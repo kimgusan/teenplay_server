@@ -1,0 +1,820 @@
+@import url('https://webfontworld.github.io/sunn/SUIT.css');
+
+[type=checkbox]:checked {
+    background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg%20viewBox%3D%270%200%2016%2016%27%20fill%3D%27%23fff%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%3E%3Cpath%20d%3D%27M12.207%204.793a1%201%200%200%201%200%201.414l-5%205a1%201%200%200%201-1.414%200l-2-2a1%201%200%200%201%201.414-1.414L6.5%209.086l4.293-4.293a1%201%200%200%201%201.414%200z%27%2F%3E%3C%2Fsvg%3E');
+    border-color: transparent;
+    background-color: currentColor;
+    background-size: 100% 100%;
+    background-position: 50%;
+    background-repeat: no-repeat;
+}
+
+*{
+    --tw-border-spacing-x: 0;
+    --tw-border-spacing-y: 0;
+    --tw-translate-x: 0;
+    --tw-translate-y: 0;
+    --tw-rotate: 0;
+    --tw-skew-x: 0;
+    --tw-skew-y: 0;
+    --tw-scale-x: 1;
+    --tw-scale-y: 1;
+    --tw-pan-x: ;
+    --tw-pan-y: ;
+    --tw-pinch-zoom: ;
+    --tw-scroll-snap-strictness: proximity;
+    --tw-ordinal: ;
+    --tw-slashed-zero: ;
+    --tw-numeric-figure: ;
+    --tw-numeric-spacing: ;
+    --tw-numeric-fraction: ;
+    --tw-ring-inset: ;
+    --tw-ring-offset-width: 0px;
+    --tw-ring-offset-color: #fff;
+    --tw-ring-color: rgba(59,130,246,.5);
+    --tw-ring-offset-shadow: 0 0 #0000;
+    --tw-ring-shadow: 0 0 #0000;
+    --tw-shadow: 0 0 #0000;
+    --tw-shadow-colored: 0 0 #0000;
+    --tw-blur: ;
+    --tw-brightness: ;
+    --tw-contrast: ;
+    --tw-grayscale: ;
+    --tw-hue-rotate: ;
+    --tw-invert: ;
+    --tw-saturate: ;
+    --tw-sepia: ;
+    --tw-drop-shadow: ;
+    --tw-backdrop-blur: ;
+    --tw-backdrop-brightness: ;
+    --tw-backdrop-contrast: ;
+    --tw-backdrop-grayscale: ;
+    --tw-backdrop-hue-rotate: ;
+    --tw-backdrop-invert: ;
+    --tw-backdrop-opacity: ;
+    --tw-backdrop-saturate: ;
+    --tw-backdrop-sepia: ;
+    scrollbar-color: auto;
+    scrollbar-width: auto;
+    letter-spacing: -.03125em;
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+    border-color: #e1e4e6;
+    font-family: SUIT,sans-serif;
+}
+
+html{
+    font-size: 16px;
+    height: 100%;
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255/var(--tw-bg-opacity));
+    font-family: SUIT,sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+    font-feature-settings: normal;
+    font-variation-settings: normal;
+}
+
+body{
+    position: relative;
+    min-height: 100%;
+    
+    opacity: 1;
+    top: 0 !important;
+    font-size: .9375rem;
+    --tw-text-opacity: 1;
+    color: rgb(23 23 23/var(--tw-text-opacity));
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255/var(--tw-bg-opacity));
+    margin: 0;
+    line-height: inherit;
+    top: 0px;
+}
+
+main{
+    min-height: 100vh;
+}
+
+.main-festival{
+    max-width: 1280px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1rem;
+}
+
+.main-festival-top{
+    margin-bottom: 1.5rem;
+}
+
+.main-festival-top-sub{
+    --tw-text-opacity: 1;
+    color: #CE201B;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    --tw-bg-opacity: 1;
+    background-color: #FFF0EE;
+    border-radius: 0.375rem;
+    max-width: fit-content;
+    display: inline-block;
+}
+
+.main-festival-top-title{
+    --tw-space-y-reverse: 0;
+    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    margin: 0;
+    margin-top: calc(1rem*(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(1rem*var(--tw-space-y-reverse));
+}
+
+.main-festival-main{
+    flex-direction: row;
+    gap: 1.5rem;
+    display: flex;
+}
+
+.main-festival-main-left{
+    max-width: 53rem;
+    position: relative;
+}
+
+.box-in{
+    padding: 20px;
+}
+
+.main-festival-box{
+    --tw-shadow: 0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);
+    --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color),0 2px 4px -2px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow);
+    border-radius: 6px;
+    overflow-y: auto;
+    position: sticky;
+    top: 0;
+}
+
+.main-festival-main-left-img{
+    border-radius: 6px;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    vertical-align: middle;
+    padding-bottom: 20px;
+}
+
+.main-festival-main-right{
+    flex: 1 1 0%;
+}
+
+
+.main-festival-main-right-top{
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255/var(--tw-bg-opacity))
+}
+
+.main-festival-main-right-top-cost{
+    grid-template-columns: repeat(7,minmax(0,1fr));
+    display: grid;
+    margin: 0;
+}
+
+.main-festival-main-right-top-cost-left{
+    --tw-text-opacity: 1;
+    color: rgb(135 141 145/var(--tw-text-opacity));
+}
+
+.main-festival-main-right-top-cost-right{
+    grid-column: span 6/span 6;
+    --tw-text-opacity: 1;
+    color:  #CE201B;
+
+    font-weight: 700;
+    margin: 0;
+    margin-top: 0;
+}
+
+.main-festival-main-right-top-content{
+    --tw-space-y-reverse: 0;
+    grid-template-columns: repeat(7,minmax(0,1fr));
+    display: grid;
+    margin: 0;
+    margin-top: calc(1rem*(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(1rem*var(--tw-space-y-reverse));
+}
+
+.main-festival-main-right-top-content-right{
+    grid-column: span 6/span 6;
+    margin: 0;
+    margin-top: 0;
+}
+
+.main-festival-main-right-top-line{
+    --tw-space-y-reverse: 0;
+    margin-top: calc(1rem*(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(1rem*var(--tw-space-y-reverse));
+    display: block;
+    padding-top: 0.5rem;
+    border-bottom-width : 1px;
+}
+
+.main-festival-main-right-mid{
+    --tw-space-y-reverse: 0;
+    margin-top: calc(1.5rem*(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(1.5rem*var(--tw-space-y-reverse));
+    display: block;
+}
+
+.main-festival-main-right-mid-content{
+    grid-template-columns: repeat(7,minmax(0,1fr));
+    display: grid;
+    margin: 0;
+}
+
+.main-festival-main-right-mid-content-dt{
+    --tw-text-opacity: 1;
+    color: rgb(135 141 145/var(--tw-text-opacity));
+}
+
+.main-festival-main-right-mid-content-dd{
+    margin-top: 0;
+    grid-column: span 6/span 6;
+    margin: 0;
+}
+
+.main-festival-main-right-mid-line{
+    --tw-space-y-reverse: 0;
+    margin-top: calc(1rem*(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(1rem*var(--tw-space-y-reverse));
+    padding-top: 0.5rem;
+    border-bottom-width: 1px;
+}
+
+.main-festival-main-right-mid-bottem-content{
+    --tw-space-y-reverse: 0;
+    grid-template-columns: repeat(7,minmax(0,1fr));
+    display: grid;
+    margin: 0;
+    margin-top: calc(1rem*(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(1rem*var(--tw-space-y-reverse));
+}
+
+.main-festival-main-right-mid-content-bottem-dt{
+    --tw-text-opacity: 1;
+    color: rgb(135 141 145/var(--tw-text-opacity));
+}
+
+.main-festival-main-right-mid-content-bottem-dd{
+
+    grid-column: span 6/span 6;
+    margin: 0;
+    margin-top: 0;
+}
+
+.main-festival-main-right-bot-content{
+    --tw-space-y-reverse: 0;
+    margin-top: calc(1.5rem*(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(1.5rem*var(--tw-space-y-reverse));
+}
+
+.main-festival-main-right-bot-content-dl{
+    grid-template-columns: repeat(7,minmax(0,1fr));
+    display: grid;
+    margin: 0;
+}
+
+.main-festival-main-right-bot-content-dt{
+    --tw-text-opacity: 1;
+    color: rgb(135 141 145/var(--tw-text-opacity));
+}
+
+.main-festival-main-right-bot-content-dd{
+    grid-column: span 6/span 6;
+    margin: 0;
+    margin-top: 0;
+}
+
+.main-festival-main-right-bot-content-a{
+    --tw-text-opacity: 1;
+    color: #CE201B;
+    transition-property: color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+    text-decoration: inherit;
+}
+
+.main-festival-main-right-bot-content-a:hover{
+    --tw-text-opacity: 1;
+    color:#9F0D08;
+}
+
+.main-festival-main-tag{
+    margin-top: 3rem;
+}
+
+.main-festival-main-tag-a{
+    --tw-border-opacity: 1;
+    border-color: #CE201B;
+
+    --tw-text-opacity: 1;
+    color: #CE201B;
+    --tw-shadow: 0 1px 1px 0 rgba(0,0,0,.05);
+    --tw-shadow-colored: 0 1px 1px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow);
+    line-height: 1;
+    font-weight: 400;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    --tw-bg-opacity: 1;
+    background-color: #FFF0EE;
+    border-width: 1px;
+    border-radius: 0.375rem;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    transition-property: color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+    text-decoration: inherit;
+}
+
+.main-festival-main-tag-a:hover{
+    --tw-bg-opacity: 1;
+    background-color: #FFB6AC;
+}
+
+.main-festival-main-tag-svg{
+    --tw-space-x-reverse: 0;
+    margin-right: calc(0.25rem*var(--tw-space-x-reverse));
+    margin-left: calc(0.25rem*(1 - var(--tw-space-x-reverse)));
+    width: 1rem;
+    height: 1rem;
+    display: block;
+    vertical-align: middle;
+}
+
+.main-festival-banner{
+    margin-top: 3rem;
+}
+
+.main-festival-banner-warp-title{
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+}
+
+.main-festival-banner-warp-title-warp-text{
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+
+.main-festival-banner-warp-title-warp-a{
+    --tw-text-opacity: 1;
+    color: rgb(135 141 145/var(--tw-text-opacity));
+    text-align: center;
+    display: flex;
+    transition-property: color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+    text-decoration: inherit;
+}
+
+.main-festival-banner-warp-title-warp-a:hover{
+    --tw-text-opacity: 1;
+    color: rgb(77 82 86/var(--tw-text-opacity));
+}
+
+.main-festival-banner-warp-title-warp-svg{
+    width: 1.25rem;
+    height: 1.25rem;
+    display: block;
+    vertical-align: middle;
+}
+
+.main-festival-banner-container{
+    --tw-space-y-reverse: 0;
+    margin-top: calc(1rem*(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(1rem*var(--tw-space-y-reverse));
+}
+
+.main-festival-banner-container-top{
+    display: grid;
+    grid-template-columns: repeat(4,minmax(0,1fr));
+    gap: 1rem; /* 요소 사이의 간격을 설정합니다. */
+    
+    
+    
+}
+
+.main-festival-banner-ad-warp{
+    border-radius: 0.375rem;
+}
+
+.main-festival-banner-ad-img{
+    position: relative;
+}
+
+.main-festival-banner-ad-img-a{
+    border-width: 1px;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    display: block;
+    isolation: isolate;
+    position: relative;
+    padding-bottom: calc(var(--tw-aspect-h)/var(--tw-aspect-w)*100%);
+    --tw-aspect-w: 16;
+    --tw-aspect-h: 9;
+    transition-property: color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.main-festival-banner-ad-img-photo{
+    -webkit-backface-visibility: hidden;
+    transform: translateZ(0);
+    transition-duration: .3s;
+    object-position: center;
+    object-fit: cover;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transition-property: color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    max-width: 100%;
+    display: block;
+    vertical-align: middle;
+}
+
+.main-festival-banner-ad-img-photo:hover{
+    --tw-scale-x: 1.1;
+    --tw-scale-y: 1.1;
+    transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.main-festival-banner-ad-like{
+    top: 0.5rem;
+    right: 0.5rem;
+    position: absolute;
+}
+
+.main-festival-banner-ad-like-button{
+    filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+    --tw-drop-shadow: drop-shadow(0 1px 2px rgba(0,0,0,.1)) drop-shadow(0 1px 1px rgba(0,0,0,.06));
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255/var(--tw-text-opacity));
+    align-items: center;
+    display: flex;
+    -webkit-appearance: button;
+    background-color: transparent;
+    background-image: none;
+    transition-property: color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+    text-align: left;
+    cursor: pointer;
+    text-transform: none;
+    font-family: inherit;
+    font-size: 100%;
+    font-weight: inherit;
+    line-height: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+.like-status-svg{
+    --tw-text-opacity: 1;
+    color: rgb(232 103 98/var(--tw-text-opacity));
+    width: 1.5rem;
+    height: 1.5rem;
+    display: block;
+    vertical-align: middle;
+}
+
+.unlike-status{
+
+}
+
+.unlike-status-svg{
+    width: 1.5rem;
+    height: 1.5rem;
+    transition-property: color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+    display: block;
+    vertical-align: middle;
+}
+
+.main-festival-banner-ad-content{
+    --tw-space-y-reverse: 0;
+    margin-top: calc(0.5rem*(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(0.5rem*var(--tw-space-y-reverse));
+}
+
+.main-festival-banner-ad-content-date{
+    --tw-text-opacity: 1;
+    color: rgb(135 141 145/var(--tw-text-opacity));
+    font-size: .8125rem;
+    border-radius: 0.375rem;
+    align-items: center;
+    height: 1.5rem;
+    display: flex;
+}
+
+.main-festival-banner-ad-content-date-date{
+    display: inline;
+}
+
+.main-festival-banner-ad-content-date-place{
+    --tw-space-x-reverse: 0;
+    margin-right: calc(0.25rem*var(--tw-space-x-reverse));
+    margin-left: calc(0.25rem*(1 - var(--tw-space-x-reverse)));
+}
+
+.main-festival-banner-ad-content-content{
+    --tw-space-y-reverse: 0;
+    margin-top: calc(0.25rem*(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(0.25rem*var(--tw-space-y-reverse));
+    font-weight: 700;
+    height: 3rem;
+}
+
+.main-festival-banner-ad-content-content-a{
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    transition-property: color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.main-festival-banner-ad-cost{
+    --tw-space-y-reverse: 0;
+    margin-top: calc(0.25rem*(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(0.25rem*var(--tw-space-y-reverse));
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+}
+
+.main-festival-banner-ad-cost-pay{
+    --tw-text-opacity: 1;
+    color: #CE201B;
+    font-weight: 700;
+}
+
+.main-festival-banner-ad-button{
+    margin-top: 3rem;
+}
+
+.main-festival-banner-ad-button-warp{
+    justify-content: center;
+    user-select: none;
+    display: flex;
+}
+
+.main-festival-banner-ad-button-container{
+    font-size: .8125rem;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+}
+
+.main-festival-button-left{
+    --tw-shadow: 0 0 #0000;
+    --tw-shadow-colored: 0 0 #0000;
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow);
+    --tw-text-opacity: 1;
+    color: rgb(169 175 179/var(--tw-text-opacity));
+    padding: 0.5rem;
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255/var(--tw-bg-opacity));
+    border-width: 1px;
+    border-radius: 0.375rem;
+    -webkit-appearance: button;
+    background-image: none;
+    transition-property: color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+    text-align: left;
+    cursor: pointer;
+    text-transform: none;
+    font-family: inherit;
+    font-size: 100%;
+    font-weight: inherit;
+    line-height: inherit;
+    margin: 0;
+}
+
+.main-festival-button-left:hover{
+    --tw-bg-opacity: 1;
+    background-color: rgb(248 250 251/var(--tw-bg-opacity));
+}
+
+.main-festival-button-left-svg{
+    width: 1rem;
+    height: 1rem;
+    display: block;
+    vertical-align: middle;
+}
+
+.main-festival-banner-ad-button-number{
+    --tw-space-x-reverse: 0;
+    margin-right: calc(1.5rem*var(--tw-space-x-reverse));
+    margin-left: calc(1.5rem*(1 - var(--tw-space-x-reverse)));  
+}
+
+.main-festival-banner-ad-button-number-one{
+    --tw-shadow: 0 0 #0000;
+    --tw-shadow-colored: 0 0 #0000;
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow);
+    padding: 0.5rem;
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255/var(--tw-bg-opacity));
+    border-radius: 0.375rem;
+    -webkit-appearance: button;
+    background-image: none;
+    transition-property: color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+    text-align: left;
+    cursor: pointer;
+    text-transform: none;
+    font-family: inherit;
+    font-size: 100%;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+    margin: 0;
+}
+
+.main-festival-banner-ad-button-number-one-all{
+    text-align: center;
+    width: 1rem;
+    height: 1rem;
+}
+
+.main-festival-banner-ad-button-number-two{
+    --tw-space-x-reverse: 0;
+
+    --tw-shadow: 0 0 #0000;
+    --tw-shadow-colored: 0 0 #0000;
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow);
+    padding: 0.5rem;
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255/var(--tw-bg-opacity));
+    border-radius: 0.375rem;
+    -webkit-appearance: button;
+    background-image: none;
+    transition-property: color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+    text-align: left;
+    cursor: pointer;
+    text-transform: none;
+    font-family: inherit;
+    font-size: 100%;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+    margin: 0;
+    margin-right: calc(9px*var(--tw-space-x-reverse));
+    margin-left: calc(9px*(1 - var(--tw-space-x-reverse)));
+}
+
+.main-festival-banner-ad-button-number-tr{
+    --tw-space-x-reverse: 0;
+
+    --tw-shadow: 0 0 #0000;
+    --tw-shadow-colored: 0 0 #0000;
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow);
+    padding: 0.5rem;
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255/var(--tw-bg-opacity));
+    border-radius: 0.375rem;
+    -webkit-appearance: button;
+    background-image: none;
+    transition-property: color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+    text-align: left;
+    cursor: pointer;
+    text-transform: none;
+    font-family: inherit;
+    font-size: 100%;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+    margin: 0;
+    margin-right: calc(9px*var(--tw-space-x-reverse));
+    margin-left: calc(9px*(1 - var(--tw-space-x-reverse)));
+}
+
+.main-festival-button-right{
+    --tw-space-x-reverse: 0;
+    --tw-shadow: 0 0 #0000;
+    --tw-shadow-colored: 0 0 #0000;
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow);
+    --tw-text-opacity: 1;
+    color: rgb(169 175 179/var(--tw-text-opacity));
+    padding: 0.5rem;
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255/var(--tw-bg-opacity));
+    border-width: 1px;
+    border-radius: 0.375rem;
+    -webkit-appearance: button;
+    background-image: none;
+    transition-property: color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+    text-align: left;
+    cursor: pointer;
+    text-transform: none;
+    font-family: inherit;
+    font-size: 100%;
+    font-weight: inherit;
+    line-height: inherit;
+    margin: 0;
+    margin-right: calc(1.5rem*var(--tw-space-x-reverse));
+    margin-left: calc(1.5rem*(1 - var(--tw-space-x-reverse)));
+}
+
+.main-festival-button-right-svg{
+    width: 1rem;
+    height: 1rem;
+    display: block;
+    vertical-align: middle;
+}
+
+.main-festival-banner-ad-button-number-one:hover{   
+    --tw-bg-opacity: 1;
+    background-color: rgb(248 250 251/var(--tw-bg-opacity));}
+
+.main-festival-banner-ad-button-number-two:hover{  
+    --tw-bg-opacity: 1;
+    background-color: rgb(248 250 251/var(--tw-bg-opacity));}
+
+.main-festival-banner-ad-button-number-tr:hover{   
+    --tw-bg-opacity: 1;
+    background-color: rgb(248 250 251/var(--tw-bg-opacity));}
+
+.main-festival-button-right:hover{
+    --tw-bg-opacity: 1;
+    background-color: rgb(248 250 251/var(--tw-bg-opacity));
+}
+
+.extra-create-container {
+    position: fixed;
+    bottom: 20px; /* 예시로 20px의 여백을 줍니다. */
+    right: 19%; /* 화면의 중앙에 위치하도록 설정합니다. */
+    transform: translateX(50%); /* 오른쪽 방향으로 50%만큼 이동시킵니다. */
+    z-index: 9999; /* 다른 요소 위에 나타나도록 함 */
+}
+
+
+.extra-create-button {
+    --tw-shadow: 0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);
+    --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color),0 2px 4px -2px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow);
+    --tw-text-opacity: 1;
+    color: rgb(135 141 145/var(--tw-text-opacity));
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255/var(--tw-bg-opacity));
+    border-width: 1px;
+    border-radius: 9999px;
+    justify-content: center;
+    align-items: center;
+    width: 4rem;
+    aspect-ratio: 1;
+    display: flex;
+}
+
+.extra-create-button:hover {
+    background-color: #F2F4F5;
+}
+
+.extra-create-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+}

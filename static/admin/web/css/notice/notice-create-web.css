@@ -1,0 +1,1713 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+/* 체크박스 스타일 숨기기 */
+[type="radio"] {
+    display: none;
+}
+
+input {
+    &::-webkit-search-decoration,
+    &::-webkit-search-cancel-button,
+    &::-webkit-search-results-button,
+    &::-webkit-search-results-decoration{
+      display: none;
+    }
+  }
+
+
+*{
+    --tw-border-spacing-x: 0;
+    --tw-border-spacing-y: 0;
+    --tw-translate-x: 0;
+    --tw-translate-y: 0;
+    --tw-rotate: 0;
+    --tw-skew-x: 0;
+    --tw-skew-y: 0;
+    --tw-scale-x: 1;
+    --tw-scale-y: 1;
+    --tw-pan-x: ;
+    --tw-pan-y: ;
+    --tw-pinch-zoom: ;
+    --tw-scroll-snap-strictness: proximity;
+    --tw-ordinal: ;
+    --tw-slashed-zero: ;
+    --tw-numeric-figure: ;
+    --tw-numeric-spacing: ;
+    --tw-numeric-fraction: ;
+    --tw-ring-inset: ;
+    --tw-ring-offset-width: 0px;
+    --tw-ring-offset-color: #fff;
+    --tw-ring-color: rgba(59,130,246,.5);
+    --tw-ring-offset-shadow: 0 0 #0000;
+    --tw-ring-shadow: 0 0 #0000;
+    --tw-shadow: 0 0 #0000;
+    --tw-shadow-colored: 0 0 #0000;
+    --tw-blur: ;
+    --tw-brightness: ;
+    --tw-contrast: ;
+    --tw-grayscale: ;
+    --tw-hue-rotate: ;
+    --tw-invert: ;
+    --tw-saturate: ;
+    --tw-sepia: ;
+    --tw-drop-shadow: ;
+    --tw-backdrop-blur: ;
+    --tw-backdrop-brightness: ;
+    --tw-backdrop-contrast: ;
+    --tw-backdrop-grayscale: ;
+    --tw-backdrop-hue-rotate: ;
+    --tw-backdrop-invert: ;
+    --tw-backdrop-opacity: ;
+    --tw-backdrop-saturate: ;
+    --tw-backdrop-sepia: ;
+    box-sizing: border-box;
+    border: 0 solid #e5e7eb;
+}
+
+html{
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    font-family: Pretendard,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+}
+
+a {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+body {
+    overflow-x: hidden;
+    height: 100%;
+    margin: 0;
+    line-height: inherit;
+    display: block;
+    min-height: 100%;
+    flex-direction: column;
+    height: 100vh;
+    display: flex;
+
+}
+
+.header-all{
+    padding-left: 32px;
+    padding-right: 32px;
+    height: 58px;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    width: 100%;
+    display: flex;
+    z-index: 20;
+    left: 0;
+    top: 0;
+    position: sticky;
+    background-color: #CE201B;
+}
+
+.header-logo-text{
+    align-items: center;
+    display: flex;
+}
+
+.header-logo-icon{
+    
+        height: 1rem;
+        width: auto;
+        display: block;
+        vertical-align: middle;
+    
+}
+
+.header-slash{
+    margin-left: 10px;
+    margin-right: 10px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #fff;
+    fill: #fff;
+}
+
+.header-admin-text{
+    align-items: center;
+    display: flex;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #fff;
+    fill: #fff;
+}
+
+.main-all{
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+}
+
+.main-nav-wrap{
+    border-width: 1px;
+    flex-basis: 260px;
+    position: relative;
+    border-color: #e6e6e7;
+    background-color: #fafafb;
+}
+
+.main-admin-info{
+    padding-bottom: 28px;
+    padding-top: 40px;
+    margin-left: 32px;
+    margin-right: 32px;
+    border-color: red;
+    box-sizing: border-box;
+    border: 0 solid #e5e7eb;
+    border-bottom-width: 1px;
+}
+
+.main-admin-wrap{
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+}
+
+.main-admin-container{
+    margin-bottom: 12px;
+}
+
+.main-admin-button{
+    width: 68px;
+    height: 68px;
+    outline: none;
+    border-radius: 9999px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    position: relative;
+    -webkit-appearance: button;
+    background-color: transparent;
+    background-image: none;
+    cursor: pointer;
+    text-transform: none;
+    font-family: inherit;
+    font-size: 100%;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+.main-admin-image{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    inset: 0px;
+    object-fit: cover;
+    object-position: center center;
+    color: transparent;
+    border-radius: 9999px;
+    max-width: 100%;
+    display: block;
+    vertical-align: middle;
+    box-sizing: border-box;
+    border: 0 solid #e5e7eb;
+}
+    
+
+.main-admin-image-warp{
+    border-width: 1px;
+    border-radius: 9999px;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    position: absolute;
+    border-color: rgba(0,0,0,.1);
+
+}
+
+.main-admin-name{
+    text-align: center;
+    
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 22px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    margin-bottom: 12px;
+}
+
+.main-admin-logout-button{
+
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    display: flex;
+    position: relative;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    border-color: rgba(0,0,0,.1);
+    color: #fff;
+    fill: #fff;
+    background-color: #CE201B;
+    -webkit-appearance: button;
+    background-image: none;
+    cursor: pointer;
+    text-transform: none;
+    font-family: inherit;
+    margin: 0;
+    padding: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.main-admin-logout-button:hover{
+    border-color: #9F0D08;
+    background-color: #9F0D08;
+}
+
+.main-admin-logout-warp{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    
+}
+
+.main-admin-select{
+    padding-top: 32px;
+    padding-bottom: 32px;
+    padding-left: 24px;
+    padding-right: 24px;
+    list-style: none;
+    margin: 0;
+}
+
+.main-user{
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 6px;
+    align-items: center;
+    height: 40px;
+    display: flex;
+    margin-bottom: 8px;
+    background-color: #FFF0EE;
+}
+
+.main-user-warp{
+    align-items: center;
+    flex-grow: 1;
+    display: flex;
+}
+
+.main-user-image{
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    color: #7e69fe;
+    fill: #7e69fe;
+    display: block;
+    vertical-align: middle;
+}
+
+.main-user-text{
+    display: block;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 20px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+
+}
+
+.main-user-texta{
+    display: block;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 20px;
+    color: #CE201B;
+    fill: #CE201B;
+
+}
+
+.main-user-other{
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 6px;
+    align-items: center;
+    height: 40px;
+    display: flex;
+    margin-bottom: 8px;
+}
+
+.main-user-other:hover{
+    background-color: #FFF0EE;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 6px;
+    align-items: center;
+    height: 40px;
+    display: flex;
+    margin-bottom: 8px;
+}
+
+.main-user-other:hover .main-user-text {
+    color: #CE201B;
+}
+
+
+.main-festival-add{
+    overflow-x: auto;
+    flex-basis: 0px;
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+.main-festival-add-warp{
+    padding-bottom: 64px;
+    row-gap: 0;
+    column-gap: 16px;
+    grid-template-columns: repeat(12,minmax(0,1fr));
+    width: 944px;
+    display: grid;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.main-festival-add-top{
+    padding-top: 41px;
+    padding-bottom: 26px;
+    border-bottom-width: 1px;
+    grid-column: 1/-1;
+    border-color: rgba(0,0,0,.1);
+}
+
+.main-festival-add-top-in{
+    justify-content: space-between;
+    display: flex;
+}
+
+.main-festival-add-top-text{
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 40px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+}
+
+.main-festival-add-top-choice{
+    display: flex;
+}
+
+.main-festival-add-top-cancle-button{
+
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    display: flex;
+    position: relative;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    border-color: rgba(0,0,0,.1);
+    color: #333334;
+    fill: #333334;
+    background-color: #E1E1E1;
+    -webkit-appearance: button;
+    background-image: none;
+    cursor: pointer;
+    text-transform: none;
+    font-family: inherit;
+    margin: 0;
+    padding: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.main-festival-add-top-cancle-button:hover{
+    border-color: #C2C2C2;
+    background-color: #C2C2C2;
+}
+
+.main-festival-add-top-cancle-text{
+    background-color: #E1E1E1;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.main-festival-add-top-create-text{
+    width: 88px;
+    margin-left: 12px;
+}
+
+.main-festival-add-top-create-button{
+    padding-left: 16px;
+    padding-right: 16px;
+    border-radius: 6px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    position: relative;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    color: #fff;
+    /*fill: #b9b9bb;*/
+    background-color: #CE201B;
+    -webkit-appearance: button;
+    background-image: none;
+    cursor: pointer;
+    text-transform: none;
+    font-family: inherit;
+    margin: 0;
+    padding: 0;
+
+}
+
+.main-festival-add-top-create-button:hover{
+    border-color: #9F0D08;
+    background-color: #9F0D08;
+}
+
+.main-festival-add-top-create-button.disabled {
+    border-color: #F2F4F5;
+    background-color: #F2F4F5;
+    cursor: default;
+}
+
+.main-festival-add-top-create-button.disabled:hover {
+    border-color: #F2F4F5;
+    background-color: #F2F4F5;
+}
+
+.main-festival-thumbnail{
+    padding-bottom: 40px;
+    padding-top: 40px;
+    grid-column: span 3/span 3;
+}
+
+.main-festival-thumbnail-maintext{
+    align-items: center;
+    display: flex;
+    margin-bottom: 7px;
+}
+
+.main-festival-thumbnail-maintext-text{
+    margin-right: 6px;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 22px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+}
+
+.main-festival-thumbnail-subtext{
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333334;
+    fill: #333334;
+}
+
+.main-festival-photo{
+    padding-top: 40px;
+    padding-bottom: 40px;
+    
+    grid-column: span 7/span 7;
+    grid-column-start: 6;
+}
+
+.main-festival-photo-warp{
+    padding: 24px;
+    border-width: 1px;
+    border-radius: 6px;
+    border-color: #e6e6e7;
+    background-color: #fff;
+}
+
+.main-festival-photo-container{
+    border-style: dashed;
+    border-width: 1px;
+    justify-content: center;
+    align-items: center;
+    height: 196px;
+    display: flex;
+    margin-bottom: 16px;
+    position: relative;
+    border-color: #e6e6e7;
+    background-color: #fafafb;
+}
+
+#main-festival-photo-svg{
+    --tw-border-opacity: 1;
+    border-color: rgb(225 221 249/var(--tw-border-opacity));
+    border-width: 2px;
+    border-radius: 6px;
+    width: 48px;
+    height: 48px;
+    display: block;
+    vertical-align: middle;
+}
+
+.main-festival-photo-button{
+    margin-bottom: 8px;
+}
+
+.main-festival-photo-button-insert{
+
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    display: flex;
+    position: relative;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    border-color: rgba(0,0,0,.1);
+    color: #333334;
+    fill: #333334;
+    background-color: #fff;
+    -webkit-appearance: button;
+    background-image: none;
+    cursor: pointer;
+    text-transform: none;
+    font-family: inherit;
+    margin: 0;
+    padding: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.main-festival-photo-button-insert:hover{
+    border-color: #f3f3f4;
+    background-color: #f3f3f4;
+}
+
+.main-festival-photo-label{
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    position: absolute;
+}
+
+.main-festival-photo-input{
+    cursor: pointer;
+    display: none;
+    font-family: inherit;
+    font-size: 100%;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+.main-festival-photo-text{
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #8a8a8b;
+    fill: #8a8a8b;
+    margin: 0;
+}
+
+.main-festival-line{
+    border-top-width: 1px;
+    width: 100%;
+    grid-column: 1/-1;
+    border-color: #f3f3f4;
+    margin: 0;
+    height: 0;
+    color: inherit;
+}
+
+.main-festival-info{
+    padding-bottom: 40px;
+    padding-top: 40px;
+    grid-column: span 3/span 3;
+}
+
+.main-festival-info-main{
+    align-items: center;
+    display: flex;
+    margin-bottom: 7px;
+}
+
+.main-festival-info-main-text{
+    margin-right: 6px;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 22px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+}
+
+.main-festival-info-sub{
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333334;
+    fill: #333334;
+}
+
+.main-festival-info-detail{
+    padding-top: 40px;
+    padding-bottom: 40px;
+
+    grid-column: span 7/span 7;
+    grid-column-start: 6;
+}
+
+.main-festival-info-detail-box{
+    row-gap: 16px;
+    justify-content: space-between;
+    flex-direction: column;
+    display: flex;
+}
+
+.main-festival-info-detail-titel{
+
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 18px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    margin-bottom: 8px;
+}
+
+.main-festival-info-detail-label{
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+    border-color: rgba(0,0,0,.1);
+    background-color: #fff;
+}
+
+.main-festival-info-detail-input{
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    width: 100%;
+    height: 48px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    font-family: inherit;
+    margin: 0;
+    padding: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.main-festival-info-categoty-titel{
+
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 18px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    margin-bottom: 8px;
+}
+
+.main-festival-info-categoty-input{
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    width: 100%;
+    height: 48px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    font-family: inherit;
+    margin: 0;
+    padding: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.main-festival-info-detail-input:focus-within{
+    border-radius: 6px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-width: 2px;
+    border-color: #2563EB;
+}
+
+.main-festival-info-categoty-input:focus-within{
+    border-radius: 6px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-width: 2px;
+    border-color: #2563EB;
+}
+
+.main-festival-info-subtitle{
+
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 18px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    margin-bottom: 8px;
+}
+
+.main-festival-info-detail-textbox{
+    padding: 0;
+    --tw-border-opacity: 1;
+    border-color: rgb(230 230 231/var(--tw-border-opacity));
+    border-width: 1px;
+    border-radius: 0.5rem;
+}
+
+.main-festival-info-detail-textarea{
+    width :540px;
+    height: 200px;
+    direction: ltr;
+    text-align: left;
+    border: none;
+    border-radius: 10px;
+    box-shadow: none;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+    overflow: hidden;
+    position: relative;
+    visibility: inherit!important;
+    color: #222f3e;
+    cursor: auto;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
+    text-shadow: none;
+    text-transform: none;
+    vertical-align: initial;
+    white-space: normal;
+    outline: 1px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    font-family: inherit;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border : 1px solid  rgba(0,0,0,.1);
+    resize: none;
+    
+}
+
+.main-festival-info-detail-textarea:focus-within{
+    border-radius: 6px;
+    padding-left: 19px;
+    padding-right: 19px;
+    padding-top: 9px;
+    border-width: 2px;
+    border-color: #2563EB;
+}
+
+
+
+
+.main-festival-plan{
+    padding-bottom: 40px;
+    padding-top: 40px;
+    grid-column: span 4/span 4;
+}
+
+.main-festival-plan-title{
+    align-items: center;
+    display: flex;
+    margin-bottom: 7px;
+}
+
+.main-festival-plan-title-text{
+    margin-right: 6px;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 22px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+}
+
+.main-festival-plan-span{
+    
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333334;
+    fill: #333334;
+}
+
+.main-festival-plan-detail{
+    padding-top: 40px;
+    padding-bottom: 40px;
+    grid-column: span 7/span 7;
+    grid-column-start: 6;
+}
+
+.main-festival-plan-detail-box{
+    row-gap: 16px;
+    justify-content: space-between;
+    flex-direction: column;
+    display: flex;
+}
+
+.main-festival-plan-detail-pay{
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 18px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    margin-bottom: 8px;
+}
+
+.main-festival-plan-detail-pay-label{
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+    border-color: rgba(0,0,0,.1);
+    background-color: #fff;
+}
+
+.main-festival-plan-detail-pay-input{
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    width: 100%;
+    height: 48px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    padding: 0;
+    font-family: inherit;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.main-festival-plan-detail-adress{
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 18px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    margin-bottom: 8px;
+}
+
+.main-festival-plan-detail-adress-label{
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+    border-color: rgba(0,0,0,.1);
+    background-color: #fff;
+}
+
+.main-festival-plan-detail-adress-input{
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    width: 100%;
+    height: 48px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    padding: 0;
+    font-family: inherit;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.main-festival-plan-detail-adressadd{
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 18px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    margin-bottom: 8px;
+}
+
+.main-festival-plan-detail-adressadd-label{
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+    border-color: rgba(0,0,0,.1);
+    background-color: #fff;
+}
+
+.main-festival-plan-detail-adressadd-input{
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    width: 100%;
+    height: 48px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    padding: 0;
+    font-family: inherit;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.main-festival-plan-detail-place{
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 18px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    margin-bottom: 8px;
+}
+
+.main-festival-plan-detail-place-label{
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+    border-color: rgba(0,0,0,.1);
+    background-color: #fff;
+}
+
+.main-festival-plan-detail-place-input{
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    width: 100%;
+    height: 48px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    padding: 0;
+    font-family: inherit;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.main-festival-plan-detail-startdate{
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 18px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    margin-bottom: 8px;
+}
+
+.main-festival-plan-detail-startdate-label{
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+    border-color: rgba(0,0,0,.1);
+    background-color: #fff;
+}
+
+.main-festival-plan-detail-startdate-input{
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    width: 100%;
+    height: 48px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    padding: 0;
+    font-family: inherit;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.main-festival-plan-detail-lastdate{
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 18px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    margin-bottom: 8px;
+}
+
+.main-festival-plan-detail-lastdate-label{
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+    border-color: rgba(0,0,0,.1);
+    background-color: #fff;
+}
+
+.main-festival-plan-detail-lastdate-input{
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    width: 100%;
+    height: 48px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    padding: 0;
+    font-family: inherit;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.main-festival-plan-detail-time{
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 18px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    margin-bottom: 8px;
+}
+
+.main-festival-plan-detail-time-label{
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+    border-color: rgba(0,0,0,.1);
+    background-color: #fff;
+}
+
+.main-festival-plan-detail-time-input{
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    width: 100%;
+    height: 48px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    padding: 0;
+    font-family: inherit;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.main-festival-admin{
+    padding-bottom: 40px;
+    padding-top: 40px;
+    grid-column: span 3/span 3;
+}
+
+.main-festival-admin-title{
+    align-items: center;
+    display: flex;
+    margin-bottom: 7px;
+}
+
+.main-festival-admin-title-text{
+    margin-right: 6px;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 22px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+}
+
+.main-festival-admin-title-span{
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333334;
+    fill: #333334;
+}
+
+.main-festival-admin-detail{
+    padding-top: 40px;
+    padding-bottom: 40px;
+    grid-column: span 7/span 7;
+    grid-column-start: 6;
+}
+
+.main-festival-admin-detail-box{
+    row-gap: 16px;
+    justify-content: space-between;
+    flex-direction: column;
+    display: flex;
+}
+
+.main-festival-admin-detail-info{
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 18px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    margin-bottom: 8px;
+}
+
+.main-festival-admin-detail-info-label{
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+    border-color: rgba(0,0,0,.1);
+    background-color: #fff;
+}
+
+.main-festival-admin-detail-info-input{
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    width: 100%;
+    height: 48px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    font-family: inherit;
+    margin: 0;
+    padding: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.main-festival-admin-detail-phone{
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 18px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    margin-bottom: 8px;
+}
+
+.main-festival-admin-detail-phone-label{
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+    border-color: rgba(0,0,0,.1);
+    background-color: #fff;
+}
+
+.main-festival-admin-detail-phone-input{
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    width: 100%;
+    height: 48px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    font-family: inherit;
+    margin: 0;
+    padding: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* 복붙시작지점 */
+
+.main-festival-give-detail{
+    padding-top: 40px;
+    padding-bottom: 40px;
+    grid-column: span 7/span 7;
+    grid-column-start: 6;
+}
+
+.main-festival-give-detail-box{
+    row-gap: 16px;
+    justify-content: space-between;
+    flex-direction: column;
+    display: flex;
+}
+
+.main-festival-give-detail-info{
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 18px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    margin-bottom: 8px;
+}
+
+.main-festival-give-detail-info-label{
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+    border-color: rgba(0,0,0,.1);
+    background-color: #fff;
+}
+
+.main-festival-give-detail-info-input{
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    width: 100%;
+    height: 48px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    font-family: inherit;
+    margin: 0;
+    padding: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.main-festival-give-detail-phone{
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 18px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    margin: 0;
+    margin-bottom: 8px;
+}
+
+.main-festival-give-detail-phone-label{
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+    border-color: rgba(0,0,0,.1);
+    background-color: #fff;
+}
+
+.main-festival-give-detail-phone-input{
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    width: 100%;
+    height: 48px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #1d1d1e;
+    fill: #1d1d1e;
+    font-family: inherit;
+    margin: 0;
+    padding: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+
+.main-festival-plan-detail-place-input:focus-within{
+    border-radius: 6px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-width: 2px;
+    border-color: #2563EB;
+}
+.main-festival-plan-detail-pay-input:focus-within{
+    border-radius: 6px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-width: 2px;
+    border-color: #2563EB;
+}
+.main-festival-plan-detail-adress-input:focus-within{
+    border-radius: 6px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-width: 2px;
+    border-color: #2563EB;
+}
+.main-festival-plan-detail-adressadd-input:focus-within{
+    border-radius: 6px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-width: 2px;
+    border-color: #2563EB;
+}
+.main-festival-plan-detail-startdate-input:focus-within{
+    border-radius: 6px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-width: 2px;
+    border-color: #2563EB;
+}
+
+.main-festival-plan-detail-lastdate-input:focus-within{
+    border-radius: 6px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-width: 2px;
+    border-color: #2563EB;
+}
+
+.main-festival-plan-detail-time-input:focus-within{
+    border-radius: 6px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-width: 2px;
+    border-color: #2563EB;
+}
+
+.main-festival-admin-detail-info-input:focus-within{
+    border-radius: 6px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-width: 2px;
+    border-color: #2563EB;
+}
+
+.main-festival-admin-detail-phone-input:focus-within{
+    border-radius: 6px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-width: 2px;
+    border-color: #2563EB;
+}
+
+.main-festival-give-detail-info-input:focus-within{
+    border-radius: 6px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-width: 2px;
+    border-color: #2563EB;
+}
+
+.main-festival-give-detail-phone-input:focus-within{
+    border-radius: 6px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-width: 2px;
+    border-color: #2563EB;
+}
+
+.main-festival-info-detail-textbox:focus-within{
+    border-radius: 6px;
+    border-color: #2563EB;
+}
+
+/* 빨간색 뜨는거 만들기 */
+
+#red-pay{
+    display: flex;
+    margin-top: 8px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #CE201B;
+    fill: #CE201B;
+}
+
+#red-title{
+    display: flex;
+    margin-top: 8px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #CE201B;
+    fill: #CE201B;
+
+}
+
+#red-content{
+    display: flex;
+    margin-top: 8px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #CE201B;
+    fill: #CE201B;
+
+}
+
+#red-address{
+    display: flex;
+    margin-top: 8px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #CE201B;
+    fill: #CE201B;
+}
+
+#red-addressdetail{
+    display: flex;
+    margin-top: 8px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #CE201B;
+    fill: #CE201B;
+}
+
+#red-place{
+    display: flex;
+    margin-top: 8px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #CE201B;
+    fill: #CE201B;
+}
+
+#red-start{
+    display: flex;
+    margin-top: 8px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #CE201B;
+    fill: #CE201B;
+}
+
+#red-last{
+    display: flex;
+    margin-top: 8px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #CE201B;
+    fill: #CE201B;
+}
+
+#red-time{
+    display: flex;
+    margin-top: 8px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #CE201B;
+    fill: #CE201B;
+}
+
+#red-info{
+    display: flex;
+    margin-top: 8px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #CE201B;
+    fill: #CE201B;
+}
+
+#red-phone{
+    display: flex;
+    margin-top: 8px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #CE201B;
+    fill: #CE201B;
+}
+
+#red-give{
+    display: flex;
+    margin-top: 8px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #CE201B;
+    fill: #CE201B;
+}
+
+#red-url{
+    display: flex;
+    margin-top: 8px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #CE201B;
+    fill: #CE201B;
+}
+
+#red-url.hidden {
+    display: none;
+}
+
+#red-give.hidden {
+    display: none;
+}
+
+
+#red-phone.hidden {
+    display: none;
+}
+
+#red-info.hidden {
+    display: none;
+}
+
+#red-time.hidden {
+    display: none;
+}
+
+#red-last.hidden {
+    display: none;
+}
+
+#red-start.hidden {
+    display: none;
+}
+
+#red-place.hidden {
+    display: none;
+}
+
+#red-addressdetail.hidden {
+    display: none;
+}
+
+#red-address.hidden {
+    display: none;
+}
+
+
+#red-pay.hidden {
+    display: none;
+}
+
+#red-title.hidden {
+    display: none;
+}
+
+#red-content.hidden {
+    display: none;
+}
+
+.redbox{
+    word-break: keep-all;
+    align-items: center;
+    display: flex; 
+    margin-right: auto;
+}
+
+.redfont{
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+    display: block;
+    vertical-align: middle;
+}
+
+#main-festival-photo-img{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    inset: 0px;
+    object-fit: cover;
+    object-position: center center;
+    color: transparent;
+    display: block;
+    vertical-align: middle;
+}
+
+#main-festival-photo-img.hidden{
+    display: none;
+}
+
+.hidden{
+    display: none;
+}
+
+.main-category{
+    display: table;
+    vertical-align: middle;
+    text-align: center;
+    list-style: none;
+}
+
+.main-category-li{
+    position: relative;
+    display: table-cell;
+    width: 14.6rem;
+}
+
+.main-festival-add-radio{
+    display: flex;
+    justify-content: space-around;
+    padding-top: 10px;
+}
+
+.main-festival-box{
+    width: 45%;
+    padding: 10px;
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    color: #333334;
+    border-color: rgba(0,0,0,.1);
+    background-color: #E1E1E1;
+}
+
+
+
+.selected-box {
+    background-color: #CE201B;
+    color: #fff;
+}

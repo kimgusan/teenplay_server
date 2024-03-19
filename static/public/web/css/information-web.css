@@ -1,0 +1,239 @@
+html, body {
+    font-family: "Noto Sans KR", sans-serif !important;
+    word-break: keep-all !important;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 13px!important;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+}
+
+html body, pre {
+    font-family: "Noto Sans KR", sans-serif!important;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    line-height: 1.15;
+}
+
+body {
+    background: #f0f2f8;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    color: #3f4254;
+    line-height: 1.5;
+    text-align: left;
+}
+
+article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
+    display: block;
+}
+
+h2, h3 {
+    font-size: 26px;
+    text-align: left;
+    margin-bottom: 24px;
+}
+
+h3, h4 {
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+label {
+    margin-bottom: 16px;
+    display: inline-block;
+}
+
+table, th, td {
+    border: 1px solid #dddddd;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.9rem;
+}
+
+th, td {
+    padding: 8px;
+    font-size: 0.9rem;
+}
+
+a, button {
+    outline: 0!important;
+}
+
+body a:active, body a:focus, body a:hover, html a:active, html a:focus, html a:hover {
+    text-decoration: none!important;
+}
+
+a {
+    cursor: pointer;
+    color: #383566;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+a, a:hover {
+    transition: color .15s ease,background-color .15s ease,border-color .15s ease,box-shadow .15s ease;
+}
+
+a:hover {
+    color: #1c1b34;
+}
+
+th {
+    background-color: #F2F4F5;
+    font-family: "Noto Sans KR", sans-serif;
+    font-weight: bold !important;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.67;
+    letter-spacing: -0.04px;
+    color: #595959;
+    text-align: center;
+}
+
+p {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    letter-spacing: 0.1px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.9rem;
+}
+
+thead {
+    text-align: left;
+    background: #fafafa;
+}
+
+table tr {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.9rem;
+}
+
+
+tbody td > * {
+    margin: 0px;
+}
+
+section {
+    letter-spacing: 0.18px;
+}
+
+:root {
+    --ck-color-image-caption-background: #f7f7f7;
+    --ck-color-image-caption-text: #333;
+    --ck-color-mention-background: rgba(153,0,48,0.1);
+    --ck-color-mention-text: #990030;
+    --ck-color-table-caption-background: #f7f7f7;
+    --ck-color-table-caption-text: #333;
+    --ck-highlight-marker-blue: #72ccfd;
+    --ck-highlight-marker-green: #62f962;
+    --ck-highlight-marker-pink: #fc7899;
+    --ck-highlight-marker-yellow: #fdfd77;
+    --ck-highlight-pen-green: #128a00;
+    --ck-highlight-pen-red: #e71313;
+    --ck-image-style-spacing: 1.5em;
+    --ck-inline-image-style-spacing: calc(var(--ck-image-style-spacing)/2);
+    --ck-todo-list-checkmark-size: 16px;
+}
+
+:root {
+    --blue: #007bff;
+    --indigo: #6610f2;
+    --purple: #6f42c1;
+    --pink: #e83e8c;
+    --red: #dc3545;
+    --orange: #fd7e14;
+    --yellow: #ffc107;
+    --green: #28a745;
+    --teal: #20c997;
+    --cyan: #17a2b8;
+    --gray: #7e8299;
+    --gray-dark: #3f4254;
+    --primary: #383566;
+    --secondary: #e4e6ef;
+    --success: #5797f6;
+    --info: #6993ff;
+    --warning: #ffa800;
+    --danger: #d85656;
+    --light: #f3f6f9;
+    --dark: #181c32;
+    --white: #fff;
+    --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-xl: 1200px;
+    --breakpoint-xxl: 1400px;
+    --font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    --font-family-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+}
+
+*, :after, :before {
+    box-sizing: border-box;
+}
+
+/* 전체 화면 */
+.screen-all-wrap {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.screen-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.screen-container {
+    max-width: 700px;
+    width: 90%;
+}
+
+/* 제목 부분 */
+.title {
+    font-size: 26px;
+    text-align: left;
+    margin-bottom: 24px;
+    font-weight: 700;
+}
+
+/* 페이지 설명 부분 */
+.content-items {
+    overflow: auto;
+}
+
+.textImport {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.bottom-text {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}

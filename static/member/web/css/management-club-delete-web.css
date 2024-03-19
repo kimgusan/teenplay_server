@@ -1,0 +1,289 @@
+body {
+    opacity: 1;
+    font-size: .9375rem;
+    --tw-text-opacity: 1;
+    color: rgb(23 23 23/var(--tw-text-opacity));
+    margin: 0;
+    line-height: inherit;
+}
+
+html > body {
+    top: 0 !important;
+}
+
+* {
+    font-size: inherit;
+    line-height: inherit;
+    letter-spacing: -.03125em;
+    scrollbar-color: auto;
+    scrollbar-width: auto;
+}
+
+*, :after, :before {
+    --tw-border-spacing-x: 0;
+    --tw-border-spacing-y: 0;
+    --tw-translate-x: 0;
+    --tw-translate-y: 0;
+    --tw-rotate: 0;
+    --tw-skew-x: 0;
+    --tw-skew-y: 0;
+    --tw-scale-x: 1;
+    --tw-scale-y: 1;
+    --tw-pan-x: ;
+    --tw-pan-y: ;
+    --tw-pinch-zoom: ;
+    --tw-scroll-snap-strictness: proximity;
+    --tw-ordinal: ;
+    --tw-slashed-zero: ;
+    --tw-numeric-figure: ;
+    --tw-numeric-spacing: ;
+    --tw-numeric-fraction: ;
+    --tw-ring-inset: ;
+    --tw-ring-offset-width: 0px;
+    --tw-ring-offset-color: #fff;
+    --tw-ring-color: rgba(59,130,246,.5);
+    --tw-ring-offset-shadow: 0 0 #0000;
+    --tw-ring-shadow: 0 0 #0000;
+    --tw-shadow: 0 0 #0000;
+    --tw-shadow-colored: 0 0 #0000;
+    --tw-blur: ;
+    --tw-brightness: ;
+    --tw-contrast: ;
+    --tw-grayscale: ;
+    --tw-hue-rotate: ;
+    --tw-invert: ;
+    --tw-saturate: ;
+    --tw-sepia: ;
+    --tw-drop-shadow: ;
+    --tw-backdrop-blur: ;
+    --tw-backdrop-brightness: ;
+    --tw-backdrop-contrast: ;
+    --tw-backdrop-grayscale: ;
+    --tw-backdrop-hue-rotate: ;
+    --tw-backdrop-invert: ;
+    --tw-backdrop-opacity: ;
+    --tw-backdrop-saturate: ;
+    --tw-backdrop-sepia: ;
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+    border-color: #e1e4e6;
+}
+
+html {
+    line-height: 1.5;
+    tab-size: 4;
+    font-family: ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+    font-feature-settings: normal;
+    font-variation-settings: normal;
+    font-family: SUIT,sans-serif;
+    font-size: 16px;
+}
+
+body, html {
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255/var(--tw-bg-opacity));
+}
+
+:root {
+    --swiper-theme-color: #007aff;
+}
+
+a {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+[class*="hover\:"], a, button {
+    transition-property: color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+}
+
+audio, canvas, embed, iframe, img, object, svg, video {
+    display: block;
+    vertical-align: middle;
+}
+
+.main {
+    min-height: 100vh;
+}
+
+.sud-header-wrap {
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255/var(--tw-bg-opacity));
+    border-width: 1px;
+    height: 3.5rem;
+}
+
+.sud-header-container {
+    white-space: nowrap;
+    overflow: auto;
+    justify-content: space-between;
+    display: flex;
+    max-width: 1280px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1rem;
+}
+
+.sud-header-box {
+    --tw-text-opacity: 1;
+    color: rgb(135 141 145/var(--tw-text-opacity));
+    flex-direction: row;
+    display: flex;
+}
+
+.sud-header-category {
+    --tw-text-opacity: 1;
+}
+
+.sud-header-box .sud-header-category:not(:first-child) {
+    --tw-space-x-reverse: 0;
+    margin-right: calc(3.5rem*var(--tw-space-x-reverse));
+    margin-left: calc(3.5rem*(1 - var(--tw-space-x-reverse)));
+    cursor: pointer;
+}
+
+.select-category {
+    color: #CE201B;
+}
+
+.select-category:hover {
+    color: #9F0D08;
+}
+
+.club-detail-link {
+    --tw-space-x-reverse: 0;
+    margin-right: calc(2.5rem*var(--tw-space-x-reverse));
+    margin-left: calc(2.5rem*(1 - var(--tw-space-x-reverse)));
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    cursor: pointer;
+}
+
+.club-detail-link:hover {
+    font-weight: 700;
+}
+
+.move-svg {
+    --tw-space-x-reverse: 0;
+    margin-right: calc(0.25rem*var(--tw-space-x-reverse));
+    margin-left: calc(0.25rem*(1 - var(--tw-space-x-reverse)));
+    width: 1rem;
+    height: 1rem;
+}
+
+.club-delete-wrap {
+    overflow-x: auto;
+    overflow-y: hidden;
+    transition: margin-left .2s;
+    display: flex;
+    flex-direction: row;
+}
+
+.club-delete-container {
+    width: 100%;
+    margin-top: 24px;
+    position: relative!important;
+}
+
+.club-delete-box {
+    width: 98% !important;
+    padding: 0 12px;
+    margin: 0 auto;
+    max-width: 100%!important;
+}
+
+.club-delete-contents, .club-delete-items {
+    margin-right: -9px;
+    margin-left: -9px;
+    margin-bottom: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.club-delete-contents::after, .club-delete-items::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.club-delete-content {
+    width: 100%;
+    padding-right: 9px;
+    padding-left: 9px;
+    float: left;
+    box-sizing: border-box;
+    padding: 0 0.75rem;
+    min-height: 1px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.top-gap {
+    margin-bottom: 32px!important;
+    font-size: 24px;
+}
+
+.club-delete-item {
+    width: 100%;
+    float: left;
+    box-sizing: border-box;
+    padding: 0 0.75rem;
+    padding-right: 9px;
+    padding-left: 9px;
+    min-height: 1px;
+}
+
+.club-delete-title {
+    font-weight: 700!important;
+    font-size: 20px;
+    text-align: center;
+}
+
+.club-delete-ment-box {
+    color: #878d91;
+    margin-top: 32px!important;
+}
+
+.club-name {
+    color: #292a2b;
+    font-weight: 700!important;
+}
+
+.re-question-ment {
+    margin-top: 40px!important;
+    text-align: center;
+}
+
+.club-delete-btn-box {
+    margin-top: 32px!important;
+    text-align: center;
+}
+
+.club-delete-btn {
+    background-color: #CE201B;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    transition: .2s ease-out;
+    cursor: pointer;
+    font-size: 14px;
+    outline: 0;
+    border: none;
+    display: inline-block;
+    height: 48px;
+    line-height: 49px;
+    padding: 0 30px;
+    border-radius: 6px;
+    vertical-align: middle;
+    -webkit-tap-highlight-color: transparent;
+    letter-spacing: -.035em !important;
+}
+
+.club-delete-btn:hover {
+    background-color: #9F0D08;
+}
