@@ -30,8 +30,7 @@ def pre_handle_request(get_response):
             if 'login' not in uri:
                 if request.session.get('admin') is None:
                     request.session['previous_uri'] = uri
-                    # return redirect('/admin/login/')
-                    return redirect('/myadmin/login/')
+                    return redirect('/admin/login/')
 
         response = get_response(request)
 
