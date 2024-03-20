@@ -455,6 +455,7 @@ class ClubPrPostListAPI(APIView):
 
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# 클럽 상세보기 페이지에서 틴플레이를 선택했을 때 화면에 보여지는 View
 class ClubTeenplayAPIView(APIView):
     def get(self, request, club_id, page):
         row_count = 5
