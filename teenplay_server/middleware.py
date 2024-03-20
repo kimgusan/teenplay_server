@@ -26,11 +26,11 @@ def pre_handle_request(get_response):
                     uri = uri.replace('/app', '')
                     return redirect(uri)
 
-        if 'admin' in uri:
-            if 'login' not in uri:
-                if request.session.get('admin') is None:
-                    request.session['previous_uri'] = uri
-                    return redirect('/admin/login/')
+        # if 'admin' in uri:
+        #     if 'login' not in uri:
+        #         if request.session.get('admin') is None:
+        #             request.session['previous_uri'] = uri
+        #             return redirect('/admin/login/')
 
         response = get_response(request)
 
