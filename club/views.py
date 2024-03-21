@@ -455,13 +455,18 @@ class ClubPrPostListAPI(APIView):
 
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 # 클럽 상세보기 페이지에서 틴플레이를 선택했을 때 화면에 보여지는 View
 class ClubTeenplayAPIView(APIView):
     def get(self, request, club_id, page):
+        # 최대 5개까지 썸네일을 보여주기 위한 count
         row_count = 5
+        # DB에서 값을 가져올 떄 offset 부터 linit 까지 가져오기 위한 수식
         offset = (page - 1) * row_count
         limit = page * row_count
 
+        # teenplay_list의 경우 페이지의 숫자만큼 늘어나면서 가져와야 하기 때문에 [offset:limit] 슬라이싱 사용
+        # has_next의 경우 다음 영상 개수가 1개라도 존재하는지 아닌지 확인하기 위해서 exists() 함수 사용
         context = {
             'member': request.session['member'],
             'club': Club.objects.filter(id=club_id).values(),
@@ -471,19 +476,28 @@ class ClubTeenplayAPIView(APIView):
         return Response(context)
 
 
+# 틴플레이 삭제를 눌렀을 때 작동하는 REST API
 class ClubTeenplayDeleteAPIView(APIView):
+    # DB에서 삭제가 아닌 Soft Delete 를 사용하기 때문에 update 메소드 사용
+    # 페이지 오류 또는 특이사항 발생 시 DB가 변경이 되지 않도록 transaction.atomic 데코레이터 사용
     @transaction.atomic
     def get(self, request, teenplay_id):
         TeenPlay.enable_objects.filter(id=teenplay_id).update(status=0)
         return Response("success")
 
 
+# 틴플레이 영상 업로드 진행 시 사용되는 REST API
 class ClubTeenplayUploadAPIView(APIView):
+    # 페이지 오류 또는 특이사항 발생 시 DB가 변경이 되지 않도록 transaction.atomic 데코레이터 사용
+    # 영상 정보에 대한 많은 정보가 담겨 있을 수 있기 때문에 get 방식이 아니라 post 방식으로 전달받음
     @transaction.atomic
     def post(self, request):
+        # 영상 title 에 입력한 정보를 받기 위해서 post 방식으로 전달 받음
         data = request.POST
+        # 영상 정보 (image, video) 파일은 request.FILES 객체에 담겨져 있기 때문에 해당 정보 변수 대입
         files = request.FILES
 
+        # request 에 담긴 정보는 모두 딕셔너리 형태로 저장되어 있기 때문에 data 딕셔너리에 신규로 각각의 값 생성
         data = {
             'teenplay_title': data['title'],
             'club_id': data['clubId'],
@@ -491,5 +505,6 @@ class ClubTeenplayUploadAPIView(APIView):
             'thumbnail_path': files['thumbnail']
         }
 
+        # 영상 생성이 될수 있도록 create 메소드 사용, data 딕셔너리에 있는 값은 unpacking 기능을 이용하여 create 변수 대입
         TeenPlay.objects.create(**data)
         return Response("success")

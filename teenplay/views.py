@@ -273,7 +273,7 @@ class TeenPlayClubLikeAPIView(APIView):
                 TeenPlayLike.objects.filter(status=1, teenplay_id=teenplayId, member_id=memberSessionId).update(status=0, updated_date=timezone.now())
                 totalLikeCount = TeenPlayLike.objects.filter(status=1, teenplay_id=teenplayId).count()
 
-        # 좋아요를 클릭한 결과와 총 count 와 해당 member_id와 display style을 context 에 딕셔너리 형태로 대입하여 응답을 반환한다.
+        # 좋아요를 클릭한 결과와 총 count 와 해당 member_id와 display style을 context 에 딕셔너리 형태로 대입하여 응답을 반환
         context = {
             'teenplay_id': teenplayId,
             'member_id': memberSessionId,
