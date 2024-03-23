@@ -21,13 +21,14 @@ let pageNumber = 5
 
 // 구글 개인정보 소리 설정 해제 후 동영상 최초 재생 확인
 videos[0].play();
-console.log(videoWraps)
 // 재생 중이 아닌 영상은 일시정지로 시작
 videoWraps.forEach((videoWrap, i) => {
     if (!videoWrap.classList.contains("playing")) {
         videos[i].autoplay = false;
+        console.log('시작안함')
     } else {
         videos[i].autoplay = true;
+        console.log('시작함')
     }
 });
 
@@ -110,6 +111,18 @@ function manageScroll(e) {
     return;
 }
 
+// 틴플레이 영상이 추가 될 때 높이를 증가시켜주는 함수
+function hightAdd () {
+    // 해당 부분 호출 시 item height 의 max 를 늘려줘야 함
+    let currentHeight = parseInt(window.getComputedStyle(slideContainer).height);
+    // 현재 뷰포트의 높이를 가져오기
+    let viewportHeight = window.innerHeight;
+    // 기존 높이에 674px (953px)를 더한 후 이를 vh 단위로 변환
+    let newHeightInVh = ((currentHeight + 953 * 30) / viewportHeight) * 100;
+    // 새로운 높이를 설정
+    slideContainer.style.height = newHeightInVh + "vh";
+}
+
 let idx = 0;
 let check = true;
 let isFetchingTeenplay = false;
@@ -125,14 +138,12 @@ slideWrap.addEventListener("wheel", (e) => {
         }
     }
     if (e.deltaY > 0) {
-        console.log('testCount', testCount)
         setTimeout(() => {
             check = true;
         }, 800);
         if (idx === videoWraps.length - 1) {
             return;
         }
-        console.log('idx1', idx)
         slideNext(idx + 1);
         videos[idx].pause();
         globalThis.flags[idx] = true;
@@ -145,14 +156,12 @@ slideWrap.addEventListener("wheel", (e) => {
         playIcons[idx].style.display = "none";
 
     } else {
-        console.log('testCount', testCount)
         setTimeout(() => {
             check = true;
         }, 800);
         if (idx == 0) {
             return;
         }
-        console.log('idx1-1', idx)
         slidePrev(idx - 1);
         videos[idx].pause();
         globalThis.flags[idx] = true;
@@ -166,19 +175,11 @@ slideWrap.addEventListener("wheel", (e) => {
     }
     if (idx === videoWraps.length-1 && !isFetchingTeenplay && idx===4){
         isFetchingTeenplayAnother = true;
-        // 해당 부분 호출 시 item height 의 max 를 늘려줘야 함
-        let currentHeight = parseInt(window.getComputedStyle(slideContainer).height);
-        // 현재 뷰포트의 높이를 가져오기
-        let viewportHeight = window.innerHeight;
-        // 기존 높이에 674px (953px)를 더한 후 이를 vh 단위로 변환
-        let newHeightInVh = ((currentHeight + 953 * 30) / viewportHeight) * 100;
-        // 새로운 높이를 설정
-        slideContainer.style.height = newHeightInVh + "vh";
+        hightAdd()
 
         setTimeout( () => {
-            getTeenplay(showTeenplay)
+            teenplayMainService.getTeenplay(showTeenplay)
             testCount++
-            console.log('첫번째 호출')
             isFetchingTeenplay = false;
             slideNumber += 1
             pageNumber += 30
@@ -245,14 +246,6 @@ slideWrap.addEventListener("wheel", (e) => {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 화면 데이터를 가져오는 것을 fetch 를 이용해서 값을 가져온다.
-
-const getTeenplay = async (callback) => {
-    const response = await fetch(`new/api/${slideNumber}/`)
-    const teenplay = await response.json();
-    if (callback){
-        callback(teenplay)
-    }
-}
 
 const showTeenplay = (teenplay) => {
 
@@ -402,8 +395,10 @@ const showTeenplay = (teenplay) => {
     videoWraps.forEach((videoWrap, i) => {
         if (!videoWrap.classList.contains("playing")) {
             videos[i].autoplay = false;
+            console.log('시작안함2')
         } else {
             videos[i].autoplay = true;
+            console.log('시작함2')
         }
     });
 
@@ -502,7 +497,6 @@ const showTeenplay = (teenplay) => {
             if (idx === videoWraps.length - 1) {
                 return;
             }
-            console.log('idx2', idx)
             slideNext(idx + 1);
             videos[idx].pause();
             globalThis.flags[idx] = true;
@@ -521,7 +515,6 @@ const showTeenplay = (teenplay) => {
             if (idx == 0) {
                 return;
             }
-            console.log('idx2-2', idx)
             slidePrev(idx - 1);
             videos[idx].pause();
             globalThis.flags[idx] = true;
@@ -536,19 +529,11 @@ const showTeenplay = (teenplay) => {
 
         if (idx == videoWraps.length-1 && !isFetchingTeenplayAnother && idx == pageNumber-1) {
             isFetchingTeenplayAnother = true;
-            // 해당 부분 호출 시 item height 의 max 를 늘려줘야 함
-            let currentHeight = parseInt(window.getComputedStyle(slideContainer).height);
-            // 현재 뷰포트의 높이를 가져오기
-            let viewportHeight = window.innerHeight;
-            // 기존 높이에 674px (953px)를 더한 후 이를 vh 단위로 변환
-            let newHeightInVh = ((currentHeight + 953 * 30) / viewportHeight) * 100;
-            // 새로운 높이를 설정
-            slideContainer.style.height = newHeightInVh + "vh";
+            hightAdd()
 
             setTimeout(() => {
                 isFetchingTeenplayAnother = false;
-                getTeenplay(showTeenplay)
-                console.log('두번쨰 호출')
+                teenplayMainService.getTeenplay(showTeenplay)
                 pageNumber += 30
             }, 500)
         }
