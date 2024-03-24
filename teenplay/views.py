@@ -155,7 +155,7 @@ class TeenPlayLikeAPIView(APIView):
             if displayStyle == 'none':
                 # 좋아요 status 를 1로 업데이트 하고 총 카운트를 total count 에 대입한다
                 TeenPlayLike.objects.filter(status=0, teenplay_id=teenplayId, member_id=memberSessionId).update(status=1, updated_date=timezone.now())
-                totalLikeCount = TeenPlayLike.objects.filter(status=1, teenplay_id=emptyValue).count()
+                totalLikeCount = TeenPlayLike.objects.filter(status=1, teenplay_id=teenplayId).count()
             else:
                 # 좋아요 status 를 0으로 업데이트 하고 총 카운트를 total count 에 대입한다
                 TeenPlayLike.objects.filter(status=1, teenplay_id=teenplayId, member_id=memberSessionId).update(status=0, updated_date=timezone.now())

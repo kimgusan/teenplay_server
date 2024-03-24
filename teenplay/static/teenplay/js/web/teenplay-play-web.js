@@ -406,11 +406,14 @@ slideContainer.addEventListener('click', async (e)=> {
         fullHeartIcon.style.display = displayStyle === 'none'? 'none': 'block';
         let buttonName = button.name
         let teenplayId = buttonName;
+        console.log(buttonName)
 
         const videoLike = await teenplayMainService.likeTeenplay(teenplayId, memberSessionId, displayStyle)
         const likeCountContainer = button.closest('.play-like-info-wrap').querySelector('.play-like-count')
+        console.log(1000)
         if(likeCountContainer){
             likeCountContainer.innerText = videoLike.totalLikeCount
+            console.log()
         }
     }
 })

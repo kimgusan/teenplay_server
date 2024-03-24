@@ -10,6 +10,9 @@ const teenplayMainService = (() => {
 
     const likeTeenplay = async (teenplayId, memberSessionId, displayStyle, callback) => {
         const teenplayLikeResponse = await fetch(`/like/api/${teenplayId}/${memberSessionId}/${displayStyle}/`);
+        console.log(teenplayId)
+        console.log(memberSessionId)
+        console.log(displayStyle)
         const videoLike = await teenplayLikeResponse.json();
         if (callback) {
             return callback(videoLike);
