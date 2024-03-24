@@ -520,7 +520,6 @@ function updateLikeIconsAndCount(teenplayId, totalLikeCount) {
         let emptyHeartIcon = button.querySelector('.play-like-icon.empty');
         let fullHeartIcon = button.querySelector('.play-like-icon.full');
         let displayStyle = window.getComputedStyle(emptyHeartIcon).display;
-        console.log(displayStyle)
 
         // 아이콘 상태 업데이트
         emptyHeartIcon.style.display = displayStyle === 'none' ? 'block' : 'none';
