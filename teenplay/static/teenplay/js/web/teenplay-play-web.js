@@ -409,11 +409,11 @@ slideContainer.addEventListener('click', async (e)=> {
         console.log(buttonName)
 
         const videoLike = await teenplayMainService.likeTeenplay(teenplayId, memberSessionId, displayStyle)
+        console.log(videoLike)
         const likeCountContainer = button.closest('.play-like-info-wrap').querySelector('.play-like-count')
         console.log(1000)
         if(likeCountContainer){
             likeCountContainer.innerText = videoLike.totalLikeCount
-            console.log()
         }
     }
 })
