@@ -21,6 +21,7 @@ let pageNumber = 5
 
 // 구글 개인정보 소리 설정 해제 후 동영상 최초 재생 확인
 videos[0].play();
+console.log(1000)
 // 재생 중이 아닌 영상은 일시정지로 시작
 videoWraps.forEach((videoWrap, i) => {
     if (!videoWrap.classList.contains("playing")) {
