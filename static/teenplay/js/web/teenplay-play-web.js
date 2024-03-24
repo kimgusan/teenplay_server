@@ -286,8 +286,9 @@ slideWrap.addEventListener("wheel", (e) => {
         isFetchingTeenplayAnother = true;
         hightAdd()
         setTimeout( () => {
-            teenplayMainService.getTeenplay(showTeenplay)
-            showList(teenplay)
+            const result = teenplayMainService.getTeenplay(showList)
+            console.log(result)
+            slideContainer.innerHtml += result
             testCount++
             isFetchingTeenplay = false;
             slideNumber += 1
