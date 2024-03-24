@@ -177,7 +177,6 @@ function hightAdd () {
 const showList = (teenplay) => {
     let text =``
     teenplay.forEach((teenplayRandomInfo)=> {
-        console.log(teenplayRandomInfo)
         text += `
         <div class="play-each">
             <section class="play-each-wrap">
@@ -280,7 +279,6 @@ const showList = (teenplay) => {
     })
     return text
 }
-
 
 // video 을 추가로 등록하는 함수
 const getAddVideo = async ()=>{
@@ -391,34 +389,85 @@ slideWrap.addEventListener("wheel", (e) => {
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // 좋아요 아이콘 클릭 시 반영
-slideContainer.addEventListener('click', async (e)=> {
-    const button = e.target.closest('.play-like-btn')
+slideContainer.addEventListener('click', async (e) => {
+    const button = e.target.closest('.play-like-btn');
 
-    if(button){
-        if(memberSessionId == 0){
-            window.location.href = '/member/login/'
-            return;
-        }
-        let emptyHeartIcon = button.querySelector('.play-like-icon.empty')
-        let fullHeartIcon = button.querySelector(".play-like-icon.full")
-        let displayStyle = window.getComputedStyle(emptyHeartIcon).display
-        emptyHeartIcon.style.display = displayStyle === 'none' ? 'block':'none';
-        fullHeartIcon.style.display = displayStyle === 'none'? 'none': 'block';
-        let buttonName = button.name
-        let teenplayId = buttonName;
-        console.log(buttonName)
-
-        const videoLike = await teenplayMainService.likeTeenplay(teenplayId, memberSessionId, displayStyle)
-        console.log(videoLike)
-        const likeCountContainer = button.closest('.play-like-info-wrap').querySelector('.play-like-count')
-        console.log(1000)
-        if(likeCountContainer){
-            likeCountContainer.innerText = videoLike.totalLikeCount
-        }
+    if (button) {
+        // 사용자 세션 확인은 주석 처리된 상태를 유지합니다.
+        // if (memberSessionId == 0) {
+        //     window.location.href = '/member/login/';
+        //     return;
+        // }
+        // 클릭된 아이콘의 ID 가져오기
+        let teenplayId = button.getAttribute('name');
+        // 비동기 통신으로 좋아요 상태 변경
+        let emptyHeartIcon = button.querySelector('.play-like-icon.empty');
+        let displayStyle = window.getComputedStyle(emptyHeartIcon).display;
+        const videoLike = await teenplayMainService.likeTeenplay(teenplayId, memberSessionId, displayStyle);
+        // 현재 클릭된 버튼 및 동일한 teenplayId를 가진 모든 버튼의 상태 업데이트
+        updateLikeIconsAndCount(teenplayId, videoLike.totalLikeCount);
     }
-})
+});
 
+// 좋아요 아이콘과 count 업데이트
+function updateLikeIconsAndCount(teenplayId, totalLikeCount) {
+    const allLikeButtons = document.querySelectorAll(`.play-like-btn[name="${teenplayId}"]`);
 
+    allLikeButtons.forEach(button => {
+        let emptyHeartIcon = button.querySelector('.play-like-icon.empty');
+        let fullHeartIcon = button.querySelector('.play-like-icon.full');
+        let displayStyle = window.getComputedStyle(emptyHeartIcon).display;
+        console.log(displayStyle)
+
+        // 아이콘 상태 업데이트
+        emptyHeartIcon.style.display = displayStyle === 'none' ? 'block' : 'none';
+        fullHeartIcon.style.display = displayStyle === 'none' ? 'none' : 'block';
+
+        // 좋아요 수 업데이트
+        const likeCountContainer = button.closest('.play-like-info-wrap').querySelector('.play-like-count');
+        if (likeCountContainer) {
+            likeCountContainer.innerText = totalLikeCount;
+        }
+    });
+}
+
+// // 좋아요 아이콘 클릭 시 반영
+// slideContainer.addEventListener('click', async (e)=> {
+//     const button = e.target.closest('.play-like-btn')
+//
+//     if(button){
+//         // if(memberSessionId == 0){
+//         //     window.location.href = '/member/login/'
+//         //     return;
+//         // }
+//         let emptyHeartIcon = button.querySelector('.play-like-icon.empty')
+//         let fullHeartIcon = button.querySelector(".play-like-icon.full")
+//         let displayStyle = window.getComputedStyle(emptyHeartIcon).display
+//         emptyHeartIcon.style.display = displayStyle === 'none' ? 'block':'none';
+//         fullHeartIcon.style.display = displayStyle === 'none'? 'none': 'block';
+//         let buttonName = button.name
+//         let teenplayId = buttonName;
+//
+//         const videoLike = await teenplayMainService.likeTeenplay(teenplayId, memberSessionId, displayStyle)
+//         const likeCountContainer = button.closest('.play-like-info-wrap').querySelector('.play-like-count')
+//         if(likeCountContainer){
+//             likeCountContainer.innerText = videoLike.totalLikeCount
+//         }
+//     }
+// })
+//
+// // 좋아요 아이콘과 count 맞추기
+// function likeIconCountAllFind (teenplayId) {
+//     const allLikeButtonStyle = document.querySelectorAll('.play-like-btn[name="${teenplayId}"]');
+//     emptyHeartIcon.style.display = displayStyle === 'none' ? 'block':'none';
+//     fullHeartIcon.style.display = displayStyle === 'none'? 'none': 'block';
+//     const likeCountContainer = button.closest('.play-like-info-wrap').querySelector('.play-like-count')
+//     if(likeCountContainer){
+//         likeCountContainer.innerText = videoLike.totalLikeCount
+//     }
+// }
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 

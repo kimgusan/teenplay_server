@@ -152,7 +152,7 @@ class TeenPlayLikeAPIView(APIView):
         # 해당 좋아요를 새로 생성했을 때 데이터가 있다면 아래 조건 사용
         else:
             # 데이터가 존재하며 현재 좋아요가 클릭되어 있지 않으면
-            if displayStyle == 'none':
+            if displayStyle != 'none':
                 # 좋아요 status 를 1로 업데이트 하고 총 카운트를 total count 에 대입한다
                 TeenPlayLike.objects.filter(status=0, teenplay_id=teenplayId, member_id=memberSessionId).update(status=1, updated_date=timezone.now())
                 totalLikeCount = TeenPlayLike.objects.filter(status=1, teenplay_id=teenplayId).count()
