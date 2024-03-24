@@ -281,7 +281,7 @@ slideWrap.addEventListener("wheel", (e) => {
         playIcons[idx].style.display = "none";
     }
     // if (idx === videoWraps.length-1 && !isFetchingTeenplay && idx===4){
-    if (idx === videoWraps.length-1 && !isFetchingTeenplay && idx===4){
+    if (idx === videoWraps.length-1 && !isFetchingTeenplay){
         isFetchingTeenplayAnother = true;
         hightAdd()
         setTimeout( () => {
