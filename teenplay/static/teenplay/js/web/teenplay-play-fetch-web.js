@@ -14,6 +14,7 @@ const teenplayMainService = (() => {
         console.log(memberSessionId)
         console.log(displayStyle)
         const videoLike = await teenplayLikeResponse.json();
+        console.log(videoLike)
         if (callback) {
             return callback(videoLike);
         }
