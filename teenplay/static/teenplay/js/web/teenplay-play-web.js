@@ -210,7 +210,7 @@ const showList = (teenplay) => {
                             </div>
                             <div class="play-like-info-wrap">
                                 <div class="play-like-wrap">
-                                    <button class="play-like-btn"  name="${teenplayRandomInfo.id}">
+                                    <button class="play-like-btn" value="${teenplayRandomInfo.like_check}" name="${teenplayRandomInfo.id}">
                                         <svg data-v-e13ecf0e="" xmlns="http://www.w3.org/2000/svg" class="play-like-icon empty" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path data-v-e13ecf0e="" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                                         </svg>
@@ -280,7 +280,7 @@ const showList = (teenplay) => {
     })
     return text
 }
-// value ="${teenplayRandomInfo}"
+
 
 // video 을 추가로 등록하는 함수
 const getAddVideo = async ()=>{
