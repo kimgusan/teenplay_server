@@ -137,33 +137,33 @@ class TeenPlayLikeAPIView(APIView):
     # 조회가 아닌 Create, Update 를 사용할 떄 오류로 인한 데이터 변경을 막기 위한 transaction.atomic 데코레이터 사용
     @transaction.atomic
     # 화면에서 조회해 온 데이터를 get 방식을 통해 데이터를 받아옴
-    def get(self, request, emptyValue, memberSessionId, displayStyle):
+    def get(self, request, teenplayId, memberSessionId, displayStyle):
         # member_id, teenplay_id 를 딕셔너리 형태로 생성
         data = {
             'member_id': memberSessionId,
-            'teenplay_id': emptyValue
+            'teenplay_id': teenplayId
         }
 
         # 좋아요 클릭 시 없으면 생성되고 있으면 update 를 하기 위한 get_or_create 함수 사용
         likeData, checked = TeenPlayLike.objects.get_or_create(**data)
         # 만약 해당 데이터가 있다면 해당 틴플레이 id 의 total count 를 변수에 대입
         if checked:
-            totalLikeCount = TeenPlayLike.objects.filter(status=1, teenplay_id=emptyValue).count()
+            totalLikeCount = TeenPlayLike.objects.filter(status=1, teenplay_id=teenplayId).count()
         # 해당 좋아요를 새로 생성했을 때 데이터가 있다면 아래 조건 사용
         else:
             # 데이터가 존재하며 현재 좋아요가 클릭되어 있지 않으면
             if displayStyle == 'none':
                 # 좋아요 status 를 1로 업데이트 하고 총 카운트를 total count 에 대입한다
-                TeenPlayLike.objects.filter(status=0, teenplay_id=emptyValue, member_id=memberSessionId).update(status=1, updated_date=timezone.now())
+                TeenPlayLike.objects.filter(status=0, teenplay_id=teenplayId, member_id=memberSessionId).update(status=1, updated_date=timezone.now())
                 totalLikeCount = TeenPlayLike.objects.filter(status=1, teenplay_id=emptyValue).count()
             else:
                 # 좋아요 status 를 0으로 업데이트 하고 총 카운트를 total count 에 대입한다
-                TeenPlayLike.objects.filter(status=1, teenplay_id=emptyValue, member_id=memberSessionId).update(status=0, updated_date=timezone.now())
-                totalLikeCount = TeenPlayLike.objects.filter(status=1, teenplay_id=emptyValue).count()
+                TeenPlayLike.objects.filter(status=1, teenplay_id=teenplayId, member_id=memberSessionId).update(status=0, updated_date=timezone.now())
+                totalLikeCount = TeenPlayLike.objects.filter(status=1, teenplay_id=teenplayId).count()
 
         # 좋아요를 클릭한 결과와 총 count 와 해당 member_id와 display style을 context 에 딕셔너리 형태로 대입하여 응답을 반환한다.
         context = {
-            'teenplay_id': emptyValue, # teenplay_id
+            'teenplay_id': teenplayId, # teenplay_id
             'member_id': memberSessionId,
             'display_style': displayStyle,
             'totalLikeCount': totalLikeCount

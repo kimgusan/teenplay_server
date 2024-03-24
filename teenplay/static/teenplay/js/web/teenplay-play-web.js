@@ -21,66 +21,115 @@ let pageNumber = 5
 
 // 구글 개인정보 소리 설정 해제 후 동영상 최초 재생 확인
 videos[0].play();
-console.log(1000)
 // 재생 중이 아닌 영상은 일시정지로 시작
 videoWraps.forEach((videoWrap, i) => {
     if (!videoWrap.classList.contains("playing")) {
         videos[i].autoplay = false;
-        console.log('시작안함')
     } else {
         videos[i].autoplay = true;
-        console.log('시작함')
     }
 });
 
 // 일시정지, 재생 관련 버튼
 // false일 때 클릭 시 재생, true일 때 클릭 시 일시정지
-globalThis.flags = new Array(videos.length);
 
-videos.forEach((video, i) => {
-    video.addEventListener("click", (e) => {
-        if (!globalThis.flags[i]) {
-            globalThis.flags[i] = true;
-            pauseIcons[i].style.display = "none";
-            playIcons[i].style.display = "block";
+// 동적 요소 추가 후 일시정지 함수
+globalThis.flags = new Array(videos.length);
+slideContainer.addEventListener('click', (e)=>{
+    if(e.target.classList.contains('play-video')){
+        const container = e.target.closest('.play-each')
+        const videoIndex = Array.from(e.currentTarget.children).indexOf(container)
+        if (!globalThis.flags[videoIndex]) {
+            globalThis.flags[videoIndex] = true;
+            pauseIcons[videoIndex].style.display = "none";
+            playIcons[videoIndex].style.display = "block";
             e.target.pause();
         } else {
-            globalThis.flags[i] = false;
-            pauseIcons[i].style.display = "block";
-            playIcons[i].style.display = "none";
+            globalThis.flags[videoIndex] = false;
+            pauseIcons[videoIndex].style.display = "block";
+            playIcons[videoIndex].style.display = "none";
             e.target.play();
         }
-    });
-});
+    }
+})
 
-// 음소거 관련 버튼
-muteIcons.forEach((mute) => {
-    mute.addEventListener("click", () => {
-        muteIcons.forEach((mute) => {
-            mute.style.display = "none";
-        });
-        videos.forEach((video) => {
+// 동적요소 추가 시 음소거 관련 기능
+slideContainer.addEventListener('click', (e)=> {
+    if(e.target.classList.contains('mute') || e.target.closest('.mute')){
+        const container = e.target.closest('.play-btn-icon-container')
+        const muteButton = container.querySelector('.mute')
+        const unmuteButton = container.querySelector('.unmute')
+
+        muteButton.style.display = 'none'
+        unmuteButton.style.display = 'block'
+
+        const video = container.closest('.play-each').querySelector('.play-video')
+        if(video){
             video.muted = true;
-        });
-        unmuteIcons.forEach((unmute) => {
-            unmute.style.display = "block";
-        });
-    });
-});
+        }
 
-unmuteIcons.forEach((unmute) => {
-    unmute.addEventListener("click", (e) => {
-        unmuteIcons.forEach((unmute) => {
-            unmute.style.display = "none";
-        });
-        videos.forEach((video) => {
+    }
+    if(e.target.classList.contains('unmute') || e.target.closest('.unmute')){
+        const container = e.target.closest('.play-btn-icon-container')
+        const muteButton = container.querySelector('.mute')
+        const unmuteButton = container.querySelector('.unmute')
+        muteButton.style.display = 'block'
+        unmuteButton.style.display = 'none'
+
+        const video = container.closest('.play-each').querySelector('.play-video')
+        if(video){
             video.muted = false;
-        });
-        muteIcons.forEach((mute) => {
-            mute.style.display = "block";
-        });
-    });
-});
+        }
+
+    }
+})
+
+// globalThis.flags = new Array(videos.length);
+//
+// videos.forEach((video, i) => {
+//     video.addEventListener("click", (e) => {
+//         if (!globalThis.flags[i]) {
+//             globalThis.flags[i] = true;
+//             pauseIcons[i].style.display = "none";
+//             playIcons[i].style.display = "block";
+//             e.target.pause();
+//         } else {
+//             globalThis.flags[i] = false;
+//             pauseIcons[i].style.display = "block";
+//             playIcons[i].style.display = "none";
+//             e.target.play();
+//         }
+//     });
+// });
+//
+// // 음소거 관련 버튼
+// muteIcons.forEach((mute) => {
+//     mute.addEventListener("click", () => {
+//         muteIcons.forEach((mute) => {
+//             mute.style.display = "none";
+//         });
+//         videos.forEach((video) => {
+//             video.muted = true;
+//         });
+//         unmuteIcons.forEach((unmute) => {
+//             unmute.style.display = "block";
+//         });
+//     });
+// });
+//
+// unmuteIcons.forEach((unmute) => {
+//     unmute.addEventListener("click", (e) => {
+//         unmuteIcons.forEach((unmute) => {
+//             unmute.style.display = "none";
+//         });
+//         videos.forEach((video) => {
+//             video.muted = false;
+//         });
+//         muteIcons.forEach((mute) => {
+//             mute.style.display = "block";
+//         });
+//     });
+// });
 
 // 진행도 1초마다 증가
 videos.forEach((video, i) => {
@@ -231,6 +280,53 @@ const showList = (teenplay) => {
     return text
 }
 
+// video 을 추가로 등록하는 함수
+const getAddVideo = async ()=>{
+    const teenplayData = await teenplayMainService.getTeenplay(slideNumber)
+    const htmlContent = showList(teenplayData)
+    slideNumber += 1
+    pageNumber += 30
+    slideContainer.innerHTML += htmlContent
+    updateVideoWraps()
+    isFetchingTeenplay = false;
+
+}
+
+// 동적 요소 추가 시 update 되어야 할 변수
+function updateVideoWraps(){
+    pauseIcons = document.querySelectorAll(".pause");
+    playIcons = document.querySelectorAll(".restart");
+    videos = document.querySelectorAll(".play-video");
+    videoInfos = document.querySelectorAll(".play-info-wrap");
+    controlButtons = document.querySelectorAll(".play-control-wrap");
+    progressBars = document.querySelectorAll(".progress-bar-now");
+    muteIcons = document.querySelectorAll(".mute");
+    unmuteIcons = document.querySelectorAll(".unmute");
+    videoWraps = document.querySelectorAll(".play-each");
+    nowPlaying = document.querySelector(".play-each.playing"); // 얘만 let
+    slideWrap = document.querySelector(".play-items");
+    slideContainer = document.querySelector(".play-item");
+    likeBtns = document.querySelectorAll(".play-like-btn");
+    emptyHeart = document.querySelectorAll(".play-like-icon.empty");
+    fullHeart = document.querySelectorAll(".play-like-icon.full");
+
+    videoWraps.forEach((videoWrap, i) => {
+        if (!videoWrap.classList.contains("playing")) {
+            videos[i].autoplay = false;
+        } else {
+            videos[i].autoplay = true;
+        }
+    });
+
+    videos.forEach((video, i) => {
+        video.addEventListener("timeupdate", (e) => {
+            let percent = (e.target.currentTime / e.target.duration) * 100;
+            progressBars[i].style.width = `${percent}%`;
+        });
+    });
+}
+
+
 let idx = 0;
 let check = true;
 let isFetchingTeenplay = false;
@@ -283,73 +379,96 @@ slideWrap.addEventListener("wheel", (e) => {
     }
     // if (idx === videoWraps.length-1 && !isFetchingTeenplay && idx===4){
     if (idx === videoWraps.length-1 && !isFetchingTeenplay){
-        isFetchingTeenplayAnother = true;
         hightAdd()
         setTimeout( () => {
-            const result = teenplayMainService.getTeenplay(showList)
-            console.log(result)
-            slideContainer.innerHtml += result
+            getAddVideo()
             testCount++
-            isFetchingTeenplay = false;
-            slideNumber += 1
-            pageNumber += 30
         },500)
     }
 });
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // 좋아요 아이콘 클릭 시 반영
-let likeButtons = document.querySelectorAll(".play-like-btn");
+slideContainer.addEventListener('click', async (e)=> {
+    const button = e.target.closest('.play-like-btn')
+    console.log(button.name)
 
-likeButtons.forEach((button, i) => {
-    button.addEventListener("click", async () => {
-        if (memberSessionId == 0) {
-            window.location.href = '/member/login/';
+    if(button){
+        if(memberSessionId == 0){
+            window.location.href = '/member/login/'
             return;
         }
+        let emptyHeartIcon = button.querySelector('.play-like-icon.empty')
+        let fullHeartIcon = button.querySelector(".play-like-icon.full")
+        let displayStyle = window.getComputedStyle(emptyHeartIcon).display
+        emptyHeartIcon.style.display = displayStyle === 'none' ? 'block':'none';
+        fullHeartIcon.style.display = displayStyle === 'none'? 'none': 'block';
+        let buttonName = button.name
+        let teenplayId = buttonName;
 
-        let emptyHeartIcon = emptyHeart[i];
-        let fullHeartIcon = fullHeart[i];
-        let currentDisplayStyle = window.getComputedStyle(emptyHeartIcon).display;
-        emptyHeartIcon.style.display = currentDisplayStyle === "none" ? "block" : "none";
-        fullHeartIcon.style.display = currentDisplayStyle === "none" ? "none" : "block";
+        const videoLike = await teenplayMainService.likeTeenplay(teenplayId, memberSessionId, displayStyle)
+        const likeCountContainer = button.closest('.play-like-info-wrap').querySelector('.play-like-count')
+        if(likeCountContainer){
+            likeCountContainer.innerText = videoLike.totalLikeCount
+        }
+    }
+})
 
-        let svgTag = button.querySelector("svg");
-        let displayStyle = window.getComputedStyle(svgTag).getPropertyValue("display");
-        let buttonValue = button.value;
 
-        // Fetch를 통해 API 호출 및 응답 처리
-        const likeTeenplay = async (callback) => {
-            const teenplayLikeResponse = await fetch(`like/api/${buttonValue}/${memberSessionId}/${displayStyle}/`);
-            const videoLike = await teenplayLikeResponse.json();
-            if (callback) {
-                callback(videoLike);
-            }
-        };
 
-        // API 응답 후 처리
-        const likeFetchClick = (videoLike) => {
-            const totalLikeCount = videoLike.totalLikeCount;
-            document.querySelectorAll(".play-like-count")[i].innerText = totalLikeCount;
 
-            // 클릭한 버튼의 상태를 변경한 후에 다른 버튼들의 상태도 동일하게 변경
-            likeButtons.forEach((btn, index) => {
-                const emptyHeartIcon = emptyHeart[index];
-                const fullHeartIcon = fullHeart[index];
 
-                // 클릭한 버튼과 동일한 value 값을 가진 버튼들의 상태만 변경
-                if (btn.value === buttonValue) {
-                    emptyHeartIcon.style.display = currentDisplayStyle === "none" ? "block" : "none";
-                    fullHeartIcon.style.display = currentDisplayStyle === "none" ? "none" : "block";
-                    document.querySelectorAll(".play-like-count")[index].innerText = totalLikeCount;
-                }
-            });
-        };
-
-        // Fetch 호출
-        await likeTeenplay(likeFetchClick);
-    });
-});
+// let likeButtons = document.querySelectorAll(".play-like-btn");
+//
+// likeButtons.forEach((button, i) => {
+//     button.addEventListener("click", async () => {
+//         if (memberSessionId == 0) {
+//             window.location.href = '/member/login/';
+//             return;
+//         }
+//
+//         let emptyHeartIcon = emptyHeart[i];
+//         let fullHeartIcon = fullHeart[i];
+//         let currentDisplayStyle = window.getComputedStyle(emptyHeartIcon).display;
+//         emptyHeartIcon.style.display = currentDisplayStyle === "none" ? "block" : "none";
+//         fullHeartIcon.style.display = currentDisplayStyle === "none" ? "none" : "block";
+//
+//         let svgTag = button.querySelector("svg");
+//         let displayStyle = window.getComputedStyle(svgTag).getPropertyValue("display");
+//         let buttonValue = button.value;
+//
+//         // Fetch를 통해 API 호출 및 응답 처리
+//         const likeTeenplay = async (callback) => {
+//             const teenplayLikeResponse = await fetch(`like/api/${buttonValue}/${memberSessionId}/${displayStyle}/`);
+//             const videoLike = await teenplayLikeResponse.json();
+//             if (callback) {
+//                 callback(videoLike);
+//             }
+//         };
+//
+//         // API 응답 후 처리
+//         const likeFetchClick = (videoLike) => {
+//             const totalLikeCount = videoLike.totalLikeCount;
+//             document.querySelectorAll(".play-like-count")[i].innerText = totalLikeCount;
+//
+//             // 클릭한 버튼의 상태를 변경한 후에 다른 버튼들의 상태도 동일하게 변경
+//             likeButtons.forEach((btn, index) => {
+//                 const emptyHeartIcon = emptyHeart[index];
+//                 const fullHeartIcon = fullHeart[index];
+//
+//                 // 클릭한 버튼과 동일한 value 값을 가진 버튼들의 상태만 변경
+//                 if (btn.value === buttonValue) {
+//                     emptyHeartIcon.style.display = currentDisplayStyle === "none" ? "block" : "none";
+//                     fullHeartIcon.style.display = currentDisplayStyle === "none" ? "none" : "block";
+//                     document.querySelectorAll(".play-like-count")[index].innerText = totalLikeCount;
+//                 }
+//             });
+//         };
+//
+//         // Fetch 호출
+//         await likeTeenplay(likeFetchClick);
+//     });
+// });
 
 
 
