@@ -478,7 +478,7 @@ button {
     margin-bottom: calc(0.5rem*var(--tw-space-y-reverse));
 }
 
-.phone-input, .address-input {
+.phone-input, .address-input, .keyword-input {
     width: 33.333333%;
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow);
     --tw-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
@@ -495,11 +495,15 @@ button {
     display: block;
 }
 
+input.keyword-input {
+    margin-bottom: 20px;
+}
+
 .phone-input::placeholder {
     color: #d4d4d9;
 }
 
-.phone-input:hover, .address-input:hover {
+.phone-input:hover, .address-input:hover, .keyword-input:hover {
     --tw-bg-opacity: 1;
     background-color: rgb(248 250 251/var(--tw-bg-opacity));
 }
@@ -546,6 +550,22 @@ button {
     --tw-bg-opacity: 1;
     background-color: rgb(248 250 251/var(--tw-bg-opacity));
     cursor: pointer;
+}
+
+.keyword-input-wrap {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(2rem*(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(2rem*var(--tw-space-y-reverse))
+}
+
+.keyword-input-container {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(0.5rem*(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(0.5rem*var(--tw-space-y-reverse));
+    gap: 0.5rem;
+    flex-direction: row;
+    display: flex;
+    max-width: 700px;
 }
 
 .selected-category {

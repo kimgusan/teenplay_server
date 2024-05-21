@@ -1,3 +1,20 @@
+const categorySelect = document.querySelector(".pr-write-fields");
+const categoryLabels = document.querySelectorAll(".interest-category")
+const categoryCheckboxes = document.querySelectorAll(".hidden-checkbox");
+const selectError = document.querySelector(".club-sub-category-warning")
+
+// 버튼 클릭 시 한번 더 검사하기 위해
+let flag = false;
+let categoryValue = false;
+
+// 지역 선택 검사
+let regionValue = false;
+const regionSelect = document.querySelector(".pr-write-desc-fields")
+
+// 카테고리 체크 검사
+let categoryCheckValue = true;
+let checkedCount = 0;
+
 // club-name-input의 글자수 표시하는 이벤트
 const clubNameInput = document.querySelector(".club-name-input");
 const inputValueCount = document.querySelector(".input-value-count");
@@ -183,10 +200,15 @@ const noneEmailWarning = document.querySelector(".none-email-warning");
 const nonePhoneWarning = document.querySelector(".none-phone-warning");
 const clubSaveBtn = document.querySelector(".club-save-btn");
 
-const checkInputValue = () => {
-    if (!clubNameInput.value || !clubManagerNameInput.value || !clubManagerEmailInput.value || !clubManagerPhoneInput.value) {
+const checkInputValue = (checkedCount) => {
+    console.log(checkedCount)
+    if (!clubNameInput.value || !clubManagerNameInput.value || !clubManagerEmailInput.value || !clubManagerPhoneInput.value || !categorySelect.value || !regionSelect.value || (checkedCount > 3)) {
         clubSaveBtn.disabled = true;
+        selectError.classList.remove("hidden")
         return;
+    }
+    if (!(checkedCount > 3)) {
+        selectError.classList.add("hidden")
     }
     clubSaveBtn.disabled = false;
 };
@@ -219,4 +241,76 @@ noneBackgroundWrap.addEventListener("drop", (e) => {
     let file = e.dataTransfer;
     backgroundImgInput.files = file.files;
     createBackgroundInfo();
+});
+
+// 관심 분야 클릭 시 클래스 추가로 속성 변화
+const interestCaregories = document.querySelectorAll(".interest-category");
+
+interestCaregories.forEach((interestCaregory) => {
+    interestCaregory.addEventListener("click", () => {
+        if (interestCaregory.classList.contains("selected-category")) {
+            interestCaregory.classList.remove("selected-category");
+            return;
+        }
+        interestCaregory.classList.add("selected-category");
+    });
+});
+
+// 대표 카테고리 입력 검사
+categorySelect.addEventListener("change", (e) => {
+    if (e.target.value) {
+        categoryValue = true;
+        const categorySelectValue = categorySelect.value
+
+        // 선택된 대표 카테고리를 추가 카테고리 항목에서 없애기
+        categoryLabels.forEach((label) => {
+            if (label.getAttribute('for') === categorySelectValue) {
+                label.style.display = "none";
+                // 선택된 대표 카테고리와 동일한 추가 카테고리의 체크박스 선택 해제
+                const checkbox = document.getElementById(categorySelectValue);
+                if (checkbox) {
+                    checkbox.checked = false;
+                }
+            } else {
+                label.style.display = 'block';
+            }
+        })
+    } else {
+        categoryValue = false;
+    }
+    checkInputValue();
+})
+
+// 대표 카테고리 입력 검사
+regionSelect.addEventListener("change", (e) => {
+    if (e.target.value) {
+        regionValue = true;
+    } else {
+        regionValue = false;
+    }
+    checkInputValue();
+})
+
+categoryCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener("click", () => {
+        checkedCount = Array.from(categoryCheckboxes).filter((checkbox) => checkbox.checked).length
+        checkInputValue(checkedCount);
+    })
+})
+
+document.addEventListener("DOMContentLoaded", () => {
+    // 선택된 대표 카테고리를 추가 카테고리 항목에서 없애기
+    const hideSelectedCategory = () => {
+        const categorySelectValue = categorySelect.value;
+        categoryLabels.forEach((label) => {
+            if (label.getAttribute('for') === categorySelectValue) {
+                label.style.display = "none";
+            } else {
+                label.style.display = 'block';
+            }
+        });
+    };
+
+    // 페이지 로드 시 숨기기 로직 실행
+    hideSelectedCategory();
 });
