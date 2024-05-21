@@ -531,9 +531,7 @@ const addClickEventDelete = () => {
     commentMenuOpenChoiceDelete.forEach((btn) => {
         btn.addEventListener("click", async (e) => {
             const replyId = e.target.classList[2];
-            await clubPostRelyService.remove({
-                'reply_id': replyId
-            });
+            await clubPostRelyService.remove(replyId);
             page = 1;
             clubPostRelyService.getList(clubPostId, page, showList).then((text) => {
                 commentListBoxWrap.innerHTML = text;

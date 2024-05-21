@@ -8,17 +8,17 @@ const teenplayMainService = (() => {
         return teenplay
     }
 
-    // const likeTeenplay = async (teenplayId, memberSessionId, displayStyle, callback) => {
-    //     const teenplayLikeResponse = await fetch(`/teenplay/club/select/like/api/${teenplayId}/${memberSessionId}/${displayStyle}/`);
-    //     const videoLike = await teenplayLikeResponse.json();
-    //     if (callback) {
-    //         return callback(videoLike);
-    //     }
-    //     return(videoLike)
-    // };
+    const likeTeenplay = async (teenplayId, memberSessionId, displayStyle, callback) => {
+        const teenplayLikeResponse = await fetch(`/teenplay/all/like/api/${teenplayId}/${memberSessionId}/${displayStyle}/`);
+        const videoLike = await teenplayLikeResponse.json();
+        if (callback) {
+            return callback(videoLike);
+        }
+        return(videoLike)
+    };
 
     return {
         getTeenplay: getTeenplay,
-        // likeTeenplay:likeTeenplay
+        likeTeenplay: likeTeenplay
     }
 })()
