@@ -7,6 +7,7 @@ from django.db import models
 from club.managers import ClubManager, ClubMemberManager, ClubPostManager, ClubPostReplyManager
 from member.models import Member
 from teenplay_server.category import Category
+from teenplay_server.models import Region
 from teenplay_server.period import Period
 
 
@@ -17,6 +18,8 @@ class Club(Period):
     member = models.ForeignKey(Member, null=False, blank=False, on_delete=models.PROTECT)
     club_profile_path = models.ImageField(upload_to='club/%Y/%m/%d')
     club_banner_path = models.ImageField(upload_to='club/%Y/%m/%d')
+    club_main_category = models.ForeignKey(Category, null=False, blank=False, default=1, on_delete=models.PROTECT)
+    club_region = models.ForeignKey(Region, null=False, blank=False, default=1, on_delete=models.PROTECT)
     # 0: 삭제
     status = models.BooleanField(default=1, null=False)
 
@@ -67,7 +70,6 @@ class ClubPost(Period):
     club = models.ForeignKey(Club, null=False, blank=False, on_delete=models.PROTECT)
     post_title = models.TextField(null=False, blank=False)
     post_content = models.TextField(null=False, blank=False)
-    category = models.ForeignKey(Category, null=False, blank=False, on_delete=models.PROTECT)
     image_path = models.ImageField(upload_to='club_post/%Y/%m/%d')
     view_count = models.IntegerField(default=0)
     # 0: 삭제, 1: 게시중
@@ -127,3 +129,13 @@ class ClubPostReply(Period):
 
     class Meta:
         db_table = 'tbl_club_post_reply'
+
+
+class ClubCategory(Period):
+    category = models.ForeignKey(Category, null=False, blank=False, on_delete=models.PROTECT)
+    club = models.ForeignKey(Club, null=False, blank=False, on_delete=models.PROTECT)
+    # 0: 삭제, 1: 유효
+    status = models.BooleanField(default=1, null=False, blank=False)
+
+    class Meta:
+        db_table = 'tbl_club_category'

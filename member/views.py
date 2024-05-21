@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 from activity.models import ActivityReply, Activity, ActivityLike, ActivityMember
 from activity.views import make_datetime
 from alarm.models import Alarm
-from club.models import ClubPostReply, ClubMember, Club, ClubNotice
+from club.models import ClubPostReply, ClubMember, Club, ClubNotice, ClubCategory
 from friend.models import Friend
 from letter.models import Letter, ReceivedLetter, SentLetter
 from member.models import Member, MemberFavoriteCategory, MemberProfile, MemberDeleteReason
@@ -20,6 +20,7 @@ from member.serializers import MemberSerializer
 from notice.models import Notice
 from pay.models import Pay, PayCancel
 from teenplay_server.category import Category
+from teenplay_server.models import Region
 from wishlist.models import WishlistReply, Wishlist
 
 
@@ -1853,6 +1854,16 @@ class MypageSendLetterAPI(APIView):
 class MypageSettingView(View):
     def get(self, request, club_id):
         club = Club.objects.get(id=club_id)
+
+        categories = Category.objects.all().distinct()
+        club_category_id = Club.objects.filter(id=club_id).first().club_main_category_id
+        category_name = Category.objects.filter(id=club_category_id).first().category_name
+        club_sub_category_id = ClubCategory.objects.filter(club_id=club_id, status=1).values_list('category_id', flat=True)
+
+        regions = Region.objects.all()
+        region_id = Club.objects.filter(id=club_id).first().club_region_id
+        region_name = Region.objects.filter(id=region_id).first().region
+
         context = {
             'club_id': club_id,
             'clubName': club.club_name,
@@ -1863,6 +1874,13 @@ class MypageSettingView(View):
             'memberNickname': club.member.member_nickname,
             'memberEmail': club.member.member_email,
             'memberPhone': club.member.member_phone,
+            'categories': categories,
+            'regions': regions,
+            'club_category_id': club_category_id,
+            'category_name': category_name,
+            'region_id': region_id,
+            'region_name': region_name,
+            'club_sub_category_id': list(club_sub_category_id),
         }
 
         return render(request, 'mypage/web/management-club-setting-web.html', context)
@@ -1874,6 +1892,8 @@ class MypageSettingView(View):
         club.club_name = data.get('club-name')
         club.club_intro = data.get('club-intro')
         club.club_info = data.get('club-details')
+        club.club_main_category_id = data.get('club-category')
+        club.club_region_id = data.get('club-region')
 
         for key in files:
             if key == 'club-profile':
@@ -1881,6 +1901,29 @@ class MypageSettingView(View):
             elif key == 'background-img':
                 club.club_banner_path = files[key]
         club.save()
+
+        # 카테고리 아이디 대조
+        # 있으면 수정
+        # 업으면 추가
+
+        # 생성한 모임의 서브 카테고리를 저장하기 위해 모임의 id를 객체화
+        club.id = club.id
+
+        # 모든 기존 카테고리의 상태를 0으로 설정
+        ClubCategory.objects.filter(club_id=club.id).update(status=0)
+
+        # 서브 카테고리를 저장하기 위해 입력 받은 정보를 저장 (문자열로 반환하기 때문에 정수로 변환)
+        sub_categories = [int(id) for id in request.POST.getlist('club-sub-category')]
+
+        for sub_category in sub_categories:
+            # 해당 카테고리가 이미 존재하는지 확인 (있으면 객체 가져오고, 없으면 생성)
+            club_category, created = ClubCategory.objects.get_or_create(club_id=club_id, category_id=sub_category)
+            # 상태를 1로 설정
+            club_category.status = 1
+            # 업데이트 날짜를 현재 시간으로 지정
+            club_category.updated_date = timezone.now()
+            # 변경사항 저장
+            club_category.save()
 
         member_instance = Member.objects.get(id=club.member_id)
         member_instance.member_nickname = data.get('manager-name')

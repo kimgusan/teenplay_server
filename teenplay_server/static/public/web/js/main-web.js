@@ -170,6 +170,91 @@ bannerModalBox.addEventListener("click", () => {
     bannerModalContainer.style.display = "none";
 });
 
+// 요일과 월을 변환하기 위한 배열
+const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
+const months = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
+
+function formatDate(dateString) {
+    // Date 객체를 생성합니다.
+    const date = new Date(dateString);
+
+    // 각 부분을 추출합니다.
+    const dayOfWeek = daysOfWeek[date.getDay()]; // 요일
+    const day = date.getDate(); // 일
+    const month = months[date.getMonth()]; // 월
+
+    // 날짜를 "N j일(l)" 형식으로 구성합니다.
+    const formattedDate = `${month} ${day}일(${dayOfWeek})`;
+
+    return formattedDate;
+}
+
+const showRecommendedActivities = (activities) => {
+    console.log(activities);
+    const postLists = document.querySelector("div.post-list.ai-posts");
+    let tempLikeBoxes = document.querySelectorAll(".like-box");
+    let flag = tempLikeBoxes[0].style.display !== 'none';
+    activities.forEach((activity) => {
+        postLists.innerHTML += `
+            <div class="post-substance">
+                <div class="post-info">
+                    <div class="post-thumbnail-box">
+                        <a class="post-thumbnail-link" href="/activity/detail?id=${activity.id}" ondragstart="return false">
+                            <img class="post-thumbnail" alt="활동 썸네일 이미지"
+                                src="${activity.thumbnail_path ? '/upload/' + activity.thumbnail_path : '/static/public/web/images/logo/logo8.png'}" 
+                            />
+                        </a>
+                        <div class="like-box" style="${flag ? 'display: block' : 'display: none'}">
+                            <input type="hidden" name="activity-id" value="${activity.id}">
+                            <button class="like-btn" type="button">
+                                <span class="full-heart" style="${activity.is_like ? 'display: block' : 'display: none'}">
+                                    <svg data-v-e13ecf0e="" xmlns="http://www.w3.org/2000/svg" class="like-svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path data-v-e13ecf0e="" fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </span>
+                                <span class="empty-heart" style="${activity.is_like ? 'display: none' : 'display: block'}">
+                                    <svg data-v-e13ecf0e="" xmlns="http://www.w3.org/2000/svg" class="unlike-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path data-v-e13ecf0e="" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="post-contents">
+                        <div class="start-date-place">
+                            <div>
+                                <span>${formatDate(activity.activity_start)}</span>
+                            </div>
+                            <div>
+                                <span></span>
+                            </div>
+                        </div>
+                        <div class="post-title">
+                            <a class="post-title-link" href="/activity/detail?id=${activity.id}" ondragstart="return false">${activity.activity_title}</a>
+                        </div>
+                        <div class="entry-fee-hits">
+                            <div class="hits">
+                                <span class="hits-text">관심 ${activity.like_count} | 참가 ${activity.member_count}명</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+    })
+    addClickEventToLikeBtns();
+}
+
+const getRecommendedActivities = async (callback) => {
+    if (!memberId) memberId = 0;
+    response = await fetch(`/ai/api/activities/`);
+    activities = await response.json();
+    if (callback) {
+        callback(activities.activities);
+    }
+}
+
+getRecommendedActivities(showRecommendedActivities);
+
 // 좋아요 선택 시 동작하는 js
 const modalWrapCopy = document.querySelector(".club-modal-wrap");
 // > 좋아요 선택 시 관심 설정할 때 표시할 부분
@@ -204,33 +289,40 @@ const getActivityLikeCount = async (activityId) => {
 }
 
 // 좋아요 버튼 클릭 시 svg 변경되는 이벤트
+
 HTMLCollection.prototype.forEach = Array.prototype.forEach;
-const likeBtns = document.querySelectorAll(".like-btn");
-const emptyHeartsCopy = document.querySelectorAll(".empty-heart");
-const fullHeartsCopy = document.querySelectorAll(".full-heart");
-const targetActivityIds = document.querySelectorAll("input[name=activity-id]");
-const hitsText = document.querySelectorAll(".hits-text");
-likeBtns.forEach((likeBtn, i) => {
-    likeBtn.addEventListener("click", async () => {
-        modalWrapCopy.style.display = "block";
-        if (emptyHeartsCopy[i].style.display === "none") {
-            await activityLikeCountService.addOrDeleteLike(targetActivityIds[i].value, false);
-            modalUnlikeContainerCopy.style.display = "block";
-            modalLikeContainerCopy.style.display = "none";
-            emptyHeartsCopy[i].style.display = "block";
-            fullHeartsCopy[i].style.display = "none";
-        } else {
-            await activityLikeCountService.addOrDeleteLike(targetActivityIds[i].value, true);
-            modalUnlikeContainerCopy.style.display = "none";
-            modalLikeContainerCopy.style.display = "block";
-            emptyHeartsCopy[i].style.display = "none";
-            fullHeartsCopy[i].style.display = "block";
-        }
-        const likeCount = await getActivityLikeCount(targetActivityIds[i].value);
-        const memberCount = await getActivityMemberCount(targetActivityIds[i].value);
-        hitsText[i].innerText = `관심 ${likeCount} | 참가 ${memberCount}명`;
+
+const addClickEventToLikeBtns = () => {
+    const likeBtns = document.querySelectorAll(".like-btn");
+    const emptyHeartsCopy = document.querySelectorAll(".empty-heart");
+    const fullHeartsCopy = document.querySelectorAll(".full-heart");
+    const targetActivityIds = document.querySelectorAll("input[name=activity-id]");
+    const hitsText = document.querySelectorAll(".hits-text");
+    likeBtns.forEach((likeBtn, i) => {
+        likeBtn.addEventListener("click", async () => {
+            modalWrapCopy.style.display = "block";
+            if (emptyHeartsCopy[i].style.display === "none") {
+                await activityLikeCountService.addOrDeleteLike(targetActivityIds[i].value, false);
+                modalUnlikeContainerCopy.style.display = "block";
+                modalLikeContainerCopy.style.display = "none";
+                emptyHeartsCopy[i].style.display = "block";
+                fullHeartsCopy[i].style.display = "none";
+            } else {
+                await activityLikeCountService.addOrDeleteLike(targetActivityIds[i].value, true);
+                modalUnlikeContainerCopy.style.display = "none";
+                modalLikeContainerCopy.style.display = "block";
+                emptyHeartsCopy[i].style.display = "none";
+                fullHeartsCopy[i].style.display = "block";
+            }
+            const likeCount = await getActivityLikeCount(targetActivityIds[i].value);
+            const memberCount = await getActivityMemberCount(targetActivityIds[i].value);
+            hitsText[i].innerText = `관심 ${likeCount} | 참가 ${memberCount}명`;
+        });
     });
-});
+}
+
+addClickEventToLikeBtns();
+
 
 // 가입 관련 모듈
 const changeClubMemberStatus = async (memberId, clubId) => {
@@ -450,4 +542,13 @@ signalBtns.forEach((signalBtn, i) => {
 });
 
 
-// 관리하기 버튼 클릭 시 모임관리 페이지로 이동 (모임관리 작업 시작 시 추가)
+// 관리하기 버튼 클릭 시 모임관리 페이지로 이동
+const manageBtns = document.querySelectorAll(".manage-btn");
+if (manageBtns) {
+    manageBtns.forEach((btn, i) => {
+        btn.addEventListener("click", () => {
+            let clubId = clubIds[i].value;
+            location.href = `/member/mypage-club/${clubId}/`;
+        })
+    })
+}

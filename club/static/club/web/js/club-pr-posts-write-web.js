@@ -23,22 +23,31 @@ writeBtn.addEventListener("click", (e) => {
 
 // 카테고리, 제목, 내용, 이미지 다 입력했을 때에만 작성완료 버튼 활성화
 // 이미지 부분은 아래에 있습니다.
-const categorySelect = document.querySelector(".pr-write-fields");
+// const categorySelect = document.querySelector(".pr-write-fields");
 const titleInput = document.querySelector(".pr-write-title");
 const contentInput = document.querySelector(".pr-write-content");
 let tempDraggedFile = false;
 
+// function checkValuesAndValidateButton() {
+//     if (!categorySelect.value || !titleInput.value || !contentInput.value || !fileNameInfo.innerText) {
+//         writeBtn.disabled = true;
+//         return;
+//     }
+//     writeBtn.disabled = false;
+// }
+
 function checkValuesAndValidateButton() {
-    if (!categorySelect.value || !titleInput.value || !contentInput.value || !fileNameInfo.innerText) {
-        writeBtn.disabled = true;
+    if (titleInput.value && contentInput.value && fileNameInfo.innerText) {
+        writeBtn.disabled = false;
         return;
     }
-    writeBtn.disabled = false;
+    writeBtn.disabled = true;
 }
 
-categorySelect.addEventListener("change", () => {
-    checkValuesAndValidateButton();
-});
+// categorySelect.addEventListener("change", () => {
+//     checkValuesAndValidateButton();
+// });
+
 titleInput.addEventListener("keyup", () => {
     checkValuesAndValidateButton();
 });

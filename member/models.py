@@ -35,6 +35,14 @@ class Member(Period):
     status = models.SmallIntegerField(choices=MEMBER_STATUS, default=1, null=False, blank=False)
     # google, kakao, naver
     member_type = models.CharField(max_length=10, null=False, blank=False)
+    # 키워드 1~3
+    member_keyword1 = models.TextField(null=True)
+    member_keyword2 = models.TextField(null=True)
+    member_keyword3 = models.TextField(null=True)
+    # 메인페이지 추천활동 관련 ai 모델 필드
+    member_recommended_activity_model = models.TextField(null=True)
+    # 틴플레이 추천 관련 ai 모델 필드
+    member_recommended_teenplay_model = models.TextField(null=True)
 
     objects = models.Manager()
     enabled_objects = MemberManager()

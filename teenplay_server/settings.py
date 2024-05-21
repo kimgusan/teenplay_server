@@ -14,6 +14,10 @@ from pathlib import Path
 
 import sys
 
+## 맥에서 사용
+import pymysql
+pymysql.install_as_MySQLdb()
+
 # 요청의 데이터 크기 제한 설정
 DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 10
 
@@ -28,14 +32,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ae#4x$6v8%w$ltg(5hdq43$*=+1_v@451gj$2j&t++x9#9o01h'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['teenplay.store','52.79.169.69', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['teenplay.store', '52.79.169.69', '127.0.0.1', 'localhost', '13.125.213.142']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'ai',
     'main',
     'oauth',
     'search',
@@ -73,8 +78,8 @@ CRONJOBS = [
     ('0 0 * * *', 'activity.tasks.DeleteOldImages')
 ]
 
-# SITE_ID = 2
-SITE_ID = 17
+SITE_ID = 2
+# SITE_ID = 17
 
 SOCIALACCOUNT_AUTO_SIGNUP = True
 ACCOUNT_EMAIL_REQUIRED = True
@@ -141,8 +146,8 @@ DATABASES = {
         # 계정 비밀번호
         'PASSWORD': '1234',
         # DBMS가 설치된 서버 PC의 IP, (127.0.0.1 = 로컬)
-        'HOST': '52.78.208.126',
-        # 'HOST': '43.200.179.41', # 현이 서버
+        # 'HOST': '52.78.208.126',
+        'HOST': '13.125.213.142', # 현이 서버
         # DBMS의 포트번호
         'PORT': '3306'
     }
