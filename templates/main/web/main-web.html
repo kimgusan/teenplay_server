@@ -284,54 +284,7 @@
                             <div class="post-container">
                                 <div>
                                     <div class="post-box">
-                                        <div class="post-list">
-                                            {% for recommend_activity in recommend_activities %}
-                                            <div class="post-substance">
-                                                <div class="post-info">
-                                                    <div class="post-thumbnail-box">
-                                                        <a class="post-thumbnail-link" href="{{ recommend_activity.get_absolute_url }}" ondragstart="return false">
-                                                            <img class="post-thumbnail" alt="활동 썸네일 이미지" 
-                                                                 {% if recommend_activity.thumbnail_path %}src="/upload/{{ recommend_activity.thumbnail_path }}"
-                                                                 {% else %} src="{% static 'public/web/images/logo/logo8.png' %}" {% endif %}
-                                                            />
-                                                        </a>
-                                                        <div class="like-box"{% if not request.session.member %} style="display: none;" {% endif %}>
-                                                            <input type="hidden" name="activity-id" value="{{ recommend_activity.id }}">
-                                                            <button class="like-btn" type="button">
-                                                                <span class="full-heart" {% if not recommend_activity.is_like %}style="display: none" {% endif %}>
-                                                                    <svg data-v-e13ecf0e="" xmlns="http://www.w3.org/2000/svg" class="like-svg" viewBox="0 0 20 20" fill="currentColor">
-                                                                        <path data-v-e13ecf0e="" fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
-                                                                    </svg>
-                                                                </span>
-                                                                <span class="empty-heart" {% if recommend_activity.is_like %}style="display: none" {% endif %}>
-                                                                    <svg data-v-e13ecf0e="" xmlns="http://www.w3.org/2000/svg" class="unlike-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                        <path data-v-e13ecf0e="" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                                                    </svg>
-                                                                </span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="post-contents">
-                                                        <div class="start-date-place">
-                                                            <div>
-                                                                <span>{{ recommend_activity.activity_start|date:"N j일(l)" }}</span>
-                                                            </div>
-                                                            <div>
-                                                                <span></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="post-title">
-                                                            <a class="post-title-link" href="{{ recommend_activity.get_absolute_url }}" ondragstart="return false">{{ recommend_activity.activity_title }}</a>
-                                                        </div>
-                                                        <div class="entry-fee-hits">
-                                                            <div class="hits">
-                                                                <span class="hits-text">관심 {{ recommend_activity.like_count }} | 참가 {{ recommend_activity.member_count }}명</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {% endfor %}
+                                        <div class="post-list ai-posts">
                                         </div>
                                     </div>
                                 </div>
@@ -370,7 +323,7 @@
                                                         <a href="{{ pop_club.get_absolute_url }}" ondragstart="return false">
                                                             <div class="clup-profile-box">
                                                                 <div class="clup-profile-thumbnail">
-                                                                    {% if pop_club.club_profile_path %}
+                                                                    {% if pop_club.club_profile_path and pop_club.club_profile_path != ' '%}
                                                                         <img class="clup-thumbnail-img" alt="모임 썸네일 이미지" src="/upload/{{ pop_club.club_profile_path }}" />
                                                                     {% else %}
                                                                         <img class="clup-thumbnail-img" alt="모임 썸네일 이미지" src="{% static 'public/web/images/logo/logo1.png' %}" />

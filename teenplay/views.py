@@ -1,4 +1,11 @@
-from django.db import transaction
+from pathlib import Path
+import joblib
+import numpy as np
+import random
+import os
+import pandas as pd
+
+from django.db import transaction, connection
 from django.db.models import Count, Q, F, Exists, Window
 from django.db.models.functions import RowNumber
 from django.shortcuts import render, redirect
@@ -8,10 +15,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from random import randint, choice
 
+
 from club.models import Club
-from member.models import Member
+from member.models import Member, MemberFavoriteCategory
 from teenplay.models import TeenPlay, TeenPlayLike
 from teenplay.serializers import TeenplaySerializer
+from wishlist.models import Wishlist
+
 
 # 매인 페이지 틴플레이 재생을 위한 View
 class TeenplayMainListWebView(View):
@@ -44,10 +54,14 @@ class TeenplayMainListWebView(View):
 
     # 메인 화면에서 랜덤한 리스트를 5개 뿌리기 위해서 사용하는 함수
     def main_random_list(self, id):
-        # 틴플레이 중에서 status 가 1인 전체 카운트 확인
-        teenplay_count = TeenPlay.enable_objects.all().count()
+        # 위시리스트, 맴버 관심 분야, 좋아요 최고 카테고리 분야 훈련된 모델을 통해 top3 호출
+        teenplay_category_top3 = self.get_user_features(id)
+        teenplay_count = TeenPlay.enable_objects.filter(club__club_main_category_id__in=teenplay_category_top3).count()
+
         # 전체 틴플레이 리스트에서 컬럼이 id 에 대한 부분을 쿼리셋 객체에서 list 로 형변환
-        teenplay_id_value = list(TeenPlay.enable_objects.values('id'))
+        teenplay_id_value = list(
+            TeenPlay.enable_objects.filter(club__club_main_category_id__in=teenplay_category_top3).values('id'))
+
         # 리스트로 형변환 된 내용중 id에 대한 값을 리스트에 담기 위해 빈 리스트 생성
         teenplay_id_list = []
         # 리스트 내부에 딕셔너리 중 value 값만 추출하여 빈 리스트에 추가
@@ -70,7 +84,8 @@ class TeenplayMainListWebView(View):
                                                                                               'club__club_name',
                                                                                               'club__club_intro',
                                                                                               'club__club_profile_path',
-                                                                                              'club_id', 'likes', 'teenplay_title')
+                                                                                              'club_id', 'likes',
+                                                                                              'teenplay_title')
 
             # 사용자가 해당 틴플레이를 좋아요를 눌렀는지 확인하기 위해서 존재 유무 확인, teenplay_id는 위에서 생성한 랜덤한 id를 동시에 대입
             member_like = TeenPlayLike.objects.filter(member_id=id, teenplay_id=radiant_teenplay, status=1).exists()
@@ -85,12 +100,122 @@ class TeenplayMainListWebView(View):
         # 반복문을 통해 생성된 리스트를 리턴값으로 전달
         return context
 
+    def get_user_features(self, id):
+        # 1. 사용자의 카테고리 id
+        member_like_random_category = MemberFavoriteCategory.objects.filter(member_id=id).order_by('?').values('category_id').first()
+        # 2. 위시리스트의 카테고리 id
+        wishlist_category = Wishlist.objects.filter(member_id=id, status=1).order_by('?').values('category_id').first()
+        # 3. 최고 좋아요 클럽의 카테고리 id
+        teenplay_like_most_category = (TeenPlayLike.objects.filter(member_id=id, status=1)
+                                       .annotate(category_id=F('teenplay__club__club_main_category_id'))
+                                       .values('category_id')
+                                       .annotate(category_count=Count('category_id'))
+                                       .order_by('-category_count')
+                                       .first())
+
+        # 로그인 하지 않았을 때 카테고리에 대하여 랜덤으로 카테고리 번호 입력
+        if member_like_random_category is None:
+            member_like_random_category = {'category_id': random.randint(1,13)}
+        if wishlist_category is None:
+            wishlist_category = {'category_id': random.randint(1,13)}
+        if teenplay_like_most_category is None:
+            teenplay_like_most_category = {'category_id': random.randint(1,13)}
+
+        # 로그인 안했을 때 피클파일 사용
+        if id is None:
+            data_list = [teenplay_like_most_category['category_id'], member_like_random_category['category_id'],
+                         wishlist_category['category_id']]
+            datas = np.array(data_list).astype('int32').reshape(1, -1)
+            # default 훈련 모델에 대하여 경로 지정
+            model_path = Path(__file__).resolve().parent.parent / 'ai' / 'ai' / 'rfc_default_model.pkl'
+            model = joblib.load(model_path)
+            prediction_proba = model.predict_proba(datas)
+            # 제한된 카테고리 없이 모든 카테고리에 대하여 번호 입력
+            top_13_indices = np.argsort(prediction_proba[0])[::-1]
+            top_13_classes = model.classes_[top_13_indices]
+            context = top_13_classes
+        else:
+            # 로그인 했을 때는 추가 훈련이 아닌 버전 업데이터 형식으로 사용되어야 합니다.
+            # 사유: Randomforest Classifier 모델에 대해서는 실시간 업데이트가 아닌 버젼업이 진행되어야 합니다.
+            # 틴플레이 ai 추천 모델을 사용하기 위하여 로그인된 사용자 id 를 받아와서 객체로 저장합니다.
+            member = Member.enabled_objects.get(id=id)
+            update_features = self.get_combined_member_data(id).reshape(1, -1)
+
+            # member 테이블에 사용자에 맞는 ai 모델을 불러옵니다.
+            model_file_name = member.member_recommended_teenplay_model
+
+            # 모델 경로에 대하여 입력해줍니다.
+            model_file_path = os.path.join(Path(__file__).resolve().parent.parent, model_file_name)
+
+            # model 객체에 현재까지 훈련된 모델을 가져옵니다.
+            model = joblib.load(model_file_path)
+            prediction_proba = model.predict_proba(update_features)
+            # 제한된 카테고리 없이 모든 카테고리에 대하여 번호 입력
+            top_3_indices = np.argsort(prediction_proba[0])[-3:][::-1]
+            top_3_classes = model.classes_[top_3_indices]
+
+            context = top_3_classes
+
+        return context
+
+    # view에 존재하는 데이터들을 결함하여 신규 데이터 프레임 및 훈련 및 검증 데이터 확인.
+    def get_combined_member_data(self, member_id):
+        # 쿼리 1: view_tp_member_favorite_category
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT member_id, member_favorite_category_id FROM view_tp_member_favorite_category WHERE member_id = %s ORDER BY RAND() LIMIT 1",
+                [member_id]
+            )
+            row1 = cursor.fetchone()
+            columns1 = [col[0] for col in cursor.description]
+
+        if not row1:
+            row1 = (member_id, 'default_favorite_category')  # 임의의 값을 할당
+            columns1 = ['member_id', 'member_favorite_category_id']
+
+        df1 = pd.DataFrame([row1], columns=columns1) if row1 else pd.DataFrame(columns=columns1)
+
+        # 쿼리 2: view_tp_member_wishlist_category
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT member_id, wishlist_category_id FROM view_tp_member_wishlist_category WHERE member_id = %s ORDER BY RAND() LIMIT 1",
+                [member_id]
+            )
+            row2 = cursor.fetchone()
+            columns2 = [col[0] for col in cursor.description]
+
+        if not row2:
+            row2 = (member_id, 'default_wishlist_category')  # 임의의 값을 할당
+            columns2 = ['member_id', 'wishlist_category_id']
+
+        df2 = pd.DataFrame([row2], columns=columns2) if row2 else pd.DataFrame(columns=columns2)
+
+        # 쿼리 3: view_tp_teenplay_like_category
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT member_id, club_main_category FROM view_tp_teenplay_like_category WHERE member_id IS NOT NULL GROUP BY club_main_category, member_id ORDER BY COUNT(*) DESC LIMIT 1"
+            )
+            row3 = cursor.fetchone()
+            columns3 = [col[0] for col in cursor.description]
+
+        if not row3:
+            row3 = (member_id, 'default_club_main_category')  # 임의의 값을 할당
+            columns3 = ['member_id', 'club_main_category']
+
+        df3 = pd.DataFrame([row3], columns=columns3) if row3 else pd.DataFrame(columns=columns3)
+
+        # 데이터프레임을 member_id를 기준으로 결합
+        df_combined = df1.merge(df2, on='member_id', how='outer').merge(df3, on='member_id', how='outer')
+
+        # 결합된 데이터프레임의 특정 값을 반환
+        return df_combined.values[0][1:]
+
+
 # 틴플레이 리스트를 추가하여 받아올 때 사용하는 API (아래로 스크롤)
 class TeenplayMainListAPIView(APIView):
     # 해당 url 로 호출을 받으면
     def get(self, request, slideNumber):
         teenplay_count = TeenPlay.enable_objects.all().count()
-
         # 멤버가 현재 세션에 등록되어있는지 확인하는 조건문
         if 'member' in request.session and 'id' in request.session['member']:
             id = request.session['member']['id']
@@ -99,6 +224,8 @@ class TeenplayMainListAPIView(APIView):
                 id = request.session['member'].get('id', None)
             else:
                 id = None
+
+        teenplay_category_top3 = self.get_user_features(id)
 
         # 쿼리셋 객체를 리스트로 변경
         teenplay_id_value = list(TeenPlay.enable_objects.values('id'))
@@ -129,8 +256,127 @@ class TeenplayMainListAPIView(APIView):
             teenplay_list.append(teenplay_like)
 
         context = teenplay_list
-        # 반복문을 통해 생성된 리스트를 리턴결과로 전
+        # 반복문을 통해 생성된 리스트를 리턴 결과로 전달
         return Response(context)
+
+    def get_user_features(self, id):
+        # 1. 사용자의 카테고리 id
+        member_like_random_category = MemberFavoriteCategory.objects.filter(member_id=id).order_by('?').values(
+            'category_id').first()
+        # 2. 위시리스트의 카테고리 id
+        wishlist_category = Wishlist.objects.filter(member_id=id, status=1).values('category_id').first()
+        # 3. 최고 좋아요 클럽의 카테고리 id
+        teenplay_like_most_category = (TeenPlayLike.objects.filter(member_id=id, status=1)
+                                       .annotate(category_id=F('teenplay__club__club_main_category_id'))
+                                       .values('category_id')
+                                       .annotate(category_count=Count('category_id'))
+                                       .order_by('-category_count')
+                                       .first())
+
+        # 로그인 하지 않았을 때 카테고리에 대하여 랜덤으로 카테고리 번호 입력
+        if member_like_random_category is None:
+            member_like_random_category = {'category_id': random.randint(1, 13)}
+        if wishlist_category is None:
+            wishlist_category = {'category_id': random.randint(1, 13)}
+        if teenplay_like_most_category is None:
+            teenplay_like_most_category = {'category_id': random.randint(1, 13)}
+
+        # 로그인 안했을 때 피클파일 사용
+        if id is None:
+            data_list = [teenplay_like_most_category['category_id'], member_like_random_category['category_id'],
+                         wishlist_category['category_id']]
+            datas = np.array(data_list).astype('int32').reshape(1, -1)
+            # default 훈련 모델에 대하여 경로 지정
+            model_path = Path(__file__).resolve().parent.parent / 'ai' / 'ai' / 'rfc_default_model.pkl'
+            model = joblib.load(model_path)
+            prediction_proba = model.predict_proba(datas)
+            # 제한된 카테고리 없이 모든 카테고리에 대하여 번호 입력
+            top_13_indices = np.argsort(prediction_proba[0])[::-1]
+            top_13_classes = model.classes_[top_13_indices]
+            context = top_13_classes
+        else:
+            # 로그인 했을 때는 추가 훈련이 아닌 버전 업데이터 형식으로 사용되어야 합니다.
+            # 사유: Randomforest Classifier 모델에 대해서는 실시간 업데이트가 아닌 버젼업이 진행되어야 합니다.
+            # 틴플레이 ai 추천 모델을 사용하기 위하여 로그인된 사용자 id 를 받아와서 객체로 저장합니다.
+            member = Member.enabled_objects.get(id=id)
+            update_features = self.get_combined_member_data(id).reshape(1, -1)
+
+            # member 테이블에 사용자에 맞는 ai 모델을 불러옵니다.
+            model_file_name = member.member_recommended_teenplay_model
+
+            # 모델 경로에 대하여 입력해줍니다.
+            model_file_path = os.path.join(Path(__file__).resolve().parent.parent, model_file_name)
+
+            # model 객체에 현재까지 훈련된 모델을 가져옵니다.
+            model = joblib.load(model_file_path)
+
+            model = joblib.load(model_file_path)
+            prediction_proba = model.predict_proba(update_features)
+            # 제한된 카테고리 없이 모든 카테고리에 대하여 번호 입력
+            top_3_indices = np.argsort(prediction_proba[0])[-3:][::-1]
+            top_3_classes = model.classes_[top_3_indices]
+
+            context = top_3_classes
+
+        return context
+
+    # view에 존재하는 데이터들을 결함하여 신규 데이터 프레임 및 훈련 및 검증 데이터 확인.
+    def get_combined_member_data(self, member_id):
+        # 쿼리 1: view_tp_member_favorite_category
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT member_id, member_favorite_category_id FROM view_tp_member_favorite_category WHERE member_id = %s ORDER BY RAND() LIMIT 1",
+                [member_id]
+            )
+            row1 = cursor.fetchone()
+            columns1 = [col[0] for col in cursor.description]
+
+        if not row1:
+            row1 = (member_id, 'default_favorite_category')  # 임의의 값을 할당
+            columns1 = ['member_id', 'member_favorite_category_id']
+
+        df1 = pd.DataFrame([row1], columns=columns1) if row1 else pd.DataFrame(columns=columns1)
+
+        # 쿼리 2: view_tp_member_wishlist_category
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT member_id, wishlist_category_id FROM view_tp_member_wishlist_category WHERE member_id = %s ORDER BY RAND() LIMIT 1",
+                [member_id]
+            )
+            row2 = cursor.fetchone()
+            columns2 = [col[0] for col in cursor.description]
+
+        if not row2:
+            row2 = (member_id, 'default_wishlist_category')  # 임의의 값을 할당
+            columns2 = ['member_id', 'wishlist_category_id']
+
+        df2 = pd.DataFrame([row2], columns=columns2) if row2 else pd.DataFrame(columns=columns2)
+
+        # 쿼리 3: view_tp_teenplay_like_category
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT member_id, club_main_category FROM view_tp_teenplay_like_category WHERE member_id IS NOT NULL GROUP BY club_main_category, member_id ORDER BY COUNT(*) DESC LIMIT 1"
+            )
+            row3 = cursor.fetchone()
+            columns3 = [col[0] for col in cursor.description]
+
+        if not row3:
+            row3 = (member_id, 'default_club_main_category')  # 임의의 값을 할당
+            columns3 = ['member_id', 'club_main_category']
+
+        df3 = pd.DataFrame([row3], columns=columns3) if row3 else pd.DataFrame(columns=columns3)
+
+        # 데이터프레임을 member_id를 기준으로 결합
+        df_combined = df1.merge(df2, on='member_id', how='outer').merge(df3, on='member_id', how='outer')
+
+        # 결합된 데이터프레임의 특정 값을 반환
+        return df_combined.values[0][1:]
+
+
+
+
+
+
 
 # 틴플레이 좋아요를 클릭했을 때 동작하는 APIView
 class TeenPlayLikeAPIView(APIView):

@@ -11,7 +11,7 @@
         <div class="main-bg">
             <div class="main-content-container">
                 <div class="content-container">
-                    <img class="content-image" src="/upload/{{ activity.thumbnail_path }}" />
+                    <img class="content-image" {% if activity.thumbnail_path %} src="/upload/{{ activity.thumbnail_path }}" {% else %}src="{% static 'public/web/images/logo/logo8.png' %}" {% endif %}/>
                     <div class="content-main-text">{{ activity.activity_intro }}</div>
                     <div class="right-content-box">
                         <div class="right-sticky">
@@ -609,4 +609,3 @@
     <script src="{% static 'activity/web/js/activity-detail-web.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 {% endblock %}
-

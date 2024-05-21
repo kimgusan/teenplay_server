@@ -1,24 +1,120 @@
 // 1단계 - 모임 이름 입력 검사 (버튼 활성화)
 const nameInput = document.querySelector("input.name-form-input");
 const nameButton = document.querySelector("button.name-form-button");
+const categorySelect = document.querySelector(".pr-write-fields");
+const interestSelectBox = document.querySelector(".interest-select-box");
+const categoryCheckboxes = document.querySelectorAll(".hidden-checkbox");
+const selectError = document.querySelector(".select-error")
+const categoryLabels = document.querySelectorAll(".interest-category")
+
+// 버튼 클릭 시 한번 더 검사하기 위해
+let flag = false;
+
+let categoryValue = false;
+let nameValue = false;
+
+// 대표 카테고리 입력 검사
+categorySelect.addEventListener("change", (e) => {
+    if (e.target.value) {
+        categoryValue = true;
+        const categorySelectValue = categorySelect.value
+
+        // 선택된 대표 카테고리를 추가 카테고리 항목에서 없애기
+        categoryLabels.forEach((label) => {
+            if (label.getAttribute('for') === categorySelectValue) {
+                label.style.display = "none";
+            } else {
+                label.style.display = 'block';
+            }
+        })
+    } else {
+        categoryValue = false;
+    }
+    allCheck();
+})
+
+// 모임명 입력 검사
 nameInput.addEventListener("keyup", (e) => {
-    if (nameInput.value) {
+    if (e.target.value) {
+        nameValue = true;
+    } else {
+        nameValue = false;
+    }
+    allCheck();
+})
+
+// 카테고리 체크 검사
+let categoryCheckValue = true;
+let checkedCount = 0;
+
+categoryCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener("click", () => {
+        checkedCount = Array.from(categoryCheckboxes).filter((checkbox) => checkbox.checked).length
+        if (checkedCount < 4) {
+            selectError.classList.add("hidden")
+            categoryCheckValue = true;
+        } else {
+            selectError.classList.remove("hidden")
+            categoryCheckValue = false;
+        }
+        allCheck();
+    })
+})
+
+// 전체 입력 시 활성화
+function allCheck() {
+    if (categoryValue && nameValue) {
+        interestSelectBox.classList.remove("hidden");
         nameButton.classList.remove("disabled");
+        flag = true;
+
+        if (categoryCheckValue === false) {
+            nameButton.classList.add("disabled");
+            flag = false;
+        }
         return;
     }
-    if (!nameButton.classList.contains("disabled")) {
-        nameButton.classList.add("disabled");
-    }
-});
+    nameButton.classList.add("disabled");
+    flag = false;
+}
 
 // 작성한 모임명을 각 태그 안에 넣어 주는 함수
 const writeClubName = () => {
     const nameInput = document.querySelector("input.name-form-input");
-    document.querySelector(".desc-form-text-title").innerText = `[${nameInput.value}]에 대한 소개글을 작성해주세요.`;
+    document.querySelector(".desc-form-text-title").innerText = `[${nameInput.value}]에 대한 소개글과\n활동 지역을 선택해주세요.`;
     document.querySelector(".img-form-text-title").innerText = `[${nameInput.value}] 모임을 고유한 이미지로 꾸며주세요`;
     document.querySelector(".club-detail-name").innerText = `${nameInput.value}`
 
 }
+
+// 관심 분야 클릭 시 클래스 추가로 속성 변화
+const interestCaregories = document.querySelectorAll(".interest-category");
+
+interestCaregories.forEach((interestCaregory) => {
+    interestCaregory.addEventListener("click", () => {
+        if (interestCaregory.classList.contains("selected-category")) {
+            interestCaregory.classList.remove("selected-category");
+            return;
+        }
+        interestCaregory.classList.add("selected-category");
+    });
+});
+
+// 입력창 가져오기
+const nameInputBox = document.querySelector(".name-form-input-box");
+
+// 입력창 클릭 시 입력박스 색상 변경
+nameInputBox.addEventListener("click", (event) => {
+    nameInputBox.style.outline = "#2563EB solid 2px";
+    // 이벤트 전파를 막아 문서 전체의 클릭 이벤트가 트리거되지 않도록 합니다.
+    event.stopPropagation();
+})
+
+// 입력창 외 화면 클릭 시 색상 변경 제거
+document.addEventListener("click", () => {
+    nameInputBox.style.outline = "";
+});
+
 
 // 다음 버튼 클릭 시 내용 변경(2단계로 이동)
 
@@ -39,19 +135,73 @@ prevButton.addEventListener("click", () => {
     secondContent.style.display = "none";
 });
 
-// 소개글 입력 검사
+// 소개글 입력 박스 가져오기
+const descInputBox = document.querySelector(".desc-form-input-box");
 
+// 소개글 입력창 클릭 시 입력박스 테두리 색상 변경
+descInputBox.addEventListener("click", (event) => {
+    descInputBox.style.outline = "#2563EB solid 2px";
+    // 이벤트 전파를 막아 문서 전체의 클릭 이벤트가 트리거되지 않도록 합니다.
+    event.stopPropagation();
+})
+
+// 소개글 입력창 외 화면 클릭 시 테두리 색상 변경 제거
+document.addEventListener("click", () => {
+    descInputBox.style.outline = "";
+});
+
+// 소개글 입력 검사
 const descInput = document.querySelector("input.desc-form-input");
 const descButton = document.querySelector(".desc-form-button");
-descInput.addEventListener("keyup", () => {
-    if (descInput.value) {
+
+// descInput.addEventListener("keyup", () => {
+//     if (descInput.value) {
+//         descButton.classList.remove("disabled");
+//         return;
+//     }
+//     if (!descButton.classList.contains("disabled")) {
+//         descButton.classList.add("disabled");
+//     }
+// });
+
+// 지역 선택 검사
+let regionValue = false;
+const regionSelect = document.querySelector(".pr-write-desc-fields")
+
+// 대표 카테고리 입력 검사
+regionSelect.addEventListener("change", (e) => {
+    if (e.target.value) {
+        regionValue = true;
+    } else {
+        regionValue = false;
+    }
+    descCheck();
+})
+
+let descValue = false;
+
+// 소개글 입력 검사
+descInput.addEventListener("keyup", (e) => {
+    if (e.target.value) {
+        descValue = true;
+    } else {
+        descValue = false;
+    }
+    descCheck();
+})
+
+// 전체 입력 시 활성화
+let flagDE = false;
+
+function descCheck() {
+    if (regionValue && descValue) {
         descButton.classList.remove("disabled");
+        flagDE = true;
         return;
     }
-    if (!descButton.classList.contains("disabled")) {
-        descButton.classList.add("disabled");
-    }
-});
+    descButton.classList.add("disabled");
+    flagDE = false;
+}
 
 // 작성한 모임 한 줄 소개를 태그 안에 넣어 주는 함수
 const writeClubIntro = () => {

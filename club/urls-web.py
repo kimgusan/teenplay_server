@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 
-from club.views import ClubIntroView, ClubCreateView, ClubDetailView, ClubAPI, ClubMemberAPI, \
+from club.views import ClubIntroView, ClubCreateView, ClubDetailView, ClubMemberAPI, \
     ClubNoticeAPI, ClubOngoingActivityAPI, ClubFinishedActivityAPI, ClubPrPostWriteView, ClubPrPostDetailView, \
     ClubTeenplayAPIView, ClubTeenplayDeleteAPIView, ClubTeenplayUploadAPIView, ClubPrPostListView, ClubPrPostReplyAPI, \
     ClubPrPostUpdateView, ClubPrPostDeleteView, ClubPrPostListAPI
@@ -15,7 +15,6 @@ urlpatterns = [
     path('create/', ClubCreateView.as_view(), name='create'),
     # 모임 상세 페이지 이동 주소
     path('detail/', ClubDetailView.as_view(), name='detail'),
-    path('detail/api/<int:club_id>', ClubAPI.as_view(), name='club-api'),
     path('club-member/api/<int:member_id>/<int:club_id>/', ClubMemberAPI.as_view(), name='club-member-api'),
     path('club-ongoing-activity/api/<int:club_id>/', ClubOngoingActivityAPI.as_view(), name='club-ongoing-activity-api'),
     path('club-finished-activity/api/<int:club_id>/<int:page>/', ClubFinishedActivityAPI.as_view(), name='club-finished-activity-api'),

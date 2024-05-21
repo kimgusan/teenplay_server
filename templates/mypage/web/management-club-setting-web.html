@@ -54,6 +54,56 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="email-phone-box">
+                            <div class="email-items">
+                                <div class="club-manager-email-box">
+                                    <label style="display: block" for="club-manager-email-input">
+                                        <div class="club-manager-email-title">카테고리</div>
+                                    </label>
+                                </div>
+                                <div class="pr-write-title-wrap">
+                                    <select name="club-category" class="pr-write-fields" required>
+                                        <option value class="pr-write-default">카테고리</option>
+                                        {% for category in categories %}
+                                            <option value="{{ category.id }}" {% if category.id == club_category_id %}selected{% endif %}>{{ category.category_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+{#                                <input name="manager-email" id="club-manager-email-input" autocomplete="off"#}
+{#                                       type="text" value="{{ memberEmail }}"/>#}
+{#                                <!-- <div class="none-email-warning" style="display: none">항목을 입력하세요</div> -->#}
+                            </div>
+                            <div class="phone-items">
+                                <div class="club-manager-phone-box">
+                                    <label style="display: block" for="club-manager-phone-input">
+                                        <div class="club-manager-phone-title">지역</div>
+                                    </label>
+                                </div>
+                                <div class="pr-write-desc-wrap">
+                                    <select name="club-region" class="pr-write-desc-fields" required>
+                                        <option value class="pr-write-desc-default">지역</option>
+                                        {% for region in regions %}
+                                            <option value="{{ region.id }}" {% if region.id == region_id %}selected{% endif %}>{{ region.region }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+{#                                <input name="manager-phone" id="club-manager-phone-input" autocomplete="off"#}
+{#                                       type="text" value="{{ memberPhone }}"/>#}
+{#                                <!-- <div class="none-phone-warning" style="display: none">항목을 입력하세요</div> -->#}
+                            </div>
+                        </div>
+                        <div class="club-category-items">
+                            <div class="club-category-title">추가 카테고리</div>
+                            <div class="club-sub-category-warning hidden">추가 카테고리는 최대 3개까지 선택이 가능합니다.</div>
+                            <div class="interest-select-box">
+                                {% for category in categories %}
+                                    <input type="checkbox" class="hidden-checkbox" id="{{ category.id }}" name="club-sub-category" value="{{ category.id }}" {% for sub_category_id in club_sub_category_id %}{% if category.id == sub_category_id %}checked{% endif %}{% endfor %}>
+                                    <label class="interest-category {% for sub_category_id in club_sub_category_id %}{% if category.id == sub_category_id %}selected-category{% endif %}{% endfor %}" for="{{ category.id }}">
+                                        {{ category.category_name }}
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        </div>
                         <div class="club-profile-items">
                             <div class="club-profile-title">모임 프로필 업로드</div>
                             <div class="club-profile-setting">
