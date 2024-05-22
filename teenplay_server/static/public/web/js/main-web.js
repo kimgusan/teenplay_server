@@ -684,4 +684,3 @@ function clubBtnAdd() {
         })
     }
 }
-
