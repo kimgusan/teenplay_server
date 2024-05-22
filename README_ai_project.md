@@ -1,6 +1,6 @@
 # <img src="https://github.com/team-teenplay/teenplay_server/assets/156397974/10dfb0a8-62c1-412f-bc78-fd415191e84c" width="25"> 틴플레이 영상 재생 알고리즘 AI 프로젝트 보고서 🎉
 
-    (1) 틴플레이: http://teenplay.store
+틴플레이: http://teenplay.store
 
 ## ♠️ 목차
 
