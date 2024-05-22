@@ -2,8 +2,12 @@
 const tabListBtn = document.querySelector(".tab-list-btn");
 const tabList = document.querySelector(".tab-list");
 const teenchinshow = document.querySelector(".teenchin-list")
+const teenchinshowadd = document.querySelector(".teenchin-list-add")
 let page = 1
 const cansleButton = document.querySelector(".teenchin-more-btn")
+
+
+
 
 
 document.addEventListener("click", (e) => {
@@ -32,10 +36,13 @@ const teenchinModalContainer = document.querySelector(".teenchin-modal-container
 
 // 신청중
 const teenchinWaitBtns = document.querySelectorAll(".teenchin-wait-btn");
-
+const teenchinWaitBtnsadd = document.querySelectorAll(".teenchin-wait-btn-add");
 teenchinWaitBtns.forEach((teenchinWaitBtn) => {
     teenchinWaitBtn.addEventListener("click", (e) => {
-
+    });
+});
+teenchinWaitBtnsadd.forEach((teenchinWaitBtn) => {
+    teenchinWaitBtn.addEventListener("click", (e) => {
     });
 });
 
@@ -76,6 +83,12 @@ const madalContent = (e, profileName) => {
         teenchinModalTitle.innerText = `${profileName}님에게\n보낸 틴친 신청을 취소하시겠습니까?`;
         teenchinModalChangedBtn.innerText = `취소하기`;
         modalHeaderTitle.innerText = `${profileName}님에게\n보낸 틴친 신청을 취소했습니다.`;
+    }
+
+    if (e.target.closest(".teenchin-wait-btn-add")) {
+        teenchinModalTitle.innerText = `${profileName}님에게\n보낸 틴친 신청을 보내시겠습니까?`;
+        teenchinModalChangedBtn.innerText = `보내기`;
+        modalHeaderTitle.innerText = `${profileName}님에게\n보낸 틴친 신청을 보냈습니다.`;
     }
 };
 
@@ -138,8 +151,15 @@ checkBtn.addEventListener("click", () => {
 // 쪽지 보내기 클릭 시 작성 모달 여는 이벤트
 const sendModalWrap = document.querySelector(".send-modal-wrap");
 const sendLetterBtns = document.querySelectorAll(".send-letter-btn");
+const sendLetterBtnsadd = document.querySelectorAll(".send-letter-btn-add");
 
 sendLetterBtns.forEach((sendLetterBtn) => {
+    sendLetterBtn.addEventListener("click", (e) => {
+
+    });
+});
+
+sendLetterBtnsadd.forEach((sendLetterBtn) => {
     sendLetterBtn.addEventListener("click", (e) => {
 
     });
@@ -205,13 +225,60 @@ checkModalCheckBtn.addEventListener("click", () => {
 
 
 
+const add_showList = (teenchin) =>{
+    let text = '';
+        teenchin = teenchin.teenchin_add
+    if (teenchin.length === 0){
+            text +=
+            `<div class="signal-none">카테고리를 설정해주세요!.</div>`
+        }
+    else{
+        teenchin.forEach((teenchin)=>{
+            if (teenchin){
+            text += `
+            <div class="teenchin-box">
+                <div class="teenchin-items-add">
+                    <!-- 틴친 상세프로필 이동 주소 필요 -->
+                    <div>
+                        <div class="profile-img-contents">
+                            <div class="profile-img-box">
+                                <img class="profile-img" src="/static/public/web/images/logo/logo1.png" alt="" />
+                            </div>
+                            <div class="profile-img-gap"></div>
+                        </div>
+                        <div class="profile-info-contents">
+                            <div class="profile-name">${teenchin.member_nickname}</div>
+                        </div>
+                    </div>
+                    <div class="teenchin-btn-container">
+                        <div class="teenchin-btn-box-add">
+                            <button class="teenchin-wait-btn-add ${teenchin.id}" type="button" style="background-color: #CE201B; color: #ffffff;">
+                                <svg class="add-svg" fill="currentColor" version="1.0" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                                    <g><path d="M16,29A13,13,0,1,1,29,16,13,13,0,0,1,16,29ZM16,5A11,11,0,1,0,27,16,11,11,0,0,0,16,5Z M16,23a1,1,0,0,1-1-1V10a1,1,0,0,1,2,0V22A1,1,0,0,1,16,23Z M22,17H10a1,1,0,0,1,0-2H22a1,1,0,0,1,0,2Z"></path></g>
+                                </svg>
+                                <span>틴친 신청</span>
+                            </button>
+                            <button class="send-letter-btn-add ${teenchin.id}" type="button">
+                                <svg aria-label="게시물 공유" class="send-svg" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
+                                    <line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="22" x2="9.218" y1="3" y2="10.083"></line>
+                                    <polygon fill="none" points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon>
+                                </svg>
+                                <span>쪽지 보내기</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `}
 
-
-
+        })
+    }return text;
+}
 
 const showList = (teenchin) =>{
     let text = '';
-    console.log(teenchin)
+    teenchin = teenchin.teenchin
+
     if (teenchin.length ===0){
             text +=
             `<div class="signal-none">아직 새로운 틴친신청이 없습니다.</div>`
@@ -601,6 +668,43 @@ const showList = (teenchin) =>{
 
 
 
+teenchinshowadd.addEventListener("click", async (e)=>{
+    if(e.target.classList[0] === 'send-letter-btn-add'){
+        const receiver = e.target.classList[1]
+        document.querySelector(".send-receiver-email").value = e.target.closest(".teenchin-items-add").querySelector(".profile-name").innerText;
+        sendModalWrap.querySelector(".send-modal-container").style.animation = "popUp 0.5s";
+        sendModalWrap.style.display = "block";
+        sendCheckBtn.addEventListener("click", async(e)=>{
+            const sendText = document.getElementById("send-content")
+            await teenchinService.write({
+                letter_content: sendText.value,
+                receiver_id : receiver
+            })
+            await teenchinService.getList(member_id, 1,status_teenchin,search, add_showList).then((text) => {
+                teenchinshowadd.innerHTML = text;
+            });
+
+        })
+    }
+    if(e.target.classList[0] === 'teenchin-wait-btn-add'){
+        const addTeenChin = e.target.classList[1]
+        let profileName = e.target.closest(".teenchin-items-add").querySelector(".profile-name").innerText;
+        madalContent(e, profileName);
+        teenchinModalContainer.style.animation = "popUp 0.5s";
+        teenchinModalWrap.style.display = "flex";
+        teenchinModalChangedBtn.addEventListener("click", async(e)=>{
+            teenchinService.add(addTeenChin)
+            await teenchinService.getList(member_id, 1,status_teenchin,search, add_showList).then((text) => {
+                teenchinshowadd.innerHTML = text;
+            });
+        } )
+
+    }
+})
+
+
+
+
 
 
 teenchinshow.addEventListener("click", async (e)=>{
@@ -689,6 +793,7 @@ cansleButton.addEventListener("click", (e) => {
     });
 
     teenchinService.getList(member_id, page + 1,).then((teenchin) => {
+            teenchin = teenchin.teenchin
     if (teenchin.length === 0){
         cansleButton.style.display = "none";
     }
@@ -708,14 +813,21 @@ teenchinService.getList(member_id, page,status_teenchin,search, showList).then((
 
 teenchinService.getList(member_id, page,status_teenchin,search,showList);
 
+teenchinService.getList(member_id, page,status_teenchin,search, add_showList).then((text) => {
+    teenchinshowadd.innerHTML += text;
+});
+
+
+teenchinService.getList(member_id, page,status_teenchin,search,add_showList);
+
 
 teenchinService.getList(member_id, page,status_teenchin,search ).then((teenchin) => {
-    console.log(teenchin.length)
+        teenchin = teenchin.teenchin
 if (teenchin.length === 0){
     cansleButton.style.display = "none";
 }})
 teenchinService.getList(member_id, page+1,status_teenchin,search).then((teenchin) => {
-    console.log(teenchin.length)
+    teenchin = teenchin.teenchin
 if (teenchin.length === 0){
     cansleButton.style.display = "none";
 }})

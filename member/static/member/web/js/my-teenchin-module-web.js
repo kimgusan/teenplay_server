@@ -8,6 +8,8 @@ const teenchinService = (() => {
         return teenchin
             ;}
 
+
+
         const remove = async (friend_id) => {
             await fetch(`/member/mypage-teenchin/${friend_id}/`, {
                 method: 'delete',
@@ -32,14 +34,15 @@ const teenchinService = (() => {
         });
     }
 
+        const add = async (friend_id) => {
+            await fetch(`/member/mypage-teenchin/${friend_id}/`, {
+            method: 'PUT',
+            headers: {'X-CSRFToken': csrf_Token}
+        });
+    }
 
 
-
-
-
-
-
-    return {getList:getList,remove:remove, update:update, write:write}
+    return {getList:getList,remove:remove, update:update, write:write, add:add}
 })();
 
 
