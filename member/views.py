@@ -1,5 +1,8 @@
 import math
+import os
+from pathlib import Path
 
+import joblib
 from bootpay_backend import BootpayBackend
 from django.db import transaction
 from django.db.models import F, Q, Value, Count
@@ -25,45 +28,86 @@ from wishlist.models import WishlistReply, Wishlist
 
 
 class MemberLoginWebView(View):
+    # 로그인 페이지로 이동하는 view입니다.
     def get(self, request):
         return render(request, 'member/web/login-web.html')
 
 
 class MemberJoinWebView(View):
+    # 회원가입 페이지로 이동하는 view입니다.
     def get(self, request):
+        # 요청 경로에서 쿼리스트링으로 type을 받아옵니다.
+        # google, kakao, naver 중 하나가 담기게 됩니다.
         member_type = request.GET['type']
+
+        # 요청 경로에서 쿼리스트링으로 이메일 주소를 받아옵니다.
         member_email = request.GET['email']
+
+        # 요청 경로에서 쿼리스트링으로 이름을 받아옵니다.
         member_nickname = request.GET['name']
+
+        # 해당 정보들을 화면에 전달하기 위해 context에 담아줍니다.
         context = {
             'member_type': member_type,
             'member_email': member_email,
             'member_nickname': member_nickname
         }
+
         return render(request, 'member/web/join-web.html', context=context)
 
+    # 회원가입 완료 시 데이터를 post방식으로 전달할 때 호출되는 메소드입니다.
     @transaction.atomic
     def post(self, request):
+        # post방식으로 받아온 데이터를 담아줍니다.
         data = request.POST
+
+        # 마케팅 정보 수신 동의 여부 checkbox를 getlist로 받아와 len()을 통해 판단합니다.
         marketing_agree = data.getlist('marketing_agree')
+        # 길이가 0일 경우 미동의, 1일 경우 체크된 상태이므로 동의입니다.
         marketing_agree = True if len(marketing_agree) else False
+
+        # 개인정보 수집, 이용 동의 여부 checkbox를 getlist로 받아와 len()을 통해 판단합니다.
         privacy_agree = data.getlist('privacy_agree')
+        # 동의, 미동의 여부는 마찬가지 방식으로 결정합니다.
         privacy_agree = True if len(privacy_agree) else False
 
+        # 받아온 데이터들을 data에 딕셔너리 형태로 저장합니다.
         data = {
             'member_email': data['member-email'],
             'member_nickname': data['member-name'],
             'member_marketing_agree': marketing_agree,
             'member_privacy_agree': privacy_agree,
             'member_type': data['member-type'],
-            'member_phone': data['member-phone']
+            'member_phone': data['member-phone'],
+            'member_keyword1': ' ',
+            'member_keyword2': ' ',
+            'member_keyword3': ' ',
+            'member_address': ' '
         }
 
+        # data 딕셔너리를 이용하여 tbl_member에 insert하고 반환된 객체를 member에 담아줍니다.
         member = Member.objects.create(**data)
+
+        # 회원별 ai 모델을 생성합니다.
+        # 1. 활동 추천 ai 모델
+        model_path = os.path.join(Path(__file__).resolve().parent.parent, 'ai/ai/activity_recommender.pkl')
+        model = joblib.load(model_path)
+        member_model_path = f'ai/2024/05/20/activity_model{member.id}.pkl'
+        os.makedirs(os.path.dirname(member_model_path), exist_ok=True)
+        joblib.dump(model, member_model_path)
+        member.member_recommended_activity_model = member_model_path
+        member.save(update_fields=['member_recommended_activity_model'])
+
+        # member에 담긴 객체를 직렬화하여 member에 다시 담아줍니다.
         member = MemberSerializer(member).data
+
+        # 직렬화된 객체를 세션에 'member' 키값으로 저장합니다. (로그인)
         request.session['member'] = member
+
+        # 메인페이지로 redirect 합니다.
         return redirect('/')
 
-
+###########################################################
 from django.http import HttpResponse
 
 
@@ -149,9 +193,16 @@ class MypageInfoWebView(View):
                 else:
                     # 존재하지 않으면 새로운 레코드 생성
                     MemberFavoriteCategory.objects.create(member_id=member.id, category_id=category_id, status=1)
+
+            # 관심 키워드 업데이트
+            member.member_keyword1 = data.get('keyword1')
+            member.member_keyword2 = data.get('keyword2')
+            member.member_keyword3 = data.get('keyword3')
+
             member.updated_date = timezone.now()
             member.save(update_fields=['member_nickname', 'member_phone', 'member_gender', 'member_marketing_agree',
-                                       'member_privacy_agree', 'member_birth', 'updated_date'])
+                                       'member_privacy_agree', 'member_birth', 'member_keyword1',
+                                       'member_keyword2', 'member_keyword3', 'updated_date'])
             member_file = MemberProfile.objects.filter(member_id=member.id)
             for key, uploaded_file in file.items():
                 try:
@@ -174,6 +225,9 @@ class MypageInfoWebView(View):
                 'member_gender': member.member_gender,
                 'member_marketing_agree': member.member_marketing_agree,
                 'member_privacy_agree': member.member_privacy_agree,
+                'member_keyword1': member.member_keyword1,
+                'member_keyword2': member.member_keyword2,
+                'member_keyword3': member.member_keyword3,
             }
             member_files = list(member_file.values('profile_path').filter(status=1))
             if len(member_files) != 0:
@@ -389,14 +443,21 @@ class MypageTeenchinAPIview(APIView):
         return Response(teenchin)
 
 
+############################################
 class MemberAlarmCountAPI(APIView):
+    # 로그인한 상태에서 헤더에 알람 개수를 띄우기 위한 요청에 응답하는 REST API 입니다.
     def get(self, request):
+        # 로그인한 사용자의 id를 받아옵니다.
         member_id = request.GET.get('member-id')
+
+        # tbl_alarm에서 해당 사용자에게 전송된(receiver_id=member_id) 알람의 개수를 집계하여 저장합니다.
         alarm_count = Alarm.enabled_objects.filter(receiver_id=member_id).count()
 
+        # 이를 Response에 담아 응답합니다.
         return Response(alarm_count)
 
 
+#############################################
 class MypageTeenchinAPIview(APIView):
     def get(self, request, member_id, page):
         status_letter = request.GET.get('status_teenchin')
@@ -1136,32 +1197,62 @@ class MypageReplyDeleteAPIVIEW(APIView):
         return Response('good')
 
 
+############################################################
+# 댓글창의 프로필 사진을 클릭하여 틴친(친구 서비스) 기능을 이용할 때 호출하는 REST API 입니다.
 class TeenChinAPI(APIView):
+    # 로그인한 사용자와 클릭한 사용자와의 틴친 관계를 조회할 때 호출되는 메소드입니다.
     def get(self, request):
+        # 로그인한 사용자의 id를 세션에서 받아옵니다.
         member_id = request.session.get('member').get('id')
+
+        # 요청 경로에서 쿼리스트링으로 상대방 id를 받아옵니다.
         teenchin_id = request.GET.get('teenchin-id')
+
+        # 사용자가 신청을 보낸 사람(sender)일 수도 있고, 받은 사람(receiver)일 수도 있으므로 두 경우 모두 고려하여 조회합니다.
         send_friend = Friend.objects.filter(sender_id=member_id, receiver_id=teenchin_id)
         receive_friend = Friend.objects.filter(receiver_id=member_id, sender_id=teenchin_id)
+
+        # 친구 상태에 해당하는 값을 0으로 초기화합니다.
         teenchin_status = 0
+
+        # 화면의 javascript에서 이후 친구수락/친구거절/신청취소/친구끊기 등을 요청할 때 sender인지 여부를 판단하기 위해
+        # 변수를 선언하고 False로 초기화합니다.
         is_sender = False
+
+        # 만약 로그인한 사용자가 sender라면
         if send_friend.exists():
+            # Friend 객체를 가져옵니다.
             send_friend = send_friend.first()
+            # 친구 상태 변수에 해당 객체의 is_friend 필드값을 넣어줍니다.
             teenchin_status = send_friend.is_friend
+            # 사용자가 sender이므로 is_sender에 True를 담아줍니다.
             is_sender = True
+
+        # 만약 로그인한 사용자가 receiver라면
         elif receive_friend.exists():
+            # Friend 객체를 가져옵니다.
             receive_friend = receive_friend.first()
+            # 친구 상태 변수에 해당 객체의 is_friend 필드값을 넣어줍니다.
             teenchin_status = receive_friend.is_friend
 
+        # if와 elif 조건문에 모두 들어가지 않았다면 둘 사이의 틴친 기록이 없다는 뜻이므로,
+        # teenchin_status 및 is_sender가 각각 0, False로 초기화된 값이 들어가게 됩니다.
         return Response({
             'teenchinStatus': teenchin_status,
             'isSender': is_sender,
         })
 
+    # 친구 신청을 보냈을 경우 호출되는 post 메소드입니다.
+    @transaction.atomic
     def post(self, request):
+        # 로그인한 사용자의 id를 세션에서 가져옵니다.
         member_id = request.session.get('member').get('id')
+
+        # 상대방 id를 post로 전달받은 데이터에서 가져옵니다.
         teenchin_id = request.data.get('teenchinId')
 
-        # 혹시 이미 친구인데 넘어왔을 경우 바로 return
+        # 혹시 이미 틴친인데 post 요청이 들어왔을 경우 바로 return합니다.
+        # 이때에도 사용자가 sender일 경우와 receiver일 경우 모두 고려하여 조회 및 판단합니다.
         send_friend = Friend.objects.filter(sender_id=member_id, receiver_id=teenchin_id, is_friend=1)
         if send_friend.exists():
             return Response("already exists")
@@ -1169,52 +1260,76 @@ class TeenChinAPI(APIView):
         if receive_friend.exists():
             return Response("already exists")
 
-        # 먼저 상태가 0인 컬럼이 있는지 검사(sender와 receiver가 다르므로 두 번 해야한다)
+        # is_friend가 0인 컬럼이 있는지 먼저 조회합니다.
+        # 이때 사용자가 sender일 경우와 receiver일 경우 모두 고려하여 조회합니다.
+        # is_friend가 0이라면 soft delete (이 경우 틴친 끊기를 통해 끊어진 상태입니다) 된 상태입니다.
         send_friend = Friend.objects.filter(sender_id=member_id, receiver_id=teenchin_id, is_friend=0)
         if send_friend.exists():
+            # 존재한다면 객체를 가져옵니다.
             send_friend = send_friend.first()
+            # 객체의 is_friend 값을 -1(수락 대기중)로 변경한 후 save()를 통해 update합니다.
             send_friend.is_friend = -1
             send_friend.updated_date = timezone.now()
             send_friend.save(update_fields=['is_friend', 'updated_date'])
-            # 알람 추가
+
+            # 요청을 받는 상대방에게 알람을 전송합니다.
             alarm_data = {
                 'target_id': member_id,
                 'alarm_type': 5,
                 'sender_id': member_id,
                 'receiver_id': teenchin_id
             }
+            # 이때 get_or_create()를 통해 알람 객체를 생성하거나 가져옵니다.
             alarm, created = Alarm.objects.get_or_create(**alarm_data)
+
+            # 만약 created가 False라면 soft delete된 경우이므로 status를 1로 다시 바꾼 후 save()합니다.
             if not created:
                 alarm.status = 1
                 alarm.updated_date = timezone.now()
                 alarm.save(update_fields=['status', 'updated_date'])
 
             return Response("success")
+
+        # 이번에는 사용자가 receiver일 경우에 해당합니다.
         receive_friend = Friend.objects.filter(sender_id=teenchin_id, receiver_id=member_id, is_friend=0)
         if receive_friend.exists():
+            # 이미 존재한다면 객체를 가져옵니다.
             receive_friend = receive_friend.first()
+
+            # 이번에는 receiver였던 사용자가 다시 요청을 보냈기 때문에,
+            # sender와 receiver를 서로 바꿔줍니다.
             receive_friend.sender_id = member_id
             receive_friend.receiver_id = teenchin_id
+
+            # 그리고 해당 객체의 is_friend를 -1(수락 대기중)으로 변경 후 save()를 통해 update합니다.
             receive_friend.is_friend = -1
             receive_friend.updated_date = timezone.now()
             receive_friend.save(update_fields=['is_friend', 'updated_date', 'sender_id', 'receiver_id'])
-            # 알람 추가
+
+            # 틴친 신청을 받는 상대방에게 알람을 전송합니다.
             alarm_data = {
                 'target_id': member_id,
                 'alarm_type': 5,
                 'sender_id': member_id,
                 'receiver_id': teenchin_id
             }
+
+            # get_or_create()를 통해 알람을 생성하거나 가져옵니다.
             alarm, created = Alarm.objects.get_or_create(**alarm_data)
+
+            # 만약 created가 False라면 soft delete된 상태이므로 status를 1로 변경한 후 save()합니다.
             if not created:
                 alarm.status = 1
                 alarm.updated_date = timezone.now()
                 alarm.save(update_fields=['status', 'updated_date'])
 
             return Response("success")
-        # 없다면 새로 생성
+
+        # 만약 사용자가 sender와 receiver일 경우에 대해 모두 테이블에 정보가 존재하지 않는다면,
+        # sender를 사용자로, receiver를 상대방으로 tbl_friend에 insert합니다.
         Friend.objects.create(sender_id=member_id, receiver_id=teenchin_id)
-        # 알람 추가
+
+        # 마찬가지로 알람을 get_or_create()를 사용하여 생성하거나, 혹은 가져와서 status를 1로 변경 후 save()합니다.
         alarm_data = {
             'target_id': member_id,
             'alarm_type': 5,
@@ -1229,16 +1344,26 @@ class TeenChinAPI(APIView):
 
         return Response("success")
 
+    # 틴친 신청이 왔을 때 수락/거절 하거나, 내가 보낸 틴친 신청을 취소할 때 호출되는 patch 메소드입니다.
+    @transaction.atomic
     def patch(self, request):
+        # 로그인한 사용자의 id를 세션에서 가져옵니다.
         member_id = request.session.get('member').get('id')
+
+        # fetch 요청의 body에서 상대방 id를 가져옵니다.
         teenchin_id = request.data.get('teenchinId')
+
+        # fetch 요청의 body에서 사용자가 신청했는지 여부를 가져옵니다. 이때에는 신청을 취소하는 요청에 해당합니다.
         is_sender = request.data.get('isSender')
+
+        # fetch 요청의 body에서, 사용자가 신청을 받았을 경우 수락/거절 여부를 가져옵니다.
         is_accept = request.data.get('isAccept')
 
         # is_sender > True -> 신청 취소만 가능 (is_accept는 관계없음)
         # is_sender > False -> is_accept가 True면 수락, False면 거절
 
-        # 혹시 이미 친구인데 넘어왔을 경우 바로 return
+        # 혹시 이미 틴친인데 요청이 들어왔을 경우 바로 return합니다.
+        # 이때에도 사용자가 sender일 경우와 receiver일 경우 모두 고려하여 조회 및 판단합니다.
         send_friend = Friend.objects.filter(sender_id=member_id, receiver_id=teenchin_id, is_friend=1)
         if send_friend.exists():
             return Response("already exists")
@@ -1246,15 +1371,18 @@ class TeenChinAPI(APIView):
         if receive_friend.exists():
             return Response("already exists")
 
-        # 내가 보냈을 경우 신청을 취소하는 로직
+        # 사용자가 신청을 보냈을 경우입니다.
         if is_sender:
+            # is_friend가 -1(수락 대기/신청중)인 정보를 tbl_friend에서 가져옵니다.
             send_friend = Friend.objects.filter(sender_id=member_id, receiver_id=teenchin_id, is_friend=-1)
             if send_friend.exists():
+                # 존재할 경우 first()로 객체를 추출합니다.
                 send_friend = send_friend.first()
+                # is_friend를 0(거절/신청취소)으로 바꿔준 후 save()를 통해 update합니다.
                 send_friend.is_friend = 0
                 send_friend.updated_date = timezone.now()
                 send_friend.save(update_fields=['is_friend', 'updated_date'])
-                # 신청할 때 떴던 알람의 status를 0으로 바꿔주자!
+                # 친구 신청 시 상대방에게 전송되었던 알람의 status를 0(soft deleted)으로 바꾼 후 save()합니다.
                 alarm_data = {
                     'target_id': member_id,
                     'alarm_type': 5,
@@ -1270,108 +1398,141 @@ class TeenChinAPI(APIView):
 
                 return Response("success")
 
-        # 다른 틴친으로부터 온 요청을 수락/거절할 때
+        # 사용자가 신청을 받았을 경우 수락/거절하는 부분입니다.
+        # is_friend가 -1(수락 대기/신청중)인 정보를 tbl_friend에서 가져옵니다.
         receive_friend = Friend.objects.filter(sender_id=teenchin_id, receiver_id=member_id, is_friend=-1)
         if receive_friend.exists():
+            # 존재할 경우 first()를 통해 객체를 추출합니다.
             receive_friend = receive_friend.first()
-            # 수락할 때
+            # is_accept가 True라면 사용자가 '수락'을 선택했을 경우입니다.
             if is_accept:
+                # 해당 객체의 is_friend를 1(틴친중)로 바꾼 후 save()하여 update합니다.
                 receive_friend.is_friend = 1
                 receive_friend.updated_date = timezone.now()
                 receive_friend.save(update_fields=['is_friend', 'updated_date'])
+                # 틴친 신청을 보냈던 상대방에게 틴친 승인 알림(alarm_type=14)을 보냅니다.
                 alarm_data = {
-                    'target_id': teenchin_id,
+                    'target_id': member_id,
                     'alarm_type': 14,
-                    'sender_id': teenchin_id,
-                    'receiver_id': member_id
+                    'sender_id': member_id,
+                    'receiver_id': teenchin_id
                 }
+                # 이때 get_or_create()를 통해 알람 객체를 생성하거나 가져옵니다.
                 alarm, created = Alarm.objects.get_or_create(**alarm_data)
+                # created가 False라면, soft delete된 알람이므로 status를 1로 바꾼 후 save()합니다.
                 if not created:
                     alarm.status = 1
                     alarm.updated_date = timezone.now()
                     alarm.save(update_fields=['status', 'updated_date'])
+
                 return Response("success")
 
-            # 거절할 때
+            # is_accept가 False라면 if문 블록에 진입하지 않고 이 부분이 실행됩니다.
+            # is_friend를 0(거절/틴친끊기)으로 바꾼 후 save()합니다.
             receive_friend.is_friend = 0
             receive_friend.updated_date = timezone.now()
             receive_friend.save(update_fields=['is_friend', 'updated_date'])
-            # 신청할 때 떴던 알람의 status를 0으로 바꿔주자!
+
+            # 사용자에게 전송되었던 알림(alarm_type=5, 틴친신청 알림)이 있는지 조회합니다.
             alarm_data = {
-                'target_id': member_id,
+                'target_id': teenchin_id,
                 'alarm_type': 5,
-                'sender_id': member_id,
-                'receiver_id': teenchin_id,
+                'sender_id': teenchin_id,
+                'receiver_id': member_id,
             }
             alarm = Alarm.objects.filter(**alarm_data)
+
+            # 해당 알림이 존재한다면,
             if alarm.exists():
+                # first()를 통해 객체를 가져옵니다.
                 alarm = alarm.first()
+                # status를 0(soft delete)으로 바꾼 후 save()합니다.
                 alarm.status = 0
                 alarm.updated_date = timezone.now()
                 alarm.save(update_fields=['status', 'updated_date'])
 
+            # 사용자에게 틴친 신청을 보낸 상대방에게 틴친 거절 알림(alarm_type=15)을 전송합니다.
+            alarm_data = {
+                'target_id': member_id,
+                'alarm_type': 15,
+                'sender_id': member_id,
+                'receiver_id': teenchin_id
+            }
+            # 이때 get_or_create()를 통해 알람 객체를 생성하거나 가져옵니다.
+            alarm, created = Alarm.objects.get_or_create(**alarm_data)
+            # created가 False라면 soft delete된 알람이므로 status를 1로 바꾼 후 save()합니다.
+            if not created:
+                alarm.status = 1
+                alarm.updated_date = timezone.now()
+                alarm.save(update_fields=['status', 'updated_date'])
+
             return Response("success")
 
+        # 위 조건식이 모두 False였다면 아무런 작업도 하지 않고 return 합니다.
         return Response("fail")
 
+    # 틴친 끊기 요청 시 호출되는 delete 메소드입니다.
+    # 틴친을 끊었을 때에는 관련 알림이 전송되지 않습니다.
+    @transaction.atomic
     def delete(self, request):
+        # 현재 로그인한 사용자의 id를 세션에서 가져옵니다.
         member_id = request.session.get('member').get('id')
+
+        # fetch 요청의 body에서 상대방의 id를 가져옵니다.
         teenchin_id = request.data.get('teenchinId')
+
+        # 사용자와 상대방이 틴친중이라면, 사용자가 sender인 경우와 receiver인 경우를 모두 고려해주어야 합니다.
+        # tbl_friend에서 사용자가 sender이고 is_friend가 1(틴친중)인 정보를 조회합니다.
         send_friend = Friend.objects.filter(sender_id=member_id, receiver_id=teenchin_id, is_friend=1)
+        # 해당 정보가 존재한다면,
         if send_friend.exists():
+            # first()를 통해 객체를 가져옵니다.
             send_friend = send_friend.first()
+            # 해당 객체의 is_friend를 0(거절/틴친끊기)으로 바꾼 후 save()합니다.
             send_friend.is_friend = 0
             send_friend.updated_date = timezone.now()
             send_friend.save(update_fields=['is_friend', 'updated_date'])
-            # 거절 알림
-            alarm_data = {
-                'target_id': member_id,
-                'alarm_type': 15,
-                'sender_id': member_id,
-                'receiver_id': teenchin_id
-            }
-            alarm, created = Alarm.objects.get_or_create(**alarm_data)
-            if not created:
-                alarm = alarm.first()
-                alarm.status = 1
-                alarm.updated_date = timezone.now()
-                alarm.save(update_fields=['status', 'updated_date'])
 
             return Response("success")
 
+        # 이번에는 사용자가 receiver이고 is_friend가 1(틴친중)인 정보를 조회합니다.
         receive_friend = Friend.objects.filter(sender_id=teenchin_id, receiver_id=member_id, is_friend=1)
+        # 해당 정보가 존재한다면,
         if receive_friend.exists():
+            # first()를 통해 객체를 가져옵니다.
             receive_friend = receive_friend.first()
+            # 해당 객체의 is_friend를 0(거절/틴친끊기)으로 바꾼 후 save()합니다.
             receive_friend.is_friend = 0
             receive_friend.updated_date = timezone.now()
             receive_friend.save(update_fields=['is_friend', 'updated_date'])
-            # 거절 알림
-            alarm_data = {
-                'target_id': member_id,
-                'alarm_type': 15,
-                'sender_id': member_id,
-                'receiver_id': teenchin_id
-            }
-            alarm, created = Alarm.objects.get_or_create(**alarm_data)
-            if not created:
-                alarm = alarm.first()
-                alarm.status = 1
-                alarm.updated_date = timezone.now()
-                alarm.save(update_fields=['status', 'updated_date'])
 
             return Response("success")
 
+        # 위 조건식이 모두 False라면 아무런 작업도 하지 않고 return합니다.
         return Response("fail")
 
 
 class ClubAlarmManageAPI(APIView):
+    # 모임 관련 알림을 각 모임마다 켜거나 끌 때 호출되는 REST API 입니다.
     def get(self, request):
+        # 현재 로그인한 사용자의 id를 세션에서 가져옵니다.
         member_id = request.session.get('member').get('id')
+
+        # fetch 요청 경로의 쿼리스트링에서 해당 모임의 id를 가져옵니다.
         club_id = request.GET.get('club-id')
+
+        # 사용자id와 모임id로 tbl_club_member에서 사용자가 해당 모임의 구성원인지 조회합니다.
         club_member = ClubMember.enabled_objects.filter(member_id=member_id, club_id=club_id)
+
+        # 모임에 대한 알림은 모임 구성원일 경우에만 켜거나 끌 수 있으므로 존재하지 않을 경우 return합니다.
         if not club_member.exists():
             return Response("Not found")
+
+        # 존재할 경우 first()를 통해 객체를 가져옵니다.
         club_member = club_member.first()
+
+        # alarm_status는 0(False)과 1(True) 둘 중의 하나이므로, not 연산자로 반대로 바꿔줍니다.
+        # 바꿔준 후 save()를 통해 update합니다.
         club_member.alarm_status = not club_member.alarm_status
         club_member.updated_date = timezone.now()
         club_member.save(update_fields=['alarm_status', 'updated_date'])
@@ -1379,6 +1540,7 @@ class ClubAlarmManageAPI(APIView):
         return Response("success")
 
 
+################################################################################
 class MypageActivityListView(View):
     def get(self, request, club_id):
         order = request.GET.get('order', '최신순')

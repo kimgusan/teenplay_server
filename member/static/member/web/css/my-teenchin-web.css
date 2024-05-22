@@ -345,6 +345,35 @@ a {
     gap: 1rem;
     display: grid;
     margin-bottom: 2.5rem;
+
+}
+
+.teenchin-list-add {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    padding-top: 0.5rem;
+    gap: 1rem;
+    display: grid;
+    margin-bottom: 2.5rem;
+
+    transition-timing-function: ease-out;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    transition-property: transform;
+    box-sizing: content-box;
+}
+
+.a{
+    touch-action: pan-y;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    overflow: hidden;
+    list-style: none;
+    padding: 0;
+    z-index: 1;
+
 }
 
 .teenchin-box {
@@ -353,6 +382,18 @@ a {
 
 .teenchin-items {
     padding: 1.5rem;
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255/var(--tw-bg-opacity));
+    border-width: 1px;
+    border-radius: 0.5rem;
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+    margin-bottom: -1px;
+}
+
+.teenchin-items-add {
+    padding: 2.5rem;
     --tw-bg-opacity: 1;
     background-color: rgb(255 255 255/var(--tw-bg-opacity));
     border-width: 1px;
@@ -438,6 +479,14 @@ a {
     display: flex;
 }
 
+.teenchin-btn-box-add {
+    flex-direction: row;
+    font-size: .9375rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 .teenchin-btn {
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow);
     --tw-border-opacity: 1;
@@ -446,6 +495,26 @@ a {
     --tw-text-opacity: 1;
     color: #878D91;
     width: 50%;
+    --tw-bg-opacity: 1;
+    background-color: #ffffff;
+    border-radius: 0.375rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    justify-content: center;
+    align-items: center;
+    height: 2.5rem;
+    display: flex;
+}
+
+.teenchin-wait-btn-add {
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow);
+    --tw-border-opacity: 1;
+    border-color: #E1E1E1;;
+    border-width: 1px;
+    --tw-text-opacity: 1;
+    color: #878D91;
+    width: 100%;
     --tw-bg-opacity: 1;
     background-color: #ffffff;
     border-radius: 0.375rem;
@@ -532,6 +601,27 @@ a {
     align-items: center;
     height: 2.5rem;
     display: flex;
+}
+
+.send-letter-btn-add {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(0px*(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(0px*var(--tw-space-y-reverse));
+    --tw-space-x-reverse: 0;
+    width: 100%;
+    --tw-text-opacity: 1;
+    color: rgb(36 93 203/var(--tw-text-opacity));
+    --tw-bg-opacity: 1;
+    background-color: rgb(239 246 255/var(--tw-bg-opacity));
+    border-radius: 0.375rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    justify-content: center;
+    align-items: center;
+    height: 2.5rem;
+    display: flex;
+    margin-top: 8px;
 }
 
 .teenchin-more-btn {
@@ -857,4 +947,10 @@ textarea[name="send-content"]::-webkit-scrollbar {
     width: 800px;
     padding-left: 443px;
     padding-top: 141px;
+}
+
+.add-svg, .request-svg, .check-svg, .send-check-svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-right: 0.25rem;
 }
