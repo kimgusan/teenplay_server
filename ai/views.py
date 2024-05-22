@@ -174,6 +174,3 @@ class RecommendedAClubAPIView(APIView):
 # 사전 학습 모델과 sklearn 버전이 맞지 않는 오류 발생
 # jupyter notebook에서 pip install --upgrade scikit-learn==1.4.2
 # 또는 django 버전 수정 pip install scikit-learn==1.2.2
-
-
-
