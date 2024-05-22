@@ -315,66 +315,66 @@
                             <div class="post-container">
                                 <div>
                                     <div class="post-box">
-                                        <div class="post-list">
-                                            {% for pop_club in popular_clubs %}
-                                            <div class="post-substance">
-                                                <div class="clup-wrap">
-                                                    <div class="clup-container">
-                                                        <a href="{{ pop_club.get_absolute_url }}" ondragstart="return false">
-                                                            <div class="clup-profile-box">
-                                                                <div class="clup-profile-thumbnail">
-                                                                    {% if pop_club.club_profile_path and pop_club.club_profile_path != ' '%}
-                                                                        <img class="clup-thumbnail-img" alt="모임 썸네일 이미지" src="/upload/{{ pop_club.club_profile_path }}" />
-                                                                    {% else %}
-                                                                        <img class="clup-thumbnail-img" alt="모임 썸네일 이미지" src="{% static 'public/web/images/logo/logo1.png' %}" />
-                                                                    {% endif %}
-                                                                </div>
-                                                                <div class="badge-gap">
-                                                                    <div class="vacuum"></div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="club-info">
-                                                                <input type="hidden" name="club-id" value="{{ pop_club.id }}">
-                                                                <div class="clup-name">{{ pop_club.club_name }}</div>
-                                                                <div class="clup-activity">
-                                                                    {{ pop_club.activity_count }}
-                                                                    <span>개의 활동</span>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <div class="clup-service">
-                                                            <!-- 가입대기중인 모임일 경우 -->
-                                                            <button class="cancel-btn" type="button" {% if pop_club.is_member != -1 %}style="display: none" {% endif %}>
-                                                                <span>가입대기</span>
-                                                            </button>
-                                                            <!-- 가입한 모임일 경우 -->
-                                                            <div class="clup-btn-box" {% if pop_club.is_member != 1 %}style="display: none" {% endif %}>
-                                                                <button class="join-status" type="button">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="check-svg" viewBox="0 0 20 20" fill="currentColor">
-                                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                                                    </svg>
-                                                                    <span>가입중</span>
-                                                                </button>
-                                                                <button id="signal-btn" class="signal-on" type="button">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="signal-on-svg" viewBox="0 0 20 20" fill="currentColor">
-                                                                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
-                                                                    </svg>
-                                                                    <span>알림 받는 중</span>
-                                                                </button>
-                                                            </div>
-                                                            <!-- 가입되지 않은 모임일 경우 -->
-                                                            <button class="join-btn" type="button" {% if pop_club.is_member or pop_club.is_manager %}style="display: none" {% endif %}>
-                                                                <span>가입 신청</span>
-                                                            </button>
-                                                            <!-- 내 모임일 경우 -->
-                                                            <button class="manage-btn" type="button" {% if not pop_club.is_manager %}style="display: none" {% endif %}>
-                                                                <span>관리하기</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {% endfor %}
+                                        <div class="post-list club-ai-posts">
+{#                                            {% for pop_club in popular_clubs %}#}
+{#                                            <div class="post-substance">#}
+{#                                                <div class="clup-wrap">#}
+{#                                                    <div class="clup-container">#}
+{#                                                        <a href="{{ pop_club.get_absolute_url }}" ondragstart="return false">#}
+{#                                                            <div class="clup-profile-box">#}
+{#                                                                <div class="clup-profile-thumbnail">#}
+{#                                                                    {% if pop_club.club_profile_path and pop_club.club_profile_path != ' '%}#}
+{#                                                                        <img class="clup-thumbnail-img" alt="모임 썸네일 이미지" src="/upload/{{ pop_club.club_profile_path }}" />#}
+{#                                                                    {% else %}#}
+{#                                                                        <img class="clup-thumbnail-img" alt="모임 썸네일 이미지" src="{% static 'public/web/images/logo/logo1.png' %}" />#}
+{#                                                                    {% endif %}#}
+{#                                                                </div>#}
+{#                                                                <div class="badge-gap">#}
+{#                                                                    <div class="vacuum"></div>#}
+{#                                                                </div>#}
+{#                                                            </div>#}
+{#                                                            <div class="club-info">#}
+{#                                                                <input type="hidden" name="club-id" value="{{ pop_club.id }}">#}
+{#                                                                <div class="clup-name">{{ pop_club.club_name }}</div>#}
+{#                                                                <div class="clup-activity">#}
+{#                                                                    {{ pop_club.activity_count }}#}
+{#                                                                    <span>개의 활동</span>#}
+{#                                                                </div>#}
+{#                                                            </div>#}
+{#                                                        </a>#}
+{#                                                        <div class="clup-service">#}
+{#                                                            <!-- 가입대기중인 모임일 경우 -->#}
+{#                                                            <button class="cancel-btn" type="button" {% if pop_club.is_member != -1 %}style="display: none" {% endif %}>#}
+{#                                                                <span>가입대기</span>#}
+{#                                                            </button>#}
+{#                                                            <!-- 가입한 모임일 경우 -->#}
+{#                                                            <div class="clup-btn-box" {% if pop_club.is_member != 1 %}style="display: none" {% endif %}>#}
+{#                                                                <button class="join-status" type="button">#}
+{#                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="check-svg" viewBox="0 0 20 20" fill="currentColor">#}
+{#                                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>#}
+{#                                                                    </svg>#}
+{#                                                                    <span>가입중</span>#}
+{#                                                                </button>#}
+{#                                                                <button id="signal-btn" class="signal-on" type="button">#}
+{#                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="signal-on-svg" viewBox="0 0 20 20" fill="currentColor">#}
+{#                                                                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>#}
+{#                                                                    </svg>#}
+{#                                                                    <span>알림 받는 중</span>#}
+{#                                                                </button>#}
+{#                                                            </div>#}
+{#                                                            <!-- 가입되지 않은 모임일 경우 -->#}
+{#                                                            <button class="join-btn" type="button" {% if pop_club.is_member or pop_club.is_manager %}style="display: none" {% endif %}>#}
+{#                                                                <span>가입 신청</span>#}
+{#                                                            </button>#}
+{#                                                            <!-- 내 모임일 경우 -->#}
+{#                                                            <button class="manage-btn" type="button" {% if not pop_club.is_manager %}style="display: none" {% endif %}>#}
+{#                                                                <span>관리하기</span>#}
+{#                                                            </button>#}
+{#                                                        </div>#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            {% endfor %}#}
                                         </div>
                                     </div>
                                 </div>
