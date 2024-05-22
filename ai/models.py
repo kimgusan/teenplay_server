@@ -1,8 +1,5 @@
 from django.db import models
 
-####### ai/models
-from django.db import models
-
 
 class ReplyAi(models.Model):
     comment = models.TextField(null=False, blank=False)
