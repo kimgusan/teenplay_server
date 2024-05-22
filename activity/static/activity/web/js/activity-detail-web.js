@@ -1,3 +1,5 @@
+//////// activity-detail.js 입니다 /////
+
 NodeList.prototype.filter = Array.prototype.filter;
 NodeList.prototype.map = Array.prototype.map;
 
