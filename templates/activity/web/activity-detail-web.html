@@ -395,7 +395,12 @@
                                     <div class="k-activity-window">
                                         <div class="k-act-window-image">
                                             <a class="k-act-image-block" href="/activity/detail/?id={{ recommended_activity.id }}">
-                                                <img class="k-act-image" src="/upload/{{ recommended_activity.thumbnail_path }}" alt="" />
+{#                                                <img class="k-act-image" src="/upload/{{ recommended_activity.thumbnail_path }}" alt="" />#}
+                                                {% if activity.thumbnail_path %}
+                                                    <img class="k-act-image" src="/upload/{{ activity.thumbnail_path }}" alt="" />
+                                                {% else %}
+                                                    <img class="k-act-image" src="/static/public/web/images/logo/logo8.png" alt="" />
+                                                {% endif %}
                                             </a>
                                             <input type="hidden" name="recommended-activity-id" value="{{ recommended_activity.id }}">
                                             <input type="hidden" name="is-liked" value="{{ recommended_activity.is_liked }}">

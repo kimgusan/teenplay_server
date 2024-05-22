@@ -1,8 +1,11 @@
+#### activity/view.py 입니다 ########
+
 import math
 import os
 from pathlib import Path
 
 import joblib
+import pandas as pd
 from django.db import transaction
 from django.db.models import F, Q
 from django.shortcuts import render, redirect
@@ -25,6 +28,8 @@ import re
 from teenplay_server.models import Region
 from bootpay_backend import BootpayBackend
 import pickle
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 def make_datetime(date, time="00:00"):
     '''
@@ -189,6 +194,86 @@ class ActivityCreateWebView(View):
 
 
 class ActivityDetailWebView(View):
+
+    @staticmethod
+    def remove_html_tags(text):
+        # 정규표현식을 사용하여 HTML 태그를 찾습니다.
+        clean = re.compile('<.*?>')
+        # 태그를 빈 문자열로 대체합니다.
+        return re.sub(clean, '', text)
+
+    @staticmethod
+    def remove_special_characters_except_spaces(text):
+        """
+        주어진 텍스트에서 숫자, 한글, 영어 알파벳을 제외한 모든 특수문자 및 기호를 제거하고,
+        공백은 유지합니다.
+
+        :param text: 특수문자 및 기호를 포함한 문자열
+        :return: 특수문자 및 기호가 제거된 문자열 (공백 유지)
+        """
+        # 정규표현식을 사용하여 숫자, 한글, 영어 알파벳, 공백을 제외한 모든 문자를 찾습니다.
+        clean = re.compile('[^0-9a-zA-Zㄱ-ㅎ가-힣ㅏ-ㅣ ]')
+        # 특수문자 및 기호를 빈 문자열로 대체합니다.
+        return re.sub(clean, ' ', text)
+
+    # 활동 데이터프레임 생성
+    # activities = Activity.objects.all()
+    #
+    # activity_data = []
+    # for activity in activities:
+    #     activity_data.append((activity.activity_title, activity.activity_content, activity.id))
+    #
+    # a_df = pd.DataFrame(activity_data, columns=['activity_title', 'activity_content', 'activity_intro', 'activity_address_location',  'id'])
+    # a_df.activity_content = a_df.activity_content.apply(remove_html_tags)
+    # a_df.activity_content = a_df.activity_content.apply(lambda x: x.replace("\"", ""))
+    # a_df['feature'] = a_df['activity_title'] + ' ' + a_df['activity_content'] + ' ' + a_df['activity_intro'] + ' ' + a_df['activity_address_location']
+    # result_df = a_df.feature
+
+    # 활동 데이터프레임 생성
+    activities = Activity.enabled_objects.annotate(
+        category_name=F('category__category_name')
+    ).values(
+        'activity_title',
+        'activity_content',
+        'activity_intro',
+        'activity_address_location',
+        'id',
+        'category_name'
+    )
+
+    # activity_data 리스트에 필요한 필드 값을 추가합니다.
+    activity_data = []
+    for activity in activities:
+        activity_data.append(
+            (
+                activity['activity_title'],
+                activity['activity_content'],
+                activity['activity_intro'],
+                activity['activity_address_location'],
+                activity['category_name'],
+                activity['id']
+            )
+        )
+
+    a_df = pd.DataFrame(activity_data, columns=['activity_title', 'activity_content', 'activity_intro', 'activity_address_location', 'category_name', 'id'])
+    a_df.activity_content = a_df.activity_content.apply(remove_html_tags)
+    a_df.activity_content = a_df.activity_content.apply(lambda x: x.replace("\"", ""))
+    a_df['feature'] = a_df['activity_title'] + ' ' + a_df['activity_content'] + ' ' + a_df['activity_intro'] + ' ' + a_df['activity_address_location'] + ' ' + a_df['category_name']
+    a_df.feature = a_df.feature.apply(remove_special_characters_except_spaces)
+    result_df = a_df.feature
+    # print(result_df)
+    print(result_df[1])
+
+
+    @staticmethod
+    def get_index_from_title(title):
+        return ActivityDetailWebView.a_df[ActivityDetailWebView.a_df.activity_title == title].index[0]
+
+    @staticmethod
+    def get_title_from_index(index):
+        return ActivityDetailWebView.a_df[ActivityDetailWebView.a_df.index == index]['activity_title'].values[0]
+
+
     # 활동 상세페이지로 이동하는 메소드입니다.
     def get(self, request):
         # 쿼리스트링으로 활동의 id를 받아옵니다.
@@ -243,8 +328,43 @@ class ActivityDetailWebView(View):
         # 해당 활동을 개설한 모임의 공지사항을 최신순으로 4개까지 조회하여 list로 형변환한 후 담아줍니다.
         club_notices = list(ClubNotice.objects.filter(status=True, club_id=club.id).order_by('-id')[:4])
 
+        # AI서비스 : 현재 페이지의 활동과 비슷한 활동들을 추천해줍니다.
+        # 추천 활동 목록에 표시할 활동들을 가져옵니다.
+        count_v = CountVectorizer()
+        count_metrix = count_v.fit_transform(ActivityDetailWebView.result_df)
+        c_s = cosine_similarity(count_metrix)
+
+        detail_title = activity.activity_title
+        detail_content = activity.activity_content
+        detail_intro = activity.activity_intro
+        detail_category = category.category_name
+        detail_address = activity.activity_address_location
+        # print(detail_category_name)
+        remove_result = self.remove_html_tags(detail_title) + self.remove_html_tags(detail_content) + self.remove_html_tags(detail_intro) +' ' +   self.remove_html_tags(detail_address) +' ' +  self.remove_html_tags(detail_category)
+        similar_title = self.remove_special_characters_except_spaces(remove_result)
+        print(similar_title)
+
+        # similar_title = activity.activity_title
+        similar_index = self.get_index_from_title(detail_title)
+        similar_activity_result = sorted(list(enumerate(c_s[similar_index])), key=lambda x: x[1], reverse=True)
+
+        all_activities = []  # 모든 활동을 저장할 리스트
+
+        for similar_activity in similar_activity_result[1:5]:
+            similar_activity_list = self.get_title_from_index(similar_activity[0])
+            # 줄 단위로 분리하여 리스트로 변환
+            activity_items = similar_activity_list.splitlines()
+            # 개별 활동을 리스트에 추가
+            all_activities.extend(activity_items)
+
+        # print(all_activities)
+
         # 추천 활동 목록에 표시할 활동들을 가져옵니다. 이때 현재 보고 있는 활동은 제외합니다.
-        recommended_activities = list(Activity.enabled_objects.exclude(id=activity_id)[0:4])
+        recommended_activities = list(
+            Activity.enabled_objects.filter(activity_title__in=all_activities).exclude(id=activity_id)[:4]
+        )
+        # 관련이 높은 순서대로 다시 정렬
+        recommended_activities = sorted(recommended_activities, key=lambda x: all_activities.index(x.activity_title))
 
         for recommended_activity in recommended_activities:
             # 각 추천활동에 표시할 활동 참가자 수를 가져와 member_count 필드를 만들어 담아줍니다.
