@@ -217,19 +217,6 @@ class ActivityDetailWebView(View):
         return re.sub(clean, ' ', text)
 
     # 활동 데이터프레임 생성
-    # activities = Activity.objects.all()
-    #
-    # activity_data = []
-    # for activity in activities:
-    #     activity_data.append((activity.activity_title, activity.activity_content, activity.id))
-    #
-    # a_df = pd.DataFrame(activity_data, columns=['activity_title', 'activity_content', 'activity_intro', 'activity_address_location',  'id'])
-    # a_df.activity_content = a_df.activity_content.apply(remove_html_tags)
-    # a_df.activity_content = a_df.activity_content.apply(lambda x: x.replace("\"", ""))
-    # a_df['feature'] = a_df['activity_title'] + ' ' + a_df['activity_content'] + ' ' + a_df['activity_intro'] + ' ' + a_df['activity_address_location']
-    # result_df = a_df.feature
-
-    # 활동 데이터프레임 생성
     activities = Activity.enabled_objects.annotate(
         category_name=F('category__category_name')
     ).values(
@@ -261,13 +248,10 @@ class ActivityDetailWebView(View):
     a_df['feature'] = a_df['activity_title'] + ' ' + a_df['activity_content'] + ' ' + a_df['activity_intro'] + ' ' + a_df['activity_address_location'] + ' ' + a_df['category_name']
     a_df.feature = a_df.feature.apply(remove_special_characters_except_spaces)
     result_df = a_df.feature
-    # print(result_df)
-    print(result_df[1])
-
 
     @staticmethod
     def get_index_from_title(title):
-        return ActivityDetailWebView.a_df[ActivityDetailWebView.a_df.activity_title == title].index[0]
+        return ActivityDetailWebView.a_df[ActivityDetailWebView.a_df.feature == title].index[0]
 
     @staticmethod
     def get_title_from_index(index):
@@ -339,13 +323,9 @@ class ActivityDetailWebView(View):
         detail_intro = activity.activity_intro
         detail_category = category.category_name
         detail_address = activity.activity_address_location
-        # print(detail_category_name)
-        remove_result = self.remove_html_tags(detail_title) + self.remove_html_tags(detail_content) + self.remove_html_tags(detail_intro) +' ' +   self.remove_html_tags(detail_address) +' ' +  self.remove_html_tags(detail_category)
+        remove_result = self.remove_html_tags(detail_title) + ' ' + self.remove_html_tags(detail_content) + ' ' + self.remove_html_tags(detail_intro) +' ' +   self.remove_html_tags(detail_address) +' ' +  self.remove_html_tags(detail_category)
         similar_title = self.remove_special_characters_except_spaces(remove_result)
-        print(similar_title)
-
-        # similar_title = activity.activity_title
-        similar_index = self.get_index_from_title(detail_title)
+        similar_index = self.get_index_from_title(similar_title)
         similar_activity_result = sorted(list(enumerate(c_s[similar_index])), key=lambda x: x[1], reverse=True)
 
         all_activities = []  # 모든 활동을 저장할 리스트
@@ -356,8 +336,6 @@ class ActivityDetailWebView(View):
             activity_items = similar_activity_list.splitlines()
             # 개별 활동을 리스트에 추가
             all_activities.extend(activity_items)
-
-        # print(all_activities)
 
         # 추천 활동 목록에 표시할 활동들을 가져옵니다. 이때 현재 보고 있는 활동은 제외합니다.
         recommended_activities = list(
