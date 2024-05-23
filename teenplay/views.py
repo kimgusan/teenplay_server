@@ -227,8 +227,10 @@ class TeenplayMainListAPIView(APIView):
 
         teenplay_category_top3 = self.get_user_features(id)
 
-        # 쿼리셋 객체를 리스트로 변경
-        teenplay_id_value = list(TeenPlay.enable_objects.values('id'))
+        # 전체 틴플레이 리스트에서 컬럼이 id 에 대한 부분을 쿼리셋 객체에서 list 로 형변환
+        teenplay_id_value = list(
+            TeenPlay.enable_objects.filter(club__club_main_category_id__in=teenplay_category_top3).values('id'))
+
         teenplay_id_list = []
         # 변경된 리스트 내부에 있는 딕셔너리 객체를 id 만 추출하여 빈 리스트에 추가
         for teenplay_id_dict in teenplay_id_value:
