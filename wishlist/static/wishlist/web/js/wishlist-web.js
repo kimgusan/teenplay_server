@@ -433,9 +433,6 @@ const replyshowList = (replies) => {
                                         <div class="comment-text${reply.id}">${reply.reply_content}</div>
                                     </div>
                                 </div>
-            `
-            if(reply.member_id === Number(memberId)) {
-                text += `      
                                 <!-- 위시리스트 개별 댓글 메뉴 부분 -->
                                 <div>
                                     <button class="comment-menu" type="button" aria-haspopup="menu" data-headlessui-state>
@@ -446,15 +443,13 @@ const replyshowList = (replies) => {
                                     <div class="comment-menu-open-wrap hidden" aria-labelledby="main-wishlist-content-menu" role="menu" tabindex="0" data-headlessui-state="open">
                                         <div class="comment-menu-open-container" role="none">
                                             <div class="comment-menu-open-divison" role="none">
-                                                <button class="comment-menu-open-choice ${reply.id} ${reply.wishlist_id}" type="button" id="comment-menu-open-update" role="menuitem" tabindex="-1">수정</button>
-                                                <button class="comment-menu-open-choice ${reply.id} ${reply.wishlist_id}" type="button" id="comment-menu-open-delete" role="menuitem" tabindex="-1">삭제</button>
+                                                <button class="comment-menu-open-choice ${reply.id} ${reply.wishlist_id}" style="display: ${reply.member_id !== Number(memberId) ? 'none' : 'block'};" type="button" id="comment-menu-open-update" role="menuitem" tabindex="-1">수정</button>
+                                                <button class="comment-menu-open-choice ${reply.id} ${reply.wishlist_id}" style="display: ${reply.member_id !== Number(memberId) ? 'none' : 'block'};" type="button" id="comment-menu-open-delete" role="menuitem" tabindex="-1">삭제</button>
+                                                <button class="comment-menu-open-choice ${reply.id} ${reply.wishlist_id}" style="display: ${reply.member_id === Number(memberId) ? 'none' : 'block'};" type="button" id="comment-menu-open-report" role="menuitem" tabindex="-1">신고</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                `
-            }
-            text += `
                             </div>
                         </div>
                         <!-- 댓글 구분선 -->
@@ -780,12 +775,14 @@ div.addEventListener("click", async (e) => {
             const replyContent = document.getElementById("reply-content")
             // const wishlistId = replyBtn.classList[1]
             const comment = document.getElementById(`reply-form${wishlistId}`)
-            await wishlistService.replyWrite({
+            const result = await wishlistService.replyWrite({
                 reply_content: replyContent.value,
                 wishlist_id: wishlistId
             });
 
-            console.log(replyContent)
+            if(result === 'profanity'){
+                alert('비속어가 포함되어 있어 댓글을 작성 할 수 없습니다.')
+            }
 
             replyContent.value = "";
 
@@ -844,11 +841,14 @@ div.addEventListener("click", async (e) => {
         commenmtUpdateArea.value = commentText.innerText
         replyUpdateBtn.addEventListener("click", async () => {
             // console.log(e.target.classList[1])
-            newReply = commenmtUpdateArea.value
-            replyId = e.target.classList[1]
+            const newReply = commenmtUpdateArea.value
+            const replyId = e.target.classList[1]
 
             // Update 함수를 호출하여 수정된 댓글 정보 전송
-            wishlistService.replyUpdate(replyId, newReply)
+            const result = await wishlistService.replyUpdate(replyId, newReply)
+            if (result === 'profanity') {
+                alert('비속어가 포함되어 있어 댓글이 수정할 수 없습니다.')
+            }
 
             // 수정된 댓글 정보를 포함한 댓글 리스트 뿌려주기
             await wishlistService.replygetList(wishlistId, replyshowList).then((replies) => {
@@ -881,6 +881,28 @@ div.addEventListener("click", async (e) => {
 
         // Remove 함수를 호출하여 전달된 정보 삭제(status=0 으로 update)
         await wishlistService.replyRemove(replyId)
+
+        // 삭제된 댓글을 제외한 댓글 리스트 다시 뿌려주기
+        await wishlistService.replygetList(wishlistId, replyshowList).then((replies) => {
+            comment.innerHTML = replies;
+        }).then(async () => {
+            await addClickEventReplyProfile();
+            await addMoreButton();
+        })
+    // 신고 버튼 클릭시 신고하기
+    } else if (e.target.id === 'comment-menu-open-report') {
+        const  replyId = e.target.classList[1]
+        const wishlistId = e.target.classList[2]
+        const comment = document.getElementById(`reply-form${wishlistId}`)
+
+        if (confirm('해당 댓글을 욕설 사용으로 신고하시겠습니까?')) {
+            await wishlistService.replyReport({'reply_id': replyId, 'reply_type': 'wishlist'})
+            page = 1;
+
+            alert("신고가 접수되어 해당 댓글이 삭제됩니다.");
+        } else {
+
+        }
 
         // 삭제된 댓글을 제외한 댓글 리스트 다시 뿌려주기
         await wishlistService.replygetList(wishlistId, replyshowList).then((replies) => {

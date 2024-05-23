@@ -1,3 +1,4 @@
+
 const activityForm = document.querySelector("form[name=activity-create]")
 
 //datepicker
@@ -466,8 +467,8 @@ const createActivity = async (pay) => {
     let summernoteContent = $('.presentation-size').summernote('code');
     let activityContent = document.createElement("input")
     activityContent.setAttribute("type", "hidden");
-    activityContent.setAttribute("name", "activity-content")
-    activityContent.setAttribute("value", JSON.stringify(summernoteContent))
+    activityContent.setAttribute("name", "activity-content");
+    activityContent.setAttribute("value",summernoteContent);
     activityForm.appendChild(activityContent)
 
     await activityForm.submit();

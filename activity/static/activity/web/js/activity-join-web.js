@@ -182,4 +182,3 @@ surveyRadioTie.addEventListener("click", () => {
         surveyBox.classList.remove("invalid-input");
     }
 });
-

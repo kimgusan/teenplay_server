@@ -1,3 +1,4 @@
+
 const activityLetterService = (() => {
     const write = async (letter) => {
         await fetch(`/member/mypage-apiletter/`, {

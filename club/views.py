@@ -1,3 +1,4 @@
+
 import math
 import os.path
 
@@ -17,6 +18,7 @@ from teenplay.models import TeenPlay
 from teenplay_server import settings
 from teenplay_server.category import Category
 from teenplay_server.models import Region
+from teenplay_server.utils.util.util import check_the_comments
 
 
 # 모임 생성 전 모임에 대한 소개글을 정적 데이터로 구성해 놓은 페이지로 이동하는 view
@@ -417,6 +419,11 @@ class ClubPrPostReplyAPI(APIView):
             'member_id': request.session['member']['id']
         }
 
+        result = check_the_comments(data['reply_content'])
+
+        if result == 'profanity':
+            return Response(result)
+
         post_reply = ClubPostReply.objects.create(**data)
 
         # 알림을 받을 회원의 id를 알기위해 club_post_id로 조회
@@ -442,6 +449,11 @@ class ClubPrPostReplyAPI(APIView):
         data = request.data
         reply_content = data['reply_content']
         reply_id = data['id']
+
+        result = check_the_comments(reply_content)
+
+        if result == 'profanity':
+            return Response(result)
 
         # 전달 받은 댓글 id를 통해 수정할 댓글 조회
         club_post_reply = ClubPostReply.enabled_objects.get(id=reply_id)

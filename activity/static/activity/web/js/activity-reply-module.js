@@ -8,6 +8,7 @@ const activityReplyService = (() => {
             },
             body: JSON.stringify(activityReply)
         });
+        return await response.json()
     };
 
     const getList = async (isAdd, page, activityId, callback) => {
@@ -19,7 +20,7 @@ const activityReplyService = (() => {
     }
 
     const update = async (activityReply) => {
-        await fetch(`/activity/replies/api/`, {
+        const response = await fetch(`/activity/replies/api/`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8',
@@ -27,6 +28,7 @@ const activityReplyService = (() => {
             },
             body: JSON.stringify(activityReply)
         });
+        return await response.json()
     }
 
     const remove = async (id) => {
@@ -40,5 +42,16 @@ const activityReplyService = (() => {
         });
     }
 
-    return {write: write, getList: getList, update: update, remove: remove}
+    const report = async (replyInfo) => {
+        await fetch(`/ai/api/report/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                'X-CSRFToken': csrf_token
+            },
+            body: JSON.stringify(replyInfo)
+        })
+    }
+
+    return {write: write, getList: getList, update: update, remove: remove, report: report}
 })()

@@ -1,3 +1,4 @@
+
 NodeList.prototype.filter = Array.prototype.filter;
 NodeList.prototype.map = Array.prototype.map;
 
@@ -360,7 +361,7 @@ const showList = (replies_info) => {
                         </div>
                     </div>
                     <!-- 개별 댓글 메뉴 부분 -->
-                    <div class="comment-modify-button ${reply.id}" style="display: ${reply.member_id !== Number(memberId) ? 'none' : 'block'}">
+                    <div class="comment-modify-button ${reply.id}">
                         <button class="comment-menu" type="button" aria-haspopup="menu" data-headlessui-state>
                             <svg class="comment-menu-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10.5 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" clip-rule="evenodd"></path>
@@ -369,8 +370,9 @@ const showList = (replies_info) => {
                         <div class="comment-menu-open-wrap ${reply.id}">
                             <div class="comment-menu-open-container" role="none">
                                 <div class="comment-menu-open-divison" role="none">
-                                    <button class="comment-menu-open-choice update ${reply.id}" type="button">수정</button>
-                                    <button class="comment-menu-open-choice delete ${reply.id}" type="button">삭제</button>
+                                    <button class="comment-menu-open-choice update ${reply.id}" style="display: ${reply.member_id !== Number(memberId) ? 'none' : 'block'}" type="button">수정</button>
+                                    <button class="comment-menu-open-choice delete ${reply.id}" style="display: ${reply.member_id !== Number(memberId) ? 'none' : 'block'}" type="button">삭제</button>
+                                    <button class="comment-menu-open-choice report ${reply.id}" style="display: ${reply.member_id === Number(memberId) ? 'none' : 'block'}" type="button">신고</button>
                                 </div>
                             </div>
                         </div>
@@ -394,6 +396,7 @@ showMoreBtnWrap.addEventListener("click", () => {
         addClickEventHideUpdate()
         addClickEventUpdateUpload()
         addClickEventDelete()
+        addClickEventReport()
         addClickEventReplyProfile()
     })
 })
@@ -406,10 +409,15 @@ commentInputUploadButton.addEventListener("click", async () => {
 
     if (!replyContent.value) return;
 
-    await clubPostRelyService.write({
+    const result = await clubPostRelyService.write({
         reply_content: replyContent.value,
         club_post_id: clubPostId
     })
+
+    if(result === 'profanity'){
+        alert('비속어가 포함되어 있어 댓글을 작성할 수 없습니다.')
+    }
+
     replyContent.value = "";
 
     page = 1
@@ -421,6 +429,7 @@ commentInputUploadButton.addEventListener("click", async () => {
     addClickEventHideUpdate()
     addClickEventUpdateUpload()
     addClickEventDelete()
+    addClickEventReport()
     addClickEventReplyProfile()
 })
 
@@ -505,10 +514,15 @@ const addClickEventUpdateUpload = () => {
             const updateTextarea = document.getElementById(`update-content${e.target.classList[1]}`);
             const updateContent = updateTextarea.value;
             if (!updateContent) return;
-            await clubPostRelyService.update({
+            const result = await clubPostRelyService.update({
                 'reply_content': updateContent,
                 'id': e.target.classList[1]
             });
+
+            if(result === 'profanity'){
+                alert('비속어가 포함되어 있어 댓글이 수정할 수 없습니다.')
+            }
+
             page = 1;
             updateTextarea.value = '';
             clubPostRelyService.getList(clubPostId, page, showList).then((text) => {
@@ -519,6 +533,7 @@ const addClickEventUpdateUpload = () => {
                 addClickEventHideUpdate()
                 addClickEventUpdateUpload()
                 addClickEventDelete()
+                addClickEventReport()
                 addClickEventReplyProfile()
             });
         })
@@ -541,8 +556,38 @@ const addClickEventDelete = () => {
                 addClickEventHideUpdate()
                 addClickEventUpdateUpload()
                 addClickEventDelete()
+                addClickEventReport()
                 addClickEventReplyProfile()
             });
+        })
+    })
+}
+
+// 댓글 신고하기
+const addClickEventReport = () => {
+    const replyReportButtons = document.querySelectorAll(".comment-menu-open-choice.report")
+    replyReportButtons.forEach((btn) => {
+        btn.addEventListener("click", async (e) => {
+            if (confirm('해당 댓글을 욕설 사용으로 신고하시겠습니까?')) {
+                const replyId = e.target.classList[2];
+                await clubPostRelyService.report({'reply_id': replyId, 'reply_type': 'club_post'})
+                alert("신고가 접수되어 해당 댓글이 삭제됩니다.");
+                page = 1;
+                clubPostRelyService.getList(clubPostId, page, showList).then((text) => {
+                    commentListBoxWrap.innerHTML = text;
+                    checkMoreBtn()
+                    showReplyMenu()
+                    addClickEventUpdate()
+                    addClickEventHideUpdate()
+                    addClickEventUpdateUpload()
+                    addClickEventDelete()
+                    addClickEventReport()
+                    addClickEventReplyProfile()
+                });
+            } else {
+
+            }
+
         })
     })
 }
@@ -556,6 +601,7 @@ clubPostRelyService.getList(clubPostId, page, showList).then((text) => {
     addClickEventHideUpdate()
     addClickEventUpdateUpload()
     addClickEventDelete()
+    addClickEventReport()
     addClickEventReplyProfile()
 })
 

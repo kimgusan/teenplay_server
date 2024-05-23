@@ -8,6 +8,7 @@ const clubPostRelyService = (() => {
             },
             body: JSON.stringify(clubPostReply)
         });
+        return response.json()
     }
 
     const getList = async (clubPostId, page, callback) => {
@@ -21,7 +22,7 @@ const clubPostRelyService = (() => {
     }
 
     const update = async (clubPostReply) => {
-        await fetch(`/clubs/pr-post-reply/api/`, {
+        const response = await fetch(`/clubs/pr-post-reply/api/`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8',
@@ -29,6 +30,7 @@ const clubPostRelyService = (() => {
             },
             body: JSON.stringify(clubPostReply)
         });
+        return response.json()
     }
 
     const remove = async (id) => {
@@ -41,5 +43,16 @@ const clubPostRelyService = (() => {
         })
     }
 
-    return {write: write, getList: getList, update: update, remove: remove}
+    const report = async (replyInfo) => {
+        await fetch(`/ai/api/report/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                'X-CSRFToken': csrf_token
+            },
+            body: JSON.stringify(replyInfo)
+        })
+    }
+
+    return {write: write, getList: getList, update: update, remove: remove, report: report}
 })()

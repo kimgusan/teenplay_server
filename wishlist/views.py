@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from teenplay_server.category import Category
+from teenplay_server.utils.util.util import check_the_comments
 from wishlist.models import Wishlist, WishlistReply, WishlistTag, WishListLike
 
 
@@ -189,7 +190,12 @@ class ReplyWriteAPI(APIView):
             'wishlist_id': data['wishlist_id'],
             'member_id': request.session['member']['id']
         }
-        print(data['wishlist_id'])
+
+        result = check_the_comments(data['reply_content'])
+
+        if result == 'profanity':
+            return Response(result)
+
         WishlistReply.objects.create(**data)
         return Response('success')
 
@@ -229,11 +235,13 @@ class ReplyActionAPI(APIView):
 
     def patch(self, request, reply_id):
         data = request.data
-        # print(reply_id)
-        # print(newReply)
-        # print(data)
-        new_reply = data['reply_content']
-        reply_content = new_reply
+        reply_content = data['reply_content']
+
+        result = check_the_comments(data['reply_content'])
+
+        if result == 'profanity':
+            return Response(result)
+
         updated_date = timezone.now()
 
         reply = WishlistReply.objects.get(id=reply_id)
@@ -242,7 +250,7 @@ class ReplyActionAPI(APIView):
 
         reply.save(update_fields=['reply_content', 'updated_date'])
 
-        return Response(new_reply)
+        return Response(reply_content)
 
 
 # 위시리스트 게시글 좋아요
