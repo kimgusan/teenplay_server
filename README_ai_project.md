@@ -4,17 +4,21 @@
 
 ## ♠️ 목차
 
-1. AI 서비스 설명
-2. AI 사전 훈련 모델
+1. **AI 서비스 설명**
+2. **AI 사전 훈련 모델**
 
-    - 필요 데이터 선택 (데이터 수집)
-    - 데이터 전처리
-    - 훈련 모델 선택
-    - 훈련 모델 검증
+    - **필요 데이터 선택 (데이터 수집)**
+    - **데이터 전처리**
+    - **훈련 모델 선택**
+    - **훈련 모델 검증**
       
-4. AI 사용 모델 
-5. AI 훈련 모델 화면
-6. 평가
+4. **AI 사용 모델**
+5. **AI 훈련 모델 화면**
+6. **평가**
+7. **트러블슈팅**
+8. **느낀점**
+
+<hr>
 
 ### 1. AI 서비스 설명 ❤️
 
@@ -24,19 +28,19 @@
 
 ### 2. AI 사전 훈련 모델 💻
 
--   데이터 수집 📊
-
-    <strong>features</strong>
-
+#### 가. 데이터 수집 📊
+    
+**-Features-**
+    
     1. u_info_category
     2. u_wishlist_category
     3. u_favorite_teenplay_like_club_category
-
-    <strong>target</strong>
+    
+**-Target-**
 
     1. club_category
-
-##### 가) 클럽 리스트에 대하여 전체 count 확인.
+    
+##### 1) 클럽 리스트에 대하여 전체 count 확인.
 
 <details>
   <summary>Click all Code</summary>
@@ -59,7 +63,7 @@
 </details>
 <img width="294" alt="스크린샷 2024-05-22 오후 8 55 14" src="https://github.com/kimgusan/teenplay_server/assets/156397911/31a8f2bd-9a54-4f83-bd41-14f0b4f7ec87">
 
-##### 나) 크롤링을 통해 가져온 각 카테고리별 title 데이터 프레임 생성.
+##### 2) 크롤링을 통해 가져온 각 카테고리별 title 데이터 프레임 생성.
 
 <details>
   <summary>Click all Code</summary>
@@ -87,10 +91,12 @@
 
 <img width="841" alt="스크린샷 2024-05-22 오후 8 56 14" src="https://github.com/kimgusan/teenplay_server/assets/156397911/25c72b34-f56e-47e4-b81f-accd0ad97da8">
 
+<br>
+<br>
 
--   데이터 전처리 🧹
+#### 나. 데이터 전처리 🧹
 
-#### 가) 가져온 데이터에 대하여 카테고리별로 데이터 분류
+##### 1) 가져온 데이터에 대하여 카테고리별로 데이터 분류
 
 <details>
   <summary>Click all Code</summary>
@@ -131,7 +137,7 @@
 <img width="177" alt="스크린샷 2024-05-22 오후 8 56 46" src="https://github.com/kimgusan/teenplay_server/assets/156397911/4f42a089-8e53-4702-bc1f-cfab31eacb81">
 
 
-#### 나) 영상 데이터에 대해 사용자가 좋아하는 카테고리, 위시리스트 카테고리 일정 비율로 값 부여
+##### 2) 영상 데이터에 대해 사용자가 좋아하는 카테고리, 위시리스트 카테고리 일정 비율로 값 부여
 
 <details>
   <summary>Click all Code</summary>
@@ -169,9 +175,9 @@
 
 <img width="523" alt="스크린샷 2024-05-22 오후 8 58 18" src="https://github.com/kimgusan/teenplay_server/assets/156397911/2341417a-4b6e-4932-a1e4-0276f2e9f143">
 
-- 훈련 모델 선택 🤖
+#### 다. 훈련 모델 선택 🤖
 
-#### 가) 결정트리 모델 (교차검증) 훈련
+##### 1) 결정트리 모델 (교차검증) 훈련
 
 <details>
   <summary>Click all Code</summary>
@@ -239,7 +245,7 @@
 <img width="668" alt="스크린샷 2024-05-22 오후 8 59 17" src="https://github.com/kimgusan/teenplay_server/assets/156397911/df61e7ef-08c1-4833-8033-911f91b20539">
 
 
-#### 나) KNN최근접 이웃 모델 (교차검증) 훈련
+##### 2) KNN최근접 이웃 모델 (교차검증) 훈련
 
 <details>
   <summary>Click all Code</summary>
@@ -272,7 +278,7 @@
 <img width="680" alt="스크린샷 2024-05-22 오후 9 00 52" src="https://github.com/kimgusan/teenplay_server/assets/156397911/fbc8dda0-03e7-40bf-b122-98950f0e92a9">
 
 
-#### 다) AdaboostClassifier 모델 (교차검증) 사용
+##### 3) AdaboostClassifier 모델 (교차검증) 사용
 
 <details>
   <summary>Click all Code</summary>
@@ -305,7 +311,7 @@
 
 <img width="673" alt="스크린샷 2024-05-22 오후 9 03 37" src="https://github.com/kimgusan/teenplay_server/assets/156397911/7405403e-1798-4189-aabc-685f5ae80350">
 
-#### 라) Randomforest 모델 (교차검증) 사용
+##### 4) Randomforest 모델 (교차검증) 사용
 
 <details>
   <summary>Click all Code</summary>
@@ -339,19 +345,19 @@
 
 <img width="675" alt="스크린샷 2024-05-22 오후 9 31 07" src="https://github.com/kimgusan/teenplay_server/assets/156397911/b507ace1-d68d-4dd6-be2b-da3c1422b992">
 
--   모델 검증
+#### 라. 모델 검증
 
-#### 검증 데이터 분류 후 Randomforest 모델 훈련
+##### 1) 검증 데이터 분류 후 Randomforest 모델 훈련
 
 <img width="224" alt="스크린샷 2024-05-22 오후 9 10 48" src="https://github.com/kimgusan/teenplay_server/assets/156397911/ba3b5fc0-e5b5-492f-8794-f7b505b780e7">
 
-#### 훈련 데이터와 평가 지표 비고하여 분석
+##### 2) 훈련 데이터와 평가 지표 비고하여 분석
 
 <img width="672" alt="스크린샷 2024-05-22 오후 9 11 15" src="https://github.com/kimgusan/teenplay_server/assets/156397911/158bdc65-c394-44c5-a493-e4b11783d688">
 <img width="671" alt="스크린샷 2024-05-22 오후 9 11 23" src="https://github.com/kimgusan/teenplay_server/assets/156397911/e8e27231-e3e4-4de0-8d0f-08ea382abd9e">
 
 
-##### 검증된 모델에 대하여 predict_proba 를 이용한 target의 확률 확인
+###### 3) 검증된 모델에 대하여 predict_proba 를 이용한 target의 확률 확인
 
 <details>
   <summary>Click all Code</summary>
@@ -372,7 +378,7 @@
 
 <img width="739" alt="스크린샷 2024-05-22 오후 9 12 02" src="https://github.com/kimgusan/teenplay_server/assets/156397911/d287197c-7bc8-4b03-bdf0-a0a6143e3a08">
 
-##### 사용자에게 입력된 값에 대하여 결과 모델 확인
+##### 4) 사용자에게 입력된 값에 대하여 결과 모델 확인
 
 <details>
   <summary>Click all Code</summary>
@@ -402,9 +408,12 @@
 
 </details>
 
-
-<img width="314" alt="스크린샷 2024-05-22 오후 9 12 30" src="https://github.com/kimgusan/teenplay_server/assets/156397911/b30730bf-1fac-4868-9201-00b90d7ed362">
-<img width="144" alt="스크린샷 2024-05-22 오후 9 12 48" src="https://github.com/kimgusan/teenplay_server/assets/156397911/309f19ee-8900-4eb4-bcdb-54f37264fcf2">
+<div>
+    <img width="144" alt="스크린샷 2024-05-22 오후 9 12 48" src="https://github.com/kimgusan/teenplay_server/assets/156397911/309f19ee-8900-4eb4-bcdb-54f37264fcf2">
+</div>
+<div>
+    <img width="314" alt="스크린샷 2024-05-22 오후 9 12 30" src="https://github.com/kimgusan/teenplay_server/assets/156397911/b30730bf-1fac-4868-9201-00b90d7ed362">
+</div>
 
 <hr>
 
@@ -419,13 +428,15 @@
 ### 4. AI 훈련 모델 화면 🎥
 
 - 개인 관심사
-<img width="671" alt="스크린샷 2024-05-22 오후 9 25 37" src="https://github.com/kimgusan/teenplay_server/assets/156397911/47851a6d-62d2-4e7d-a30b-f8c7dddb77d0">
+<img width="497" alt="스크린샷 2024-05-23 오후 1 04 33" src="https://github.com/kimgusan/teenplay_server/assets/156397911/273c0475-db84-4ec4-afe4-ae3d13965856">
 
 - 위시리스트(작성) 관심사
-<img width="844" alt="스크린샷 2024-05-22 오후 9 27 07" src="https://github.com/kimgusan/teenplay_server/assets/156397911/e749f852-2d08-4f23-863f-97b4356a6691">
+<img width="790" alt="스크린샷 2024-05-23 오후 1 08 07" src="https://github.com/kimgusan/teenplay_server/assets/156397911/ced34def-5f1f-42a4-b0f9-28a51b0eb7f4">
+
 
 - 좋아요 관심사
-<img width="1105" alt="스크린샷 2024-05-22 오후 9 28 07" src="https://github.com/kimgusan/teenplay_server/assets/156397911/1fd1ab42-e73e-42ac-a517-1c65eafb6294">
+<img width="1115" alt="스크린샷 2024-05-23 오전 11 12 27" src="https://github.com/kimgusan/teenplay_server/assets/156397911/6de03e6b-2cf0-451f-853c-94fc864ca404">
+
 
 
 ### 5. 평가 📈
@@ -436,5 +447,54 @@
 - **비율 기반 학습**: 영상의 특성상 여러 카테고리가 혼합되어야 하기 때문에 초기 훈련 모델에서 1:1 비율 대신 3:7 비율로 학습시켜 65%의 정확도를 기준으로 유사한 값의 평가 지표를 설정했습니다.
 - **패치 및 업데이트**: 향후 패치 시 새로운 학습 모델에 용이하게 대응하기 위해 각 회원별 카테고리 종류에 대한 뷰를 3개 구성해 해당 값을 조회할 수 있도록 설정했습니다.
 - **사용자 경험에 따른 영상 표기 개선**: 영상을 스크롤하면서 확인할 때 사용자의 관심사에 대한 영상이 비율적으로 다수 나타나며, 사용자의 관심사에 따라 나타나는 영상이 달라진다는 것을 확인할 수 있습니다.
+
+
+### 6. 트러블슈팅 🚨
+#### 가. 문제 발생
+- 영상 추천의 경우 사용자가 관심있는 분야가 나타나야 하지만 다양한 정보를 선택 했을 때 내가 선택한 정보에 대해서만 관련있는 영상이 나타나는 문제가 발생했습니다.
+   
+#### 나. 원인 추론
+- Feature의 경우 사용자가 관심있는 분야만 선택하는 경우 1:1 로 분류 훈련이 진행 되기 때문에 다양한 카테고리에 대한 영상을 확인할 수 없다는 판단을 하였습니다.
+   
+#### 다. 해결 방안
+- 단일 중요도 feature 만 고려하는 것이 아닌, 다양한 카테고리를 선택했을 때 상위 3개의 카테고리에 대한 영상을 불러오는 것으로 변경하였습니다.
+- Rest API를 통해 영상을 추가적으로 불러올 때 고정된 카테고리가 아닌 다중으로 선택한 카테고리 중 랜덤으로 값을 가져와서 해당 항목으로 초기 5개, 스크롤 진행시 30개 씩 가져옴으로서 내가 선택한 카테고리에 대한 영상만 보이지 않고,
+  관심있는 영상에 대하여 어느정도 비중을 가져오는 것으로 하였습니다.
+- 모델 훈련 시 좋아요를 클릭한 카테고리와 실제 target의 영상 카테고리에 대하여 일정 비율을 유지하여 실제 사용 시 해당 값에 대하여 어느정도 연관성 있게 훈련을 진행하였습니다.
+```
+# 특정 feature 2개에 대하여 비율을 맞춰서 가져오는 함수
+def match_categories(df, like_col, target_col, ratio=(3, 7)):
+    like_values = df[like_col].value_counts().index
+    for value in like_values:
+        like_indices = df[df[like_col] == value].index
+        num_target = int(len(like_indices) * ratio[1] / sum(ratio))
+        target_indices = np.random.choice(like_indices, size=num_target, replace=False)
+        df.loc[target_indices, target_col] = value
+    return df
+```
+   
+#### 라. 결과 확인
+- 영상을 표기 할 시 (여행·동행, 운동·액티비티, 스터디) 에 대한 영상이 출력 되는 것을 확인할 수 있습니다.
+
+<table>
+  <tr>
+    <th>운동</th>
+    <th>여행</th>
+    <th>스터디</th>
+  </tr>
+  <tr>
+    <td><img width="357" alt="스크린샷 2024-05-23 오전 11 32 54" src="https://github.com/kimgusan/teenplay_server/assets/156397911/627b58cf-bf48-485c-b0fa-f6b14b073a3c"></td>
+    <td><img width="369" alt="스크린샷 2024-05-23 오전 11 35 37" src="https://github.com/kimgusan/teenplay_server/assets/156397911/b5209a81-366f-4a16-afdf-0a13435758e6"></td>
+    <td><img width="362" alt="스크린샷 2024-05-23 오후 1 02 22" src="https://github.com/kimgusan/teenplay_server/assets/156397911/8dce2262-9341-4b39-81c4-aa43a1c371af"></td>
+  </tr>
+</table>
+
+### 7. 😎 느낀점 
+<hr>
+<h2> 😎 어려웠던 부분</h2>
+- 머신러닝에 대한 여러 모델에 대하여 실습을 진행하고 분류, 회귀 머신러닝 프로젝트를 진행하면서 이렇게 훈련한 가상 데이터에 대하여 실제 실무에서 어떻게 적용되고 사용되는 지 알지 못하였습니다.
+- 금번 프로젝트를 진행하면서 제가 배웠던 모델이 어떻게 화면에 출력될 수 있는지, 차후 버젼 업데이트 진행 시 어떤 데이터들 특정 데이터들에 대하여 view를 사용하여 
+
+<h2>😎 문제를 해결했던 부분</h2>
 
   
