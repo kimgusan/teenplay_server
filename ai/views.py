@@ -81,7 +81,7 @@ class RecommendedAClubAPIView(APIView):
             model = joblib.load(os.path.join(Path(__file__).resolve().parent, 'ai/club.pkl'))
             # 훈련 (훈련 키워드는 특정 시즌(ex_여름 시즌, 겨울 시즌 등)에 맞춰 팀 회의 진행 후 지정)
             # 카테고리 별 확률 순서 객체 생성
-            probabilities = model.predict_proba(['여행 바다 산 여름 시원한'])
+            probabilities = model.predict_proba(['여행 동행 바다 산 여름 시원한'])
             # 훈련 결과를 인덱스로 변환하고 내림차순으로 정렬된 카테고리 객체 생성 (argsort: 인덱스로 반환)
             # 카테고리는 0부터 시작이 아니고 1부터 시작이기 때문에 1을 더하여 카테고리 순서를 맞추기
             showing_categories = probabilities.argsort()[0][::-1] + 1

@@ -1,4 +1,3 @@
-
 import math
 import os
 from pathlib import Path
@@ -195,6 +194,7 @@ class ActivityCreateWebView(View):
             return redirect(f'/activity/create?club_id={club.id}')
 
 
+
 class ActivityDetailWebView(View):
 
     @staticmethod
@@ -217,7 +217,6 @@ class ActivityDetailWebView(View):
         clean = re.compile('[^0-9a-zA-Zㄱ-ㅎ가-힣ㅏ-ㅣ ]')
         # 특수문자 및 기호를 빈 문자열로 대체합니다.
         return re.sub(clean, ' ', text)
-
 
     # 활동 데이터프레임 생성
     activities = Activity.enabled_objects.annotate(
@@ -249,10 +248,8 @@ class ActivityDetailWebView(View):
     a_df.activity_content = a_df.activity_content.apply(remove_html_tags)
     a_df.activity_content = a_df.activity_content.apply(lambda x: x.replace("\"", ""))
     a_df['feature'] = a_df['activity_title'] + ' ' + a_df['activity_content'] + ' ' + a_df['activity_intro'] + ' ' + a_df['activity_address_location'] + ' ' + a_df['category_name']
-    a_df.feature = a_df.feature.apply(remove_special_characters_except_spaces)
+    a_df.feature = a_df.feature.apply(remove_special_characters_except_spaces).replace("나만의", " ").str.replace("원데이 클래스", " ")
     result_df = a_df.feature
-
-
 
     @staticmethod
     def get_index_from_title(title):
@@ -329,7 +326,8 @@ class ActivityDetailWebView(View):
         detail_category = category.category_name
         detail_address = activity.activity_address_location
         remove_result = self.remove_html_tags(detail_title) + ' ' + self.remove_html_tags(detail_content) + ' ' + self.remove_html_tags(detail_intro) +' ' +   self.remove_html_tags(detail_address) +' ' +  self.remove_html_tags(detail_category)
-        similar_title = self.remove_special_characters_except_spaces(remove_result)
+        remove_result = remove_result.replace("나만의", " ").replace("원데이 클래스", " ")
+        similar_title = self.remove_special_characters_except_spaces(remove_result).replace("나만의", "").replace("원데이 클래스", "")
         similar_index = self.get_index_from_title(similar_title)
         similar_activity_result = sorted(list(enumerate(c_s[similar_index])), key=lambda x: x[1], reverse=True)
 
@@ -341,7 +339,6 @@ class ActivityDetailWebView(View):
             activity_items = similar_activity_list.splitlines()
             # 개별 활동을 리스트에 추가
             all_activities.extend(activity_items)
-
 
         # 추천 활동 목록에 표시할 활동들을 가져옵니다. 이때 현재 보고 있는 활동은 제외합니다.
         recommended_activities = list(
