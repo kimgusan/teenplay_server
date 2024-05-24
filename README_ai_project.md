@@ -395,7 +395,7 @@
     <!-- # 예측 확률 얻기 -->
     prediction_proba = rfc.predict_proba(user_input_feature)
 
-    <!-- # 상위 3개의 확률에 해당하는 클래스 추출 -->
+    <!-- # 상위 1개의 확률에 해당하는 클래스 추출 -->
     top_3_indices = np.argsort(prediction_proba[0])[-1:][::-1]
     top_3_classes = rfc.classes_[top_3_indices]
 
