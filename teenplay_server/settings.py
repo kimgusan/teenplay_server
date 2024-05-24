@@ -78,8 +78,8 @@ CRONJOBS = [
     ('0 0 * * *', 'activity.tasks.DeleteOldImages')
 ]
 
-SITE_ID = 2
-# SITE_ID = 17
+# SITE_ID = 2
+SITE_ID = 17
 
 SOCIALACCOUNT_AUTO_SIGNUP = True
 ACCOUNT_EMAIL_REQUIRED = True
@@ -146,8 +146,8 @@ DATABASES = {
         # 계정 비밀번호
         'PASSWORD': '1234',
         # DBMS가 설치된 서버 PC의 IP, (127.0.0.1 = 로컬)
-        # 'HOST': '52.78.208.126',
-        'HOST': '13.125.213.142', # 현이 서버
+        'HOST': '52.78.208.126',
+        # 'HOST': '13.125.213.142', # 현이 서버
         # DBMS의 포트번호
         'PORT': '3306'
     }
