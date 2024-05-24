@@ -319,11 +319,11 @@
     from sklearn.ensemble import RandomForestClassifier
     
     parameters = {
-        'max_depth' : [8, 9, 10],
-        'min_samples_split' : [50, 100, 150]
+        'max_depth' : [2, 3, 4, 5, 6, 7, 8, 9, 10],
+        'min_samples_split' : [10, 20, 30, 40, 50, 100, 150]
     }
     
-    rfc = RandomForestClassifier(n_estimators=70)
+    rfc = RandomForestClassifier(n_estimators=150)
     
     g_rfc = GridSearchCV(rfc, param_grid=parameters, cv=3, n_jobs= -1)
     g_rfc.fit(X_trian, y_train)
@@ -343,7 +343,7 @@
 
 </details>
 
-<img width="675" alt="스크린샷 2024-05-22 오후 9 31 07" src="https://github.com/kimgusan/teenplay_server/assets/156397911/b507ace1-d68d-4dd6-be2b-da3c1422b992">
+<img width="691" alt="스크린샷 2024-05-24 오전 10 31 22" src="https://github.com/kimgusan/teenplay_server/assets/156397911/912380f6-62c0-4584-929c-d842851d25bb">
 
 #### 라. 모델 검증
 
@@ -353,9 +353,8 @@
 
 ##### 2) 훈련 데이터와 평가 지표 비교하여 분석
 
-<img width="672" alt="스크린샷 2024-05-22 오후 9 11 15" src="https://github.com/kimgusan/teenplay_server/assets/156397911/158bdc65-c394-44c5-a493-e4b11783d688">
-<img width="671" alt="스크린샷 2024-05-22 오후 9 11 23" src="https://github.com/kimgusan/teenplay_server/assets/156397911/e8e27231-e3e4-4de0-8d0f-08ea382abd9e">
-
+<img width="691" alt="스크린샷 2024-05-24 오전 10 31 22" src="https://github.com/kimgusan/teenplay_server/assets/156397911/30162ea8-4b79-4a1e-a34c-a6e632976a7f">
+<img width="712" alt="스크린샷 2024-05-24 오전 10 29 12" src="https://github.com/kimgusan/teenplay_server/assets/156397911/cc6b8d55-481d-4638-bd64-c7e3f51caddc">
 
 ###### 3) 검증된 모델에 대하여 predict_proba 를 이용한 target의 확률 확인
 
@@ -432,7 +431,6 @@
 
 - 위시리스트(작성) 관심사
 <img width="790" alt="스크린샷 2024-05-23 오후 1 08 07" src="https://github.com/kimgusan/teenplay_server/assets/156397911/ced34def-5f1f-42a4-b0f9-28a51b0eb7f4">
-
 
 - 좋아요 관심사
 <img width="1115" alt="스크린샷 2024-05-23 오전 11 12 27" src="https://github.com/kimgusan/teenplay_server/assets/156397911/6de03e6b-2cf0-451f-853c-94fc864ca404">
