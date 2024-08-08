@@ -327,7 +327,7 @@ const showRecommendedClubs = (clubs) => {
     const clubPostLists = document.querySelector("div.post-list.club-ai-posts");
     let text = ``;
     clubs.forEach((club) => {
-        const thumbnailSrc = (club.club_profile_path.club_profile_path && club.club_profile_path.club_profile_path !== ' ') ? `/upload/${club.club_profile_path}` : '/static/public/web/images/logo/logo1.png';
+        const thumbnailSrc = (club.club_profile_path.club_profile_path && club.club_profile_path.club_profile_path !== ' ') ? `/upload/${club.club_profile_path.club_profile_path}` : '/static/public/web/images/logo/logo1.png';
         text += `
         <div class="post-substance">
             <div class="clup-wrap">
